@@ -17,8 +17,8 @@ cd_doc <- function() {
 }
 
 cd_local()
-samples <- read.table("listLabel.txt", header=T, sep = "\t", stringsAsFactors = F)
-for(sample in samples$Organoid){
+samples <- read.table("sampleList.csv", header=T, sep = "\t", stringsAsFactors = F)
+for(sample in samples$Organoids){
 #sample <- "hN31"
   # Import data
   cd_doc()

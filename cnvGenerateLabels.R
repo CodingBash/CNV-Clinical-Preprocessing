@@ -35,4 +35,4 @@ sample_df <- data.frame(
 print(sample_df$Organoids)
 
 cd_local()
-write.csv(sample_df, "sampleList.csv")
+write.csv(sample_df, "sampleList.csv", row.names = FALSE)
