@@ -6,7 +6,7 @@ install.packages("rstudioapi")
 # Import libraries
 library(rstudioapi) # load it
 library(BSgenome.Hsapiens.UCSC.hg19)
-
+library(CORE)
 cd_local <- function() {
   current_path <- getActiveDocumentContext()$path 
   setwd(dirname(current_path ))
