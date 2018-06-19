@@ -1,7 +1,11 @@
+source("https://bioconductor.org/biocLite.R")
+biocLite("BSgenome.Hsapiens.UCSC.hg19")
+
 install.packages("CORE")
 install.packages("rstudioapi")
 # Import libraries
 library(rstudioapi) # load it
+library(BSgenome.Hsapiens.UCSC.hg19)
 
 cd_local <- function() {
   current_path <- getActiveDocumentContext()$path 
@@ -14,7 +18,7 @@ cd_doc <- function() {
 
 cd_local()
 samples <- read.table("sampleList.csv", header=T, sep = "\t", stringsAsFactors = F)
-classes <- c("N", "T")
+classes <- c("N")
 
 loaded_samples <- c(NA)
 loaded_samples.index <- 1
@@ -31,7 +35,7 @@ for(sample in samples$Organoids){
 
 # A table of DNA copy number gain events observed in 100 individual tumor cells
 generateInputCORE <- function(){
-  dataInputCORE <- data.frame(chrom = NA, start = NA, end = NA)
+  dataInputCORE <- data.frame()
   
   cd_doc()
   loaded_segments <- list(NA)
@@ -40,20 +44,30 @@ generateInputCORE <- function(){
     segments <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))  
     segments <- segments[,c(1, 10, 11)]
     names(segments) <- c("chrom", "start", "end")
-    
-    
-    # segments$X.chrom. <- paste("chr", segments$X.chrom., sep="")
-    
-    
-    
-    # loaded_segments[loaded_segments.index] <- segments
-    # loaded_segments.index <- loaded_segments.index + 1
+    dataInputCORE <- rbind(dataInputCORE, segments)
   }
+  return(dataInputCORE)
 }
 
 # A table of chromosome boundary positions for DNA copy number analysis
 generateInputBoundaries <- function(){
-
+  genome <- BSgenome.Hsapiens.UCSC.hg19
+  seqlengths(genome) <- seqlengths(Hsapiens)
+  
+  # Create chromosome vector
+  chrom_vec <- c(NA)
+  chrom_vec.index <- 1
+  for(i in append(seq(1,22, by=1), c("X", "Y"))){
+    chrom_vec[chrom_vec.index] <- paste("chr", i, sep = "")  
+    chrom_vec.index <- chrom_vec.index + 1
+  }
+  dataInputBoundaries <- data.frame()
+  
+  for(chrom_i in chrom_vec){
+    df = data.frame(chrom = chrom_i, start = 0, end = seqlengths(genome)[chrom_i])
+    dataInputBoundaries <- rbind(dataInputBoundaries, df)
+  }
+  return(dataInputBoundaries)
 }
 
 testInputCORE <- generateInputCORE()
