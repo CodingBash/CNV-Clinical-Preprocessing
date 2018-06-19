@@ -18,8 +18,8 @@ cd_doc <- function() {
 
 cd_local()
 samples <- read.table("sampleList.csv", header=T, sep = "\t", stringsAsFactors = F)
-for(sample in samples$Organoids){
-#sample <- "hN31"
+#for(sample in samples$Organoids){
+sample <- "hT30"
   # Import data
   cd_doc()
   #facets_data <- as.data.frame(read.table("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_hT1/analysis/structural_variants/hT1--NA12878.cnv.facets.v0.5.2.txt", header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
@@ -44,24 +44,26 @@ for(sample in samples$Organoids){
   
   
   cd_local()
-  pdf(paste("cnv_image", sample, ".pdf", sep = ""), width = 44, height = 16)
+  #pdf(paste("cnv_image_merged_chr19_", sample, ".pdf", sep = ""), width = 44, height = 16)
   
   # Visualize bins
   # TODO, switch from segment BED to bin BED
-  gtrellis_layout(track_height = c(1,3,3), track_ylim = range(data.frame(facets_bins_data$X.cnlr.)), nrow = 3, n_track = 3, byrow = FALSE, species="hg19")
+  #gtrellis_layout(track_height = c(1,4), track_ylim = range(data.frame(facets_bins_data$X.cnlr.)), nrow = 3, n_track = 2, byrow = FALSE, species="hg19")
+  gtrellis_layout(track_height = c(1,4), track_ylim = range(data.frame(facets_bins_data$X.cnlr.)), nrow = 3, n_track = 2, byrow = FALSE, species="hg19", category = c("chrX"))
   add_track(panel_fun = function(gr) {
     # the use of `get_cell_meta_data()` will be introduced later
     chr = get_cell_meta_data("name")  
     grid.rect(gp = gpar(fill = "#EEEEEE"))
     grid.text(chr)
   })
-  add_points_track(facets_bins_data, facets_bins_data$X.cnlr., gp = gpar(col = ifelse(facets_bins_data$X.cnlr. > 0.2, "blue", ifelse(facets_bins_data$X.cnlr. > -0.23, "black", "red"))))
-  add_segments_track(facets_data, facets_data$X.cnlr.median., gp = gpar(col = ifelse(facets_data$X.cnlr.median. > 0.2, "blue", ifelse(facets_data$X.cnlr.median. > -0.23, "black", "red")), lwd = 4))
+  add_points_track(facets_bins_data, facets_bins_data$X.cnlr., gp = gpar(fill = "gray"))
+  #add_points_track(facets_bins_data, facets_bins_data$X.cnlr., gp = gpar(col = ifelse(facets_bins_data$X.cnlr. > 0.2, "blue", ifelse(facets_bins_data$X.cnlr. > -0.23, "black", "red"))))
+  add_segments_track(facets_data, facets_data$X.cnlr.median., track = current_track(), gp = gpar(col = ifelse(facets_data$X.cnlr.median. > 0.2, "orange", ifelse(facets_data$X.cnlr.median. > -0.23, "blue", "red")), lwd = 4))
   
   # Visualize segments
   #gtrellis_layout(track_ylim= range(data.frame(facets_data$X.cnlr.median.)), nrow = 3, byrow = FALSE)
   # add_segments_track(facets_data, facets_data$X.cnlr.median., gp = gpar(col = ifelse(facets_data$X.cnlr.median. > 0, "red", "green")), lwd = 4)
   #add_segments_track(facets_data, facets_data$X.cnlr.median., gp = gpar(col = ifelse(facets_data$X.cnlr.median. > 0.2, "blue", ifelse(facets_data$X.cnlr.median. > -0.23, "black", "red")), lwd = 4))
   
-  dev.off()
-}
+  #dev.off()
+#}
