@@ -1,11 +1,13 @@
 # Download packages
 source("https://bioconductor.org/biocLite.R")
 biocLite("gtrellis")
+biocLite("ComplexHeatmap")
 
 # Import libraries
 library(gtrellis)
 library(circlize)
 library(rstudioapi) # load it
+library(ComplexHeatmap)
 
 cd_local <- function() {
   current_path <- getActiveDocumentContext()$path 
@@ -48,8 +50,24 @@ sample <- "hT30"
   
   # Visualize bins
   # TODO, switch from segment BED to bin BED
-  #gtrellis_layout(track_height = c(1,4), track_ylim = range(data.frame(facets_bins_data$X.cnlr.)), nrow = 3, n_track = 2, byrow = FALSE, species="hg19")
-  gtrellis_layout(track_height = c(1,4), track_ylim = range(data.frame(facets_bins_data$X.cnlr.)), nrow = 3, n_track = 2, byrow = FALSE, species="hg19", category = c("chrX"))
+  lgd = Legend(at = c("duplication", "nuetral", "deletion"), title = "Class", type = "lines", legend_gp = gpar(col = c("orange", "blue", "red")))
+  gtrellis_layout(track_height = c(2,5,1),
+                  track_axis = c(FALSE, TRUE, FALSE), 
+                  track_ylim = range(data.frame(facets_bins_data$X.cnlr.)), 
+                  nrow = 3, 
+                  n_track = 3, 
+                  byrow = FALSE, 
+                  species="hg19",
+                  legend = lgd)
+  
+  # gtrellis_layout(track_height = c(2,5,1),
+  #                 track_axis = c(FALSE, TRUE, FALSE), 
+  #                 track_ylim = range(data.frame(facets_bins_data$X.cnlr.)),
+  #                 nrow = 3, 
+  #                 n_track = 3, 
+  #                 byrow = FALSE, 
+  #                 species="hg19", 
+  #                 category = c("chr2"))
   add_track(panel_fun = function(gr) {
     # the use of `get_cell_meta_data()` will be introduced later
     chr = get_cell_meta_data("name")  
@@ -60,6 +78,18 @@ sample <- "hT30"
   #add_points_track(facets_bins_data, facets_bins_data$X.cnlr., gp = gpar(col = ifelse(facets_bins_data$X.cnlr. > 0.2, "blue", ifelse(facets_bins_data$X.cnlr. > -0.23, "black", "red"))))
   add_segments_track(facets_data, facets_data$X.cnlr.median., track = current_track(), gp = gpar(col = ifelse(facets_data$X.cnlr.median. > 0.2, "orange", ifelse(facets_data$X.cnlr.median. > -0.23, "blue", "red")), lwd = 4))
   
+  cytoband_df = circlize::read.cytoband(species = "hg19")$df
+  add_track(cytoband_df, panel_fun = function(gr) {
+    cytoband_chr = gr
+    grid.rect(cytoband_chr[[2]], unit(0, "npc"),
+              width = cytoband_chr[[3]] - cytoband_chr[[2]], height = unit(1, "npc"),
+              default.units = "native", hjust = 0, vjust = 0,
+              gp = gpar(fill = circlize::cytoband.col(cytoband_chr[[5]])))
+    grid.rect(min(cytoband_chr[[2]]), unit(0, "npc"),
+              width = max(cytoband_chr[[3]]) - min(cytoband_chr[[2]]), height = unit(1, "npc"),
+              default.units = "native", hjust = 0, vjust = 0,
+              gp = gpar(fill = "transparent"))
+  })
   # Visualize segments
   #gtrellis_layout(track_ylim= range(data.frame(facets_data$X.cnlr.median.)), nrow = 3, byrow = FALSE)
   # add_segments_track(facets_data, facets_data$X.cnlr.median., gp = gpar(col = ifelse(facets_data$X.cnlr.median. > 0, "red", "green")), lwd = 4)
