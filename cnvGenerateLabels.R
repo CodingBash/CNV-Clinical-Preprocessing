@@ -1,4 +1,5 @@
-library(rstudioapi) # load it
+install.packages("rstudioapi")
+library("rstudioapi")
 
 cd_doc <- function() {
   setwd("C:/Users/bbece/Documents")
