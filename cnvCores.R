@@ -68,18 +68,17 @@ rescaleInput <- function(input, chromosomeSizes){
     } else if (chrom_r == "X") {
       for(i in seq(1, 22)){
         total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
-        print(i)
       }  
     }  else if (chrom_r == "Y") {
       for(i in seq(1, 22)){
         total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
-        print(i)
       }  
       total_bp <- total_bp + chromosomeSizes["chrX", ]$size
     }
     input[row.index, ]$start <- input[row.index, ]$start + total_bp
     input[row.index, ]$end <- input[row.index, ]$end + total_bp
   }
+  return(input)
 }
 # A table of DNA copy number gain events observed in 100 individual tumor cells
 generateInputCORE <- function(chromosomeSizes){
@@ -91,15 +90,15 @@ generateInputCORE <- function(chromosomeSizes){
   for(sample in loaded_samples){
     segments <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))  
     segments <- segments[,c(1, 10, 11)]
-    print(segments)
     names(segments) <- c("chrom", "start", "end")
-    
     segments <- rescaleInput(segments, chromosomeSizes)
+    
     dataInputCORE <- rbind(dataInputCORE, segments)
   }
   return(dataInputCORE)
 }
 
+# TODO: Need to verify results - check with Pascal
 inputCORE <- generateInputCORE(chromosomeSizes)
 
 
