@@ -80,6 +80,7 @@ rescaleInput <- function(input, chromosomeSizes){
   }
   return(input)
 }
+
 # A table of DNA copy number gain events observed in 100 individual tumor cells
 generateInputCORE <- function(chromosomeSizes){
   dataInputCORE <- data.frame()
@@ -101,6 +102,36 @@ generateInputCORE <- function(chromosomeSizes){
 # TODO: Need to verify results - check with Pascal
 inputCORE <- generateInputCORE(chromosomeSizes)
 
+rescaleBoundaries <- function(chromosomeSizes){
+  boundaries <- data.frame()
+  # TODO: This may not work, may need to paste "chr" --- it works fine
+  for(row.index in seq(1, nrow(chromosomeSizes))){
+    chrom_r <- chromosomeSizes[row.index, ]$chrom
+    total_bp <- 0
+    last_size <- chromosomeSizes[chrom_r, ]$size
+    
+    if(chrom_r %in% paste("chr", seq(1,22), sep = "")){ # TODO: chrom_r index may be off
+      for(i in paste("chr", seq(1, as.numeric(substring(chrom_r, 4))), sep = "")){
+        total_bp <- total_bp + chromosomeSizes[i, ]$size
+      }  
+    } else if (chrom_r == "chrX") {
+      for(i in paste("chr", seq(1, 22), sep = "")){
+        total_bp <- total_bp + chromosomeSizes[i, ]$size
+      }  
+    }  else if (chrom_r == "chrY") {
+      for(i in paste("chr", seq(1, 22), sep = "")){
+        total_bp <- total_bp + chromosomeSizes[i, ]$size
+      }  
+      total_bp <- total_bp + chromosomeSizes["chrX", ]$size
+    } else {
+      next
+    }
+    df = data.frame(chrom = chrom_r, start = total_bp - last_size + 1, end = total_bp)
+    boundaries <- rbind(boundaries, df)
+  }
+  return(boundaries)
+}
+inputBoundaries <- rescaleBoundaries(chromosomeSizes)
 
 
 #Compute 3 cores and perform no randomization
