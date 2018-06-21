@@ -96,14 +96,18 @@ generateInputCORE <- function(chromosomeSizes){
     
     dataInputCORE <- rbind(dataInputCORE, segments)
   }
-  return(dataInputCORE)
+  
+  # TODO: SKIPPING X AND Y DUE TO INPUT FORMAT ERROR (not accepting string as chr)
+  returnme <- dataInputCORE[dataInputCORE$chrom != "X" & dataInputCORE$chrom != "Y",]
+  returnme$chrom <- as.numeric(returnme$chrom)
+  return(returnme)
 }
 
 # TODO: Need to verify results - check with Pascal
 inputCORE <- generateInputCORE(chromosomeSizes)
 
 rescaleBoundaries <- function(chromosomeSizes){
-  boundaries <- data.frame()
+  boundaries <- data.frame(stringsAsFactors = FALSE)
   # TODO: This may not work, may need to paste "chr" --- it works fine
   for(row.index in seq(1, nrow(chromosomeSizes))){
     chrom_r <- chromosomeSizes[row.index, ]$chrom
@@ -126,10 +130,15 @@ rescaleBoundaries <- function(chromosomeSizes){
     } else {
       next
     }
-    df = data.frame(chrom = chrom_r, start = total_bp - last_size + 1, end = total_bp)
+    df = data.frame(chrom = substring(chrom_r, 4), start = total_bp - last_size + 1, end = total_bp, stringsAsFactors = FALSE)
     boundaries <- rbind(boundaries, df)
   }
-  return(boundaries)
+  
+  # TODO: SKIPPING X AND Y DUE TO INPUT FORMAT ERROR (not accepting string as chr)
+  returnme <- boundaries[boundaries$chrom != "X" & boundaries$chrom != "Y",]
+  returnme$chrom <- as.numeric(returnme$chrom)
+  
+  return(returnme)
 }
 inputBoundaries <- rescaleBoundaries(chromosomeSizes)
 
@@ -137,13 +146,13 @@ inputBoundaries <- rescaleBoundaries(chromosomeSizes)
 #Compute 3 cores and perform no randomization
 #(meaningless for estimate of significance).
 
-myCOREobj<-CORE(dataIn=testInputCORE, maxmark=15, minscore = 50, nshuffle=0,
-                boundaries=testInputBoundaries,seedme=123)
+myCOREobj<-CORE(dataIn=inputCORE, maxmark=10, nshuffle=0,
+                boundaries=inputBoundaries,seedme=123)
 ## Not run:
 #Extend this computation to a much larger number of randomizations,
 #using 2 cores of a host computer.
 newCOREobj<-CORE(dataIn=myCOREobj,keep=c("maxmark","seedme","boundaries"),
-                 nshuffle=20,distrib="Rparallel",njobs=4)
+                 nshuffle=50,distrib="Rparallel",njobs=4)
 #When using "Grid", make sure you have write
 ## Not run:
 #Extend this computation to a much larger number of randomizations,
