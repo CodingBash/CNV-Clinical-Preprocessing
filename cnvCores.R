@@ -32,26 +32,8 @@ for(sample in samples$Organoids){
   }
 }
 
-
-# A table of DNA copy number gain events observed in 100 individual tumor cells
-generateInputCORE <- function(){
-  dataInputCORE <- data.frame()
-  
-  cd_doc()
-  loaded_segments <- list(NA)
-  loaded_segments.index <- 1
-  for(sample in loaded_samples){
-    segments <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))  
-    segments <- segments[,c(1, 10, 11)]
-    print(segments)
-    names(segments) <- c("chrom", "start", "end")
-    dataInputCORE <- rbind(dataInputCORE, segments)
-  }
-  return(dataInputCORE)
-}
-
 # A table of chromosome boundary positions for DNA copy number analysis
-generateInputBoundaries <- function(){
+generateChromosomeSizes <- function(){
   genome <- BSgenome.Hsapiens.UCSC.hg19
   seqlengths(genome) <- seqlengths(Hsapiens)
   
@@ -62,26 +44,77 @@ generateInputBoundaries <- function(){
     chrom_vec[chrom_vec.index] <- paste("chr", i, sep = "")  
     chrom_vec.index <- chrom_vec.index + 1
   }
-  dataInputBoundaries <- data.frame()
+  chromosomeSizes <- data.frame()
   
   for(chrom_i in chrom_vec){
-    df = data.frame(chrom = chrom_i, start = 0, end = seqlengths(genome)[chrom_i])
-    dataInputBoundaries <- rbind(dataInputBoundaries, df)
+    df = data.frame(chrom = chrom_i, size = seqlengths(genome)[chrom_i])
+    chromosomeSizes <- rbind(chromosomeSizes, df)
   }
-  return(dataInputBoundaries)
+  return(chromosomeSizes)
 }
 
-testInputCORE <- generateInputCORE()
-testInputBoundaries <- generateInputBoundaries()
+chromosomeSizes <- generateChromosomeSizes()
+
+
+# TODO: Deal with a female XX case (does it matter though?)
+rescaleInput <- function(input, chromosomeSizes){
+  for(row.index in seq(1, nrow(input))){
+    chrom_r <- input[row.index, ]$chrom
+    total_bp <- 0
+    if(chrom_r %in% seq(2,22)){
+      for(i in seq(1, as.numeric(chrom_r) - 1)){
+        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+      }  
+    } else if (chrom_r == "X") {
+      for(i in seq(1, 22)){
+        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+        print(i)
+      }  
+    }  else if (chrom_r == "Y") {
+      for(i in seq(1, 22)){
+        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+        print(i)
+      }  
+      total_bp <- total_bp + chromosomeSizes["chrX", ]$size
+    }
+    input[row.index, ]$start <- input[row.index, ]$start + total_bp
+    input[row.index, ]$end <- input[row.index, ]$end + total_bp
+  }
+}
+# A table of DNA copy number gain events observed in 100 individual tumor cells
+generateInputCORE <- function(chromosomeSizes){
+  dataInputCORE <- data.frame()
+  
+  cd_doc()
+  loaded_segments <- list(NA)
+  loaded_segments.index <- 1
+  for(sample in loaded_samples){
+    segments <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))  
+    segments <- segments[,c(1, 10, 11)]
+    print(segments)
+    names(segments) <- c("chrom", "start", "end")
+    
+    segments <- rescaleInput(segments, chromosomeSizes)
+    dataInputCORE <- rbind(dataInputCORE, segments)
+  }
+  return(dataInputCORE)
+}
+
+inputCORE <- generateInputCORE(chromosomeSizes)
+
+
 
 #Compute 3 cores and perform no randomization
 #(meaningless for estimate of significance).
-data(testInputCORE)
-data(testInputBoundaries)
 
-myCOREobj<-CORE(dataIn=myCOREobj,keep=c("maxmark","seedme","boundaries", "CORE"),
-                 nshuffle=20,distrib="Rparallel",njobs=2)
-
+myCOREobj<-CORE(dataIn=testInputCORE, maxmark=15, minscore = 50, nshuffle=0,
+                boundaries=testInputBoundaries,seedme=123)
+## Not run:
+#Extend this computation to a much larger number of randomizations,
+#using 2 cores of a host computer.
+newCOREobj<-CORE(dataIn=myCOREobj,keep=c("maxmark","seedme","boundaries"),
+                 nshuffle=20,distrib="Rparallel",njobs=4)
+#When using "Grid", make sure you have write
 ## Not run:
 #Extend this computation to a much larger number of randomizations,
 #using 2 cores of a host computer.
