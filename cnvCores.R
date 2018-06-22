@@ -19,6 +19,7 @@ cd_doc <- function() {
 cd_local()
 samples <- read.table("sampleList.csv", header=T, sep = "\t", stringsAsFactors = F)
 classes <- c("N")
+event <- "A" # A - amplification, D - deletion
 
 loaded_samples <- c(NA)
 loaded_samples.index <- 1
@@ -90,6 +91,12 @@ generateInputCORE <- function(chromosomeSizes){
   loaded_segments.index <- 1
   for(sample in loaded_samples){
     segments <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))  
+    if(event == "A"){
+      segments <- segments[segments$X.cnlr.median. > 0.2,]  
+    } else if (event == "D"){
+      segments <- segments[segments$X.cnlr.median. < -0.235,]  
+    }
+    
     segments <- segments[,c(1, 10, 11)]
     names(segments) <- c("chrom", "start", "end")
     segments <- rescaleInput(segments, chromosomeSizes)
@@ -165,27 +172,59 @@ newCOREobj<-CORE(dataIn=myCOREobj,keep=c("maxmark","seedme","boundaries"),
 # nshuffle=20,distrib="Grid",njobs=2)
 ## End(Not run)
 
+# TODO: Deal with a female XX case (does it matter though?)
+rescaleOutput <- function(cores, chromosomeSizes){
+  for(row.index in seq(1, nrow(cores))){
+    chrom_r <- as.numeric(substring(cores[row.index, ]$chrom, 4))
+    #print(chrom_r)
+    total_bp <- 0
+    if(chrom_r %in% seq(2,22)){
+      for(i in seq(1, as.numeric(chrom_r) - 1)){
+        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+      }  
+    } else if (chrom_r == "X") {
+      for(i in seq(1, 22)){
+        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+      }  
+    }  else if (chrom_r == "Y") {
+      for(i in seq(1, 22)){
+        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+      }  
+      total_bp <- total_bp + chromosomeSizes["chrX", ]$size
+    }
+    #print(total_bp)
+    cores[row.index, ]$start <- cores[row.index, ]$start - total_bp
+    cores[row.index, ]$end <- cores[row.index, ]$end - total_bp
+  }
+  return(cores)
+}
+
 install.packages("devtools")
 library(devtools)
 install_github("wefang/ghelper")
 
-boundaries <- data.frame(myCOREobj$coreTable)
-boundaries$chrom <- paste("chr", boundaries$chrom, sep = "")
+coreTable <- data.frame(myCOREobj$coreTable)
+coreTable <- rescaleOutput(coreTable, chromosomeSizes)
+
+#coreTable$chrom <- paste("chr", coreTable$chrom, sep = "")
 
 library(gtrellis)
 library(circlize)
 library(rstudioapi) # load it
 library(ComplexHeatmap)
 
+
 lgd = Legend(at = c("duplication", "nuetral", "deletion"), title = "Class", type = "lines", legend_gp = gpar(col = c("orange", "blue", "red")))
 gtrellis_layout(track_height = c(2,5,1),
                 track_axis = c(FALSE, TRUE, FALSE), 
-                track_ylim = range(seq(-1,1)), 
+                track_ylim = range(data.frame(coreTable$score)), 
                 nrow = 3, 
                 n_track = 3, 
                 byrow = FALSE, 
                 species="hg19",
-                legend = lgd)
+                legend = lgd
+                #,category = c("chr19")
+                )
 
 # gtrellis_layout(track_height = c(2,5,1),
 #                 track_axis = c(FALSE, TRUE, FALSE), 
@@ -202,7 +241,7 @@ add_track(panel_fun = function(gr) {
   grid.text(chr)
 })
 
-add_segments_track(boundaries, 0, gp = gpar(col = "black", lwd = 4))
+add_segments_track(coreTable, coreTable$score, gp = gpar(col = "black", lwd = 4))
 
 cytoband_df = circlize::read.cytoband(species = "hg19")$df
 add_track(cytoband_df, panel_fun = function(gr) {

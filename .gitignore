@@ -39,3 +39,4 @@ rsconnect/
 *.pdf
 *.zip
 *.rds
+/plot_saves
