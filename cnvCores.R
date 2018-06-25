@@ -175,8 +175,8 @@ newCOREobj<-CORE(dataIn=myCOREobj,keep=c("maxmark","seedme","boundaries"),
 # TODO: Deal with a female XX case (does it matter though?)
 rescaleOutput <- function(cores, chromosomeSizes){
   for(row.index in seq(1, nrow(cores))){
-    chrom_r <- as.numeric(substring(cores[row.index, ]$chrom, 4))
-    #print(chrom_r)
+    chrom_r <- as.numeric(cores[row.index, ]$chrom)
+    print(chrom_r)
     total_bp <- 0
     if(chrom_r %in% seq(2,22)){
       for(i in seq(1, as.numeric(chrom_r) - 1)){
@@ -199,12 +199,13 @@ rescaleOutput <- function(cores, chromosomeSizes){
   return(cores)
 }
 
-install.packages("devtools")
-library(devtools)
-install_github("wefang/ghelper")
+#install.packages("devtools")
+#library(devtools)
+#install_github("wefang/ghelper")
 
 coreTable <- data.frame(myCOREobj$coreTable)
 coreTable <- rescaleOutput(coreTable, chromosomeSizes)
+coreTable$chrom <- paste("chr", coreTable$chrom, sep = "")
 
 #coreTable$chrom <- paste("chr", coreTable$chrom, sep = "")
 
@@ -255,3 +256,6 @@ add_track(cytoband_df, panel_fun = function(gr) {
             default.units = "native", hjust = 0, vjust = 0,
             gp = gpar(fill = "transparent"))
 })
+
+# TODO: SAVE DATA
+
