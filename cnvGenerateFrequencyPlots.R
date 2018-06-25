@@ -41,21 +41,21 @@ for(sample in samples$Organoids){
   dataInputCORE <- data.frame()
   
   cd_doc()
-  loaded_segments <- list(NA)
-  loaded_segments.index <- 1
+  loaded_bins <- list(NA)
+  loaded_bins.index <- 1
   for(sample in loaded_samples){
-    segments <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))  
+    bins <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.procSample-jseg.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
     if(event == "A"){
-      segments <- segments[segments$X.cnlr.median. > 0.2,]  
+      bins <- bins[bins$X.cnlr. > 0.2,]  
     } else if (event == "D"){
-      segments <- segments[segments$X.cnlr.median. < -0.235,]  
+      bins <- bins[bins$X.cnlr. < -0.235,]  
     }
     
-    segments <- segments[,c(1, 10, 11, 5)]
-    names(segments) <- c("chrom", "start", "end", "cnlr")
+    bins <- bins[,c(1, 2, 2, 11)]
+    names(bins) <- c("chrom", "start", "end", "cnlr")
     #segments <- rescaleInput(segments, chromosomeSizes)
     
-    dataInputCORE <- rbind(dataInputCORE, segments)
+    dataInputCORE <- rbind(dataInputCORE, bins)
   }
   
   # TODO: SKIPPING X AND Y DUE TO INPUT FORMAT ERROR (not accepting string as chr)
@@ -63,7 +63,7 @@ for(sample in samples$Organoids){
   dataInputCORE$chrom <- paste("chr", dataInputCORE$chrom, sep = "")
   
   ##########
-  dataInputCORE_density = circlize::genomicDensity(dataInputCORE, window.size = 1e7)
+  dataInputCORE_density = circlize::genomicDensity(dataInputCORE, window.size = 5e6)
   head(dataInputCORE_density)
   
   
