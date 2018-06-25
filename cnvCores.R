@@ -207,6 +207,9 @@ coreTable <- data.frame(myCOREobj$coreTable)
 coreTable <- rescaleOutput(coreTable, chromosomeSizes)
 coreTable$chrom <- paste("chr", coreTable$chrom, sep = "")
 
+densityInput <- cbind(rescaleOutput(inputCORE, chromosomeSizes))
+densityInput$chrom <- paste("chr", densityInput$chrom, sep = "")
+dataInputCORE_density = circlize::genomicDensity(densityInput, window.size = 1e7, overlap = FALSE)
 #coreTable$chrom <- paste("chr", coreTable$chrom, sep = "")
 
 library(gtrellis)
@@ -216,11 +219,14 @@ library(ComplexHeatmap)
 
 
 lgd = Legend(at = c("duplication", "nuetral", "deletion"), title = "Class", type = "lines", legend_gp = gpar(col = c("orange", "blue", "red")))
-gtrellis_layout(track_height = c(2,5,1),
-                track_axis = c(FALSE, TRUE, FALSE), 
-                track_ylim = range(data.frame(coreTable$score)), 
+gtrellis_layout(track_height = unit.c(2*grobHeight(textGrob("chr1")), 
+                                      unit(1.0, "null"), 
+                                      unit(0.5, "null"), 
+                                      unit(3, "mm")),
+                track_axis = c(FALSE, TRUE, TRUE, FALSE), 
+                track_ylim = c(0, 1, range(data.frame(coreTable$score)), c(0, max(dataInputCORE_density[[4]])), 0, 1),
                 nrow = 3, 
-                n_track = 3, 
+                n_track = 4, 
                 byrow = FALSE, 
                 species="hg19",
                 legend = lgd
@@ -243,6 +249,9 @@ add_track(panel_fun = function(gr) {
 })
 
 add_segments_track(coreTable, coreTable$score, gp = gpar(col = "black", lwd = 4))
+
+add_lines_track(dataInputCORE_density, dataInputCORE_density[[4]], area = TRUE, 
+                gp = gpar(fill = "pink"))
 
 cytoband_df = circlize::read.cytoband(species = "hg19")$df
 add_track(cytoband_df, panel_fun = function(gr) {
