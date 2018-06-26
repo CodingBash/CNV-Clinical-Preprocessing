@@ -19,7 +19,7 @@ cd_doc <- function() {
 cd_local()
 samples <- read.table("sampleList.csv", header=T, sep = "\t", stringsAsFactors = F)
 classes <- c("N")
-event <- "A" # A - amplification, D - deletion
+event <- "D" # A - amplification, D - deletion
 
 loaded_samples <- c(NA)
 loaded_samples.index <- 1
@@ -61,6 +61,10 @@ chromosomeSizes <- generateChromosomeSizes()
 rescaleInput <- function(input, chromosomeSizes){
   for(row.index in seq(1, nrow(input))){
     chrom_r <- input[row.index, ]$chrom
+    if (is.na(chrom_r) || length(chrom_r) == 0){
+      next # TODO: This is to resolve the NA row. Where did it come from?
+    } 
+    print(chrom_r)
     total_bp <- 0
     if(chrom_r %in% seq(2,22)){
       for(i in seq(1, as.numeric(chrom_r) - 1)){
@@ -91,6 +95,7 @@ generateInputCORE <- function(chromosomeSizes){
   loaded_segments.index <- 1
   for(sample in loaded_samples){
     segments <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))  
+    head(segments)
     if(event == "A"){
       segments <- segments[segments$X.cnlr.median. > 0.2,]  
     } else if (event == "D"){
@@ -250,8 +255,16 @@ add_track(panel_fun = function(gr) {
 
 add_segments_track(coreTable, coreTable$score, gp = gpar(col = "black", lwd = 4))
 
+fill_string <- NA
+if(event == "A"){
+  fill_string <- "pink"
+} else {
+  fill_string <- "blue"
+}
+
+
 add_lines_track(dataInputCORE_density, dataInputCORE_density[[4]], area = TRUE, 
-                gp = gpar(fill = "pink"))
+                gp = gpar(fill = fill_string))
 
 cytoband_df = circlize::read.cytoband(species = "hg19")$df
 add_track(cytoband_df, panel_fun = function(gr) {

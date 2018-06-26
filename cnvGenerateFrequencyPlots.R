@@ -86,9 +86,17 @@ for(sample in samples$Organoids){
     grid.text(chr)
   })
   
+  fill_string <- NA
+  if(event == "A"){
+    fill_string <- "pink"
+  } else {
+    fill_string <- "blue"
+  }
+  
+  
   # track for genomic density
   add_lines_track(dataInputCORE_density, dataInputCORE_density[[4]], area = TRUE, 
-                  gp = gpar(fill = "pink"))
+                  gp = gpar(fill = fill_string))
   
   # TODO: Set default to lowest heat
   col_fun = circlize::colorRamp2(seq(0, max(dataInputCORE_density[[4]]), length = 11), 
