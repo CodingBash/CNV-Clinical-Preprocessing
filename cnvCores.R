@@ -19,7 +19,7 @@ cd_doc <- function() {
 cd_local()
 samples <- read.table("sampleList.csv", header=T, sep = "\t", stringsAsFactors = F)
 classes <- c("N")
-event <- "D" # A - amplification, D - deletion
+event <- "A" # A - amplification, D - deletion
 
 loaded_samples <- c(NA)
 loaded_samples.index <- 1
@@ -160,22 +160,13 @@ inputBoundaries <- rescaleBoundaries(chromosomeSizes)
 
 myCOREobj<-CORE(dataIn=inputCORE, maxmark=10, nshuffle=0,
                 boundaries=inputBoundaries,seedme=123)
-## Not run:
-#Extend this computation to a much larger number of randomizations,
-#using 2 cores of a host computer.
+
 newCOREobj<-CORE(dataIn=myCOREobj,keep=c("maxmark","seedme","boundaries"),
                  nshuffle=50,distrib="Rparallel",njobs=4)
-#When using "Grid", make sure you have write
-## Not run:
-#Extend this computation to a much larger number of randomizations,
-#using 2 cores of a host computer.
-# newCOREobj<-CORE(dataIn=myCOREobj,keep=c("maxmark","seedme","boundaries"),
-# nshuffle=20,distrib="Rparallel",njobs=2)
-#When using "Grid", make sure you have write premission to the current
-#work space.
-# newCOREobj<-CORE(dataIn=myCOREobj,keep=c("maxmark","seedme","boundaries"),
-# nshuffle=20,distrib="Grid",njobs=2)
-## End(Not run)
+
+newCOREobj<-CORE(dataIn=myCOREobj,keep=c("maxmark","seedme","boundaries"),
+ nshuffle=20,distrib="Grid",njobs=2)
+
 
 # TODO: Deal with a female XX case (does it matter though?)
 rescaleOutput <- function(cores, chromosomeSizes){
