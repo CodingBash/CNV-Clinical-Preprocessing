@@ -51,13 +51,14 @@ sample <- "hT30"
   # Visualize bins
   # TODO, switch from segment BED to bin BED
   lgd = Legend(at = c("duplication", "nuetral", "deletion"), title = "Class", type = "lines", legend_gp = gpar(col = c("orange", "blue", "red")))
-  gtrellis_layout(track_height = c(2,5,1),
+  gtrellis_layout(track_height = c(1,8,1),
                   track_axis = c(FALSE, TRUE, FALSE), 
-                  track_ylim = range(data.frame(facets_bins_data$X.cnlr.)), 
+                  track_ylim = range(seq(-6,2)), 
                   nrow = 3, 
                   n_track = 3, 
                   byrow = FALSE, 
-                  species="hg19",
+                  species="hg19"
+                  , category = "chr8",
                   legend = lgd)
   
   # gtrellis_layout(track_height = c(2,5,1),

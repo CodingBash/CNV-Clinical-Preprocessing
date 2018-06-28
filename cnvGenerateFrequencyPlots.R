@@ -45,6 +45,7 @@ for(sample in samples$Organoids){
   loaded_bins.index <- 1
   for(sample in loaded_samples){
     bins <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.procSample-jseg.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+    head(bins)
     if(event == "A"){
       bins <- bins[bins$X.cnlr. > 0.2,]  
     } else if (event == "D"){

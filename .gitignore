@@ -40,3 +40,5 @@ rsconnect/
 *.zip
 *.rds
 /plot_saves
+*.bed
+/mappedFacetsFiles
