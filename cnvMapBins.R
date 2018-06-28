@@ -74,6 +74,7 @@ mapBasesToBins <- function(){
   
   for(sample in loaded_samples){
     mapped_sample <- mapSample(sample)
+    print(head(mapped_sample))
     outputMappedSample(sample, mapped_sample)
   }
 }
