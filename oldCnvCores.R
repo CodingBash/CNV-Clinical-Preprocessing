@@ -19,7 +19,7 @@ cd_doc <- function() {
 cd_local()
 samples <- read.table("sampleList.csv", header=T, sep = "\t", stringsAsFactors = F)
 classes <- c("N")
-event <- "A" # A - amplification, D - deletion
+event <- "D" # A - amplification, D - deletion
 
 loaded_samples <- c(NA)
 loaded_samples.index <- 1
@@ -104,12 +104,12 @@ generateInputCORE <- function(chromosomeSizes){
     
     segments <- segments[,c(1, 10, 11)]
     names(segments) <- c("chrom", "start", "end")
-    segments <- rescaleInput(segments, chromosomeSizes)
+    #segments <- rescaleInput(segments, chromosomeSizes)
     
     dataInputCORE <- rbind(dataInputCORE, segments)
   }
   
-  # TODO: SKIPPING X AND Y DUE TO INPUT FORMAT ERROR (not accepting string as chr)
+  # TODO: SKIPPING X AND Y DUE TO INPUT FORMAT ERROR (not accepting string as chr)                          IMPORTANT
   returnme <- dataInputCORE[dataInputCORE$chrom != "X" & dataInputCORE$chrom != "Y",]
   returnme$chrom <- as.numeric(returnme$chrom)
   return(returnme)

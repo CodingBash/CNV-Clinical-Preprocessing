@@ -42,3 +42,5 @@ rsconnect/
 /plot_saves
 *.bed
 /mappedFacetsFiles
+/coresResults
+/coverageWorkspace

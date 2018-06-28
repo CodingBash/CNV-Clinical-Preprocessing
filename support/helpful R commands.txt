@@ -1,0 +1,4 @@
+Produce BED file from formatted data frame:
+
+write.table(inputCOREintervals, sep = "\t", quote = FALSE, col.names = FALSE, row.names = FALSE, file = "inputCOREintervalsDELETIONS.bed", )
+
