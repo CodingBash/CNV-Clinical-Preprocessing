@@ -18,7 +18,7 @@ cd_doc <- function() {
 
 cd_local()
 samples <- read.table("sampleList.csv", header=T, sep = "\t", stringsAsFactors = F)
-classes <- c("N")
+classes <- c("T")
 event <- "D" # A - amplification, D - deletion
 
 loaded_samples <- c(NA)

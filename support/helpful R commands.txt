@@ -2,3 +2,19 @@ Produce BED file from formatted data frame:
 
 write.table(inputCOREintervals, sep = "\t", quote = FALSE, col.names = FALSE, row.names = FALSE, file = "inputCOREintervalsDELETIONS.bed", )
 
+
+Read $coreTable CSV into df
+
+df <- read.table("AcoreTableBP.csv", header = TRUE, sep = ",")
+
+Convert $coreTable CSV into BED formatted data frame, then save
+
+df <- df[,c(2,3,4)]
+write.table(df, sep = "\t", quote = FALSE, col.names = FALSE, row.names = FALSE, file = "AcoresBP.bed")
+
+GET THE CORE ALGORITHM INPUT IN BED FORMAT
+
+head(inputCORE)
+inputCOREintervals <- cbind(inputCORE)
+inputCOREintervals$chrom <- paste("chr", inputCOREintervals$chrom, sep = "")
+write.table(inputCOREintervals, sep = "\t", quote = FALSE, col.names = FALSE, row.names = FALSE, file = "inputCOREintervals.hT.amp.bed", )
