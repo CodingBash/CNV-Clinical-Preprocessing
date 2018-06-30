@@ -7,6 +7,8 @@ install.packages("rstudioapi")
 library(rstudioapi) # load it
 library(BSgenome.Hsapiens.UCSC.hg19)
 library(CORE)
+
+source("cnvMapBins.R")
 cd_local <- function() {
   current_path <- getActiveDocumentContext()$path 
   setwd(dirname(current_path ))
@@ -164,9 +166,13 @@ myCOREobj<-CORE(dataIn=inputCORE, maxmark=10, nshuffle=0,
 newCOREobj<-CORE(dataIn=myCOREobj,keep=c("maxmark","seedme","boundaries"),
                  nshuffle=50,distrib="Rparallel",njobs=4)
 
-newCOREobj<-CORE(dataIn=myCOREobj,keep=c("maxmark","seedme","boundaries"),
- nshuffle=20,distrib="Grid",njobs=2)
+#newCOREobj<-CORE(dataIn=myCOREobj,keep=c("maxmark","seedme","boundaries"),
+# nshuffle=20,distrib="Grid",njobs=2)
 
+
+
+cd_local() # new
+source("cnvMapBins.R") # TODO: Need to check if bins or not (should be a parameter) # new
 
 # TODO: Deal with a female XX case (does it matter though?)
 rescaleOutput <- function(cores, chromosomeSizes){
