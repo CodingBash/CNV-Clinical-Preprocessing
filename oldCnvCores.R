@@ -112,7 +112,10 @@ generateInputCORE <- function(chromosomeSizes){
   }
   
   # TODO: SKIPPING X AND Y DUE TO INPUT FORMAT ERROR (not accepting string as chr)                          IMPORTANT
-  returnme <- dataInputCORE[dataInputCORE$chrom != "X" & dataInputCORE$chrom != "Y",]
+  #returnme <- dataInputCORE[dataInputCORE$chrom != "X" & dataInputCORE$chrom != "Y",]
+  returnme <- cbind(dataInputCORE)
+  if(length(returnme[returnme$chrom == 'X',]$chrom) > 0) returnme[returnme$chrom == 'X',]$chrom <- "23"
+  if(length(returnme[returnme$chrom == 'Y',]$chrom) > 0) returnme[returnme$chrom == 'Y',]$chrom <- "24"
   returnme$chrom <- as.numeric(returnme$chrom)
   return(returnme)
 }
@@ -149,7 +152,10 @@ rescaleBoundaries <- function(chromosomeSizes){
   }
   
   # TODO: SKIPPING X AND Y DUE TO INPUT FORMAT ERROR (not accepting string as chr)
-  returnme <- boundaries[boundaries$chrom != "X" & boundaries$chrom != "Y",]
+  #returnme <- boundaries[boundaries$chrom != "X" & boundaries$chrom != "Y",]
+  returnme <- cbind(boundaries)
+  if(length(returnme[returnme$chrom == 'X',]$chrom) > 0) returnme[returnme$chrom == 'X',]$chrom <- "23"
+  if(length(returnme[returnme$chrom == 'Y',]$chrom) > 0) returnme[returnme$chrom == 'Y',]$chrom <- "24"
   returnme$chrom <- as.numeric(returnme$chrom)
   
   return(returnme)
