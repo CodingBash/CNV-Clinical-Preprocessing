@@ -26,3 +26,9 @@ coreTable <- read.table("AcoreTableBP.csv", header = TRUE, sep = ",")
 coreTable <- coreTable[which(Aobj$p<0.002),]
 coreTable <- coreTable[,c(2,3,4)] # Now convert to BED format
 write.table(coreTable, sep = "\t", quote = FALSE, col.names = FALSE, row.names = FALSE, file = "AcoresBP.bed")
+
+
+# Remove artifacts from hT cores with fractional subtraction
+subtractBed -a AcoresBP.bed -b ../../../hN_results/coresResults/prev_run_7_3_2018/AcoresBP.bed -A -f 0.5 > ../AfinalCoresBP_subtractFraction.bed
+
+
