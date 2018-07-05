@@ -7,6 +7,8 @@ library(CNprep)
 library(rstudioapi) # load it
 
 
+# TODO: Remove the X and Y chromosome segments/bins
+
 # TODO: A lot of the code below is duplicate between many of my R scripts. Need to modularize
 cd_local <- function() {
   current_path <- getActiveDocumentContext()$path 
@@ -23,6 +25,58 @@ sample <- "hT30"
 
 cytobands <- read.table("cytoBand.txt", header=F, sep = "\t", stringsAsFactors = F)
 names(cytobands) <- c("chrom", "start", "end", "cytoloc", "stain")
+
+# TODO: This is a duplicate from cnvCores.R!!! Modularize
+classes <- c("N")
+loaded_samples <- c(NA)
+loaded_samples.index <- 1
+for(sample in samples$Organoids){
+  for(class in classes){
+    if(substring(sample, 2,2) == class){
+      loaded_samples[loaded_samples.index] <- sample
+      loaded_samples.index <- loaded_samples.index + 1
+      next
+    }
+  }
+}
+
+generateInputCORE <- function(chromosomeSizes){
+  dataInputCORE <- data.frame()
+  
+  cd_doc()
+  loaded_segments <- list(NA)
+  loaded_segments.index <- 1
+  for(sample in loaded_samples){
+    segments <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))  
+    # TODO: CHANGED from cnvCores.R - removed event filtering
+    #if(event == "A"){
+    #  segments <- segments[segments$X.cnlr.median. > 0.2,]  
+    #} else if (event == "D"){
+    #  segments <- segments[segments$X.cnlr.median. < -0.235,]  
+    #}
+    
+    #segments <- segments[,c(1, 10, 11)] TODO: CHANGED FROM cnvCores.R version
+    #names(segments) <- c("chrom", "start", "end") TODO: CHANGED FROM cnvCores.R version
+    #segments <- rescaleInput(segments, chromosomeSizes)
+    
+    dataInputCORE <- rbind(dataInputCORE, segments)
+  }
+  
+  # TODO: SKIPPING X AND Y DUE TO INPUT FORMAT ERROR (not accepting string as chr)                          IMPORTANT
+  returnme <- dataInputCORE[dataInputCORE$X.chrom. != "X" & dataInputCORE$X.chrom. != "Y",] # TODO: CHANGED FROM cnvCores.R -> $chrom to #X.chrom.
+  
+  # TODO: CHANGED FROM cnvCores.R version ... intentionally skipping X and Y chromosome
+  #returnme <- cbind(dataInputCORE)
+  #if(length(returnme[returnme$chrom == 'X',]$chrom) > 0) returnme[returnme$chrom == 'X',]$chrom <- "23"
+  #if(length(returnme[returnme$chrom == 'Y',]$chrom) > 0) returnme[returnme$chrom == 'Y',]$chrom <- "24"
+  returnme$X.chrom. <- as.numeric(returnme$X.chrom.) # TODO: CHANGED from cnvCores.R -> changed from $chrom to $X.chrom.
+  return(returnme)
+}
+
+# TODO: Need to verify results - check with Pascal
+normalSegments <- generateInputCORE(chromosomeSizes)
+
+
 
 cd_doc()
 facets_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
@@ -142,6 +196,18 @@ for(facets_bins_data.index in seq(1, nrow(facets_bins_data))){
   ratinput <- rbind(ratinput, ratinput.entry)
 }
 
+norminput <- data.frame(stringsAsFactors = FALSE)
+for(normalSegments.index in seq(1, nrow(normalSegments))){
+  norminput.entry <- data.frame(length = normalSegments[normalSegments.index, ]$X.end. - normalSegments[normalSegments.index, ]$X.start., segmedian = normalSegments[normalSegments.index, ]$X.cnlr.median.)
+  norminput <- rbind(norminput, norminput.entry)
+}
+
+
+
+
+
+
+###############
 data(segexample)
 data(ratexample)
 data(normsegs)
