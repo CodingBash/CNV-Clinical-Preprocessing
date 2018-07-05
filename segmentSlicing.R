@@ -1,10 +1,133 @@
+source("https://bioconductor.org/biocLite.R")
+biocLite("BSgenome.Hsapiens.UCSC.hg19")
+
 install.packages("CNprep")
+library(BSgenome.Hsapiens.UCSC.hg19)
 library(CNprep)
-CNprep::
+library(rstudioapi) # load it
+
+
+# TODO: A lot of the code below is duplicate between many of my R scripts. Need to modularize
+cd_local <- function() {
+  current_path <- getActiveDocumentContext()$path 
+  setwd(dirname(current_path ))
+}
+
+cd_doc <- function() {
+  setwd("C:/Users/bbece/Documents")
+}
+
+cd_local()
+samples <- read.table("sampleList.csv", header=T, sep = "\t", stringsAsFactors = F)
+sample <- "hT30"
+
+cd_doc()
+facets_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+facets_bins_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.procSample-jseg.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+
+
+#facets_data <- facets_data[,c(1, 10, 11, 5)]
+#facets_data$X.chrom. <- paste("chr", facets_data$X.chrom., sep="")
+
+#facets_bins_data$start <- seq(1, length.out=nrow(facets_bins_data), by=1)
+#facets_bins_data$end <- seq(2, length.out=nrow(facets_bins_data), by=1)
+#facets_bins_data <- facets_bins_data[,c(1, 2, 2, 11)]
+#facets_bins_data$X.chrom. <- paste("chr", facets_bins_data$X.chrom., sep="")
+
+
+head(facets_data)
+head(facets_bins_data)
+# print(data_bed)
+
+# TODO: Duplicate CODE from cnvCores.R! Need to modularize
+# A table of chromosome boundary positions for DNA copy number analysis
+generateChromosomeSizes <- function(){
+  genome <- BSgenome.Hsapiens.UCSC.hg19
+  seqlengths(genome) <- seqlengths(Hsapiens)
+  
+  # Create chromosome vector
+  chrom_vec <- c(NA)
+  chrom_vec.index <- 1
+  for(i in append(seq(1,22, by=1), c("X", "Y"))){
+    chrom_vec[chrom_vec.index] <- paste("chr", i, sep = "")  
+    chrom_vec.index <- chrom_vec.index + 1
+  }
+  chromosomeSizes <- data.frame()
+  
+  for(chrom_i in chrom_vec){
+    df = data.frame(chrom = chrom_i, size = seqlengths(genome)[chrom_i])
+    chromosomeSizes <- rbind(chromosomeSizes, df)
+  }
+  return(chromosomeSizes)
+}
+
+chromosomeSizes <- generateChromosomeSizes()
+
+
+# TODO: Duplicate code! -> The only thing changed is pass in a entry's chrom, start, and end instead of whole input
+# --- so we remove the input iteratation. Also, the result is stored in a 1-row dataframe and returned. Essentially, this is the same method but
+# --- but works for just a single row. We can modularize by having the method that works on a whole input just utilize this one.
+# TODO: Deal with a female XX case (does it matter though?)
+rescaleInput <- function(chrom, start, end, chromosomeSizes){
+    chrom_r <- chrom
+    if (is.na(chrom_r) || length(chrom_r) == 0){
+      next # TODO: This is to resolve the NA row. Where did it come from?
+    } 
+    total_bp <- 0
+    if(chrom_r %in% seq(2,22)){
+      for(i in seq(1, as.numeric(chrom_r) - 1)){
+        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+      }  
+    } else if (chrom_r == "X") {
+      for(i in seq(1, 22)){
+        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+      }  
+    }  else if (chrom_r == "Y") {
+      for(i in seq(1, 22)){
+        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+      }  
+      total_bp <- total_bp + chromosomeSizes["chrX", ]$size
+    }
+    abs_start <- start + total_bp
+    abs_end <- end + total_bp
+    returnme <- data.frame(start = abs_start, end = abs_end)
+    return(returnme)
+}
+
+
+seginput <- data.frame(stringsAsFactors = FALSE)
+
+for(facets_data.index in seq(1, nrow(facets_data))){
+  abs_position <- rescaleInput(facets_data[facets_data.index,]$X.chrom., facets_data[facets_data.index,]$X.start., facets_data[facets_data.index,]$X.end., chromosomeSizes)
+  
+  probes.start = 0
+  probes.end = 0
+  for(i in seq(1, facets_data.index)){
+    if(i != facets_data.index){
+      probes.start <- probes.start + facets_data[i,]$X.num.mark.
+    }
+    probes.end <- probes.end + facets_data[i,]$X.num.mark.
+  }
+  probes.start <- probes.start + 1
+  
+  seginput.entry <- data.frame(ID = "P1", start = probes.start, end = probes.end, 
+                               num.probes = facets_data[facets_data.index,]$X.num.mark., seg.median = facets_data[facets_data.index,]$X.cnlr.median., 
+                               chrom = facets_data[facets_data.index,]$X.chrom., chrom.pos.start = facets_data[facets_data.index,]$X.start., 
+                               chrom.pos.end = facets_data[facets_data.index,]$X.end., cytoband.start = "", 
+                               cytoband.end = "", abs.pos.start = abs_position$start,
+                               abs.pos.end = abs_position$end)
+  
+  
+  seginput <- rbind(seginput, seginput.entry)
+}
+
+#ratinput <- ...
 
 data(segexample)
 data(ratexample)
 data(normsegs)
+
+
 #small toy example
 segtable<-CNpreprocessing(segall=segexample[segexample[,"ID"]=="WZ1",],
                           ratall=ratexample,"ID","start","end",chromcol="chrom",bpstartcol="chrom.pos.start",
@@ -27,3 +150,8 @@ segtable<-CNpreprocessing(segall=mysegs,ratall=ratexample,"ID",chromcol="chrom",
                           blsize=50,minjoin=0.25,cweight=0.4,bstimes=50,chromrange=1:22,distrib="Rparallel",
                           njobs=40,modelNames="E",normalength=normsegs[,1],normalmedian=normsegs[,2])
 ## End(Not run)
+
+data(ratexample)
+#Plot the whole genome log ratio data for the first profile
+#Note X and Y chromosomes at the far right of the plot
+plot(ratexample[,1])
