@@ -8,6 +8,7 @@ library(rstudioapi) # load it
 
 
 # TODO: Remove the X and Y chromosome segments/bins
+# TODO: Do not include segments with lower than 5K bp (see paper)
 
 # TODO: A lot of the code below is duplicate between many of my R scripts. Need to modularize
 cd_local <- function() {
@@ -21,8 +22,6 @@ cd_doc <- function() {
 
 cd_local()
 samples <- read.table("sampleList.csv", header=T, sep = "\t", stringsAsFactors = F)
-sample <- "hT30"
-
 cytobands <- read.table("cytoBand.txt", header=F, sep = "\t", stringsAsFactors = F)
 names(cytobands) <- c("chrom", "start", "end", "cytoloc", "stain")
 
@@ -157,7 +156,7 @@ findCytolocation <- function(chrom, chrom.position){
   return(returnme)
 }
 
-
+sample <- "hT30"
 # GENERATE SEGINPUT FROM FACETS SAMPLE
 seginput <- data.frame(stringsAsFactors = FALSE)
 for(facets_data.index in seq(1, nrow(facets_data))){
@@ -204,7 +203,10 @@ for(normalSegments.index in seq(1, nrow(normalSegments))){
 
 
 
-
+segtable<-CNpreprocessing(segall=seginput,ratall=ratinput,"ID","start","end",
+                          chromcol="chrom",bpstartcol="chrom.pos.start",bpendcol="chrom.pos.end",blsize=50,
+                          minjoin=0.25,cweight=0.4,bstimes=50,chromrange=1:22,distrib="Rparallel",njobs=40,
+                          modelNames="E",normalength=norminput[,1],normalmedian=norminput[,2])
 
 
 ###############
