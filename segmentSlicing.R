@@ -104,8 +104,8 @@ findCytolocation <- function(chrom, chrom.position){
 }
 
 
+# GENERATE SEGINPUT FROM FACETS SAMPLE
 seginput <- data.frame(stringsAsFactors = FALSE)
-
 for(facets_data.index in seq(1, nrow(facets_data))){
   abs_position <- rescaleInput(facets_data[facets_data.index,]$X.chrom., facets_data[facets_data.index,]$X.start., facets_data[facets_data.index,]$X.end., chromosomeSizes)
   
@@ -124,7 +124,7 @@ for(facets_data.index in seq(1, nrow(facets_data))){
   cytoband.my.end <- findCytolocation(chrom = facets_data[facets_data.index,]$X.chrom., chrom.position = facets_data[facets_data.index,]$X.end.)
   
   
-  seginput.entry <- data.frame(ID = "P1", start = probes.start, end = probes.end, 
+  seginput.entry <- data.frame(ID = sample, start = probes.start, end = probes.end, 
                                num.probes = facets_data[facets_data.index,]$X.num.mark., seg.median = facets_data[facets_data.index,]$X.cnlr.median., 
                                chrom = facets_data[facets_data.index,]$X.chrom., chrom.pos.start = facets_data[facets_data.index,]$X.start., 
                                chrom.pos.end = facets_data[facets_data.index,]$X.end., cytoband.start = cytoband.my.start, 
@@ -135,7 +135,12 @@ for(facets_data.index in seq(1, nrow(facets_data))){
   seginput <- rbind(seginput, seginput.entry)
 }
 
-#ratinput <- ...
+ratinput <- data.frame(stringsAsFactors = FALSE)
+for(facets_bins_data.index in seq(1, nrow(facets_bins_data))){
+  ratinput.entry <- data.frame(sample = facets_bins_data[facets_bins_data.index,]$X.cnlr.)
+  names(ratinput.entry) <- c(sample)
+  ratinput <- rbind(ratinput, ratinput.entry)
+}
 
 data(segexample)
 data(ratexample)
