@@ -21,6 +21,9 @@ cd_local()
 samples <- read.table("sampleList.csv", header=T, sep = "\t", stringsAsFactors = F)
 sample <- "hT30"
 
+cytobands <- read.table("cytoBand.txt", header=F, sep = "\t", stringsAsFactors = F)
+names(cytobands) <- c("chrom", "start", "end", "cytoloc", "stain")
+
 cd_doc()
 facets_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
 facets_bins_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.procSample-jseg.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
@@ -94,6 +97,12 @@ rescaleInput <- function(chrom, start, end, chromosomeSizes){
     return(returnme)
 }
 
+findCytolocation <- function(chrom, chrom.position){
+  row <- cytobands[cytobands$chrom == paste("chr", chrom, sep = "") & cytobands$start <= chrom.position & cytobands$end >= chrom.position, ]
+  returnme <- data.frame(row)$cytoloc
+  return(returnme)
+}
+
 
 seginput <- data.frame(stringsAsFactors = FALSE)
 
@@ -110,11 +119,16 @@ for(facets_data.index in seq(1, nrow(facets_data))){
   }
   probes.start <- probes.start + 1
   
+  
+  cytoband.my.start <- findCytolocation(chrom = facets_data[facets_data.index,]$X.chrom., chrom.position = facets_data[facets_data.index,]$X.start.)
+  cytoband.my.end <- findCytolocation(chrom = facets_data[facets_data.index,]$X.chrom., chrom.position = facets_data[facets_data.index,]$X.end.)
+  
+  
   seginput.entry <- data.frame(ID = "P1", start = probes.start, end = probes.end, 
                                num.probes = facets_data[facets_data.index,]$X.num.mark., seg.median = facets_data[facets_data.index,]$X.cnlr.median., 
                                chrom = facets_data[facets_data.index,]$X.chrom., chrom.pos.start = facets_data[facets_data.index,]$X.start., 
-                               chrom.pos.end = facets_data[facets_data.index,]$X.end., cytoband.start = "", 
-                               cytoband.end = "", abs.pos.start = abs_position$start,
+                               chrom.pos.end = facets_data[facets_data.index,]$X.end., cytoband.start = cytoband.my.start, 
+                               cytoband.end = cytoband.my.end, abs.pos.start = abs_position$start,
                                abs.pos.end = abs_position$end)
   
   
