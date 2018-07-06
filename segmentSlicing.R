@@ -192,3 +192,27 @@ segtable<-CNpreprocessing(segall=seginput,ratall=ratinput,"ID","start","end",
                           chromcol="chrom",bpstartcol="chrom.pos.start",bpendcol="chrom.pos.end",blsize=50,
                           minjoin=0.25,cweight=0.4,bstimes=50,chromrange=1:22,distrib="Rparallel",njobs=40,
                           modelNames="E",normalength=norminput[,1],normalmedian=norminput[,2])
+
+interval <- 0.1
+tb <- seq(-3, 3, interval)
+col <- rep(1, length(tb))
+means <- sort(unique(segtable$maxzmean))
+color <- 2
+for(mean in means){
+  segmedians <- segtable[segtable$maxzmean == mean, ]$segmedian
+  print(paste(mean, "cluster between", min(segmedians), "and", max(segmedians)))
+  for(tb.index in seq(1, length(tb))){
+    if(tb[tb.index] >= min(segmedians) - (interval/2) & tb[tb.index] <= max(segmedians) + (interval/2)){
+      col[tb.index] <- color  
+    } 
+  }
+  color <- color + 1
+}
+
+hist(segtable$segmedian,
+     col = col,
+     breaks = tb,
+     axes = FALSE)
+axis(side = 1, at=tb)
+axis(side = 2, at=seq(0, 20, 1))
+#lines(density(segtable$segmedian))
