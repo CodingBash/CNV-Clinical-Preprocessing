@@ -75,26 +75,6 @@ generateInputCORE <- function(chromosomeSizes){
 # TODO: Need to verify results - check with Pascal
 normalSegments <- generateInputCORE(chromosomeSizes)
 
-
-
-cd_doc()
-facets_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
-facets_bins_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.procSample-jseg.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
-
-
-#facets_data <- facets_data[,c(1, 10, 11, 5)]
-#facets_data$X.chrom. <- paste("chr", facets_data$X.chrom., sep="")
-
-#facets_bins_data$start <- seq(1, length.out=nrow(facets_bins_data), by=1)
-#facets_bins_data$end <- seq(2, length.out=nrow(facets_bins_data), by=1)
-#facets_bins_data <- facets_bins_data[,c(1, 2, 2, 11)]
-#facets_bins_data$X.chrom. <- paste("chr", facets_bins_data$X.chrom., sep="")
-
-
-head(facets_data)
-head(facets_bins_data)
-# print(data_bed)
-
 # TODO: Duplicate CODE from cnvCores.R! Need to modularize
 # A table of chromosome boundary positions for DNA copy number analysis
 generateChromosomeSizes <- function(){
@@ -119,35 +99,34 @@ generateChromosomeSizes <- function(){
 
 chromosomeSizes <- generateChromosomeSizes()
 
-
 # TODO: Duplicate code! -> The only thing changed is pass in a entry's chrom, start, and end instead of whole input
 # --- so we remove the input iteratation. Also, the result is stored in a 1-row dataframe and returned. Essentially, this is the same method but
 # --- but works for just a single row. We can modularize by having the method that works on a whole input just utilize this one.
 # TODO: Deal with a female XX case (does it matter though?)
 rescaleInput <- function(chrom, start, end, chromosomeSizes){
-    chrom_r <- chrom
-    if (is.na(chrom_r) || length(chrom_r) == 0){
-      next # TODO: This is to resolve the NA row. Where did it come from?
-    } 
-    total_bp <- 0
-    if(chrom_r %in% seq(2,22)){
-      for(i in seq(1, as.numeric(chrom_r) - 1)){
-        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
-      }  
-    } else if (chrom_r == "X") {
-      for(i in seq(1, 22)){
-        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
-      }  
-    }  else if (chrom_r == "Y") {
-      for(i in seq(1, 22)){
-        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
-      }  
-      total_bp <- total_bp + chromosomeSizes["chrX", ]$size
-    }
-    abs_start <- start + total_bp
-    abs_end <- end + total_bp
-    returnme <- data.frame(start = abs_start, end = abs_end)
-    return(returnme)
+  chrom_r <- chrom
+  if (is.na(chrom_r) || length(chrom_r) == 0){
+    next # TODO: This is to resolve the NA row. Where did it come from?
+  } 
+  total_bp <- 0
+  if(chrom_r %in% seq(2,22)){
+    for(i in seq(1, as.numeric(chrom_r) - 1)){
+      total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+    }  
+  } else if (chrom_r == "X") {
+    for(i in seq(1, 22)){
+      total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+    }  
+  }  else if (chrom_r == "Y") {
+    for(i in seq(1, 22)){
+      total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+    }  
+    total_bp <- total_bp + chromosomeSizes["chrX", ]$size
+  }
+  abs_start <- start + total_bp
+  abs_end <- end + total_bp
+  returnme <- data.frame(start = abs_start, end = abs_end)
+  return(returnme)
 }
 
 findCytolocation <- function(chrom, chrom.position){
@@ -156,7 +135,13 @@ findCytolocation <- function(chrom, chrom.position){
   return(returnme)
 }
 
+cd_doc()
 sample <- "hT30"
+
+facets_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+facets_bins_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.procSample-jseg.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+
+
 # GENERATE SEGINPUT FROM FACETS SAMPLE
 seginput <- data.frame(stringsAsFactors = FALSE)
 for(facets_data.index in seq(1, nrow(facets_data))){
@@ -207,38 +192,3 @@ segtable<-CNpreprocessing(segall=seginput,ratall=ratinput,"ID","start","end",
                           chromcol="chrom",bpstartcol="chrom.pos.start",bpendcol="chrom.pos.end",blsize=50,
                           minjoin=0.25,cweight=0.4,bstimes=50,chromrange=1:22,distrib="Rparallel",njobs=40,
                           modelNames="E",normalength=norminput[,1],normalmedian=norminput[,2])
-
-
-###############
-data(segexample)
-data(ratexample)
-data(normsegs)
-
-
-#small toy example
-segtable<-CNpreprocessing(segall=segexample[segexample[,"ID"]=="WZ1",],
-                          ratall=ratexample,"ID","start","end",chromcol="chrom",bpstartcol="chrom.pos.start",
-                          bpendcol="chrom.pos.end",blsize=50,minjoin=0.25,cweight=0.4,bstimes=50,
-                          chromrange=1:3,distrib="Rparallel",njobs=2,modelNames="E",
-                          normalength=normsegs[,1],normalmedian=normsegs[,2])
-## Not run:
-#Example 1: 5 whole genome analysis, choosing the right format of arguments
-segtable<-CNpreprocessing(segall=segexample,ratall=ratexample,"ID","start","end",
-                          chromcol="chrom",bpstartcol="chrom.pos.start",bpendcol="chrom.pos.end",blsize=50,
-                          minjoin=0.25,cweight=0.4,bstimes=50,chromrange=1:22,distrib="Rparallel",njobs=40,
-                          modelNames="E",normalength=normsegs[,1],normalmedian=normsegs[,2])
-#Example 2: how to use annotexample, when segment table does not have columns of
-#integer postions in terms of measuring units(probes), such as "mysegs" below
-mysegs<-segexample[,c(1,5:12)]
-data(annotexample)
-segtable<-CNpreprocessing(segall=mysegs,ratall=ratexample,"ID",chromcol="chrom",
-                          bpstartcol="chrom.pos.start",bpendcol="chrom.pos.end",annot=annotexample,
-                          annotstartcol="CHROM.POS",annotendcol="CHROM.POS",annotchromcol="CHROM",
-                          blsize=50,minjoin=0.25,cweight=0.4,bstimes=50,chromrange=1:22,distrib="Rparallel",
-                          njobs=40,modelNames="E",normalength=normsegs[,1],normalmedian=normsegs[,2])
-## End(Not run)
-
-data(ratexample)
-#Plot the whole genome log ratio data for the first profile
-#Note X and Y chromosomes at the far right of the plot
-plot(ratexample[,1])
