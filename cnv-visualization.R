@@ -57,8 +57,8 @@ sample <- "hT30"
                   nrow = 3, 
                   n_track = 3, 
                   byrow = FALSE, 
-                  species="hg19"
-                  , category = "chr8",
+                  species="hg19", 
+                  #category = "chr8",
                   legend = lgd)
   
   # gtrellis_layout(track_height = c(2,5,1),

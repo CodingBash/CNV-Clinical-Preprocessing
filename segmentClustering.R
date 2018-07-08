@@ -1,4 +1,5 @@
 source("https://bioconductor.org/biocLite.R")
+biocLite("Rsamtools")
 biocLite("BSgenome.Hsapiens.UCSC.hg19")
 
 install.packages("CNprep")
@@ -39,6 +40,10 @@ for(sample in samples$Organoids){
   }
 }
 
+for(sample in loaded_samples){
+  print(sample)
+}
+
 generateInputCORE <- function(chromosomeSizes){
   dataInputCORE <- data.frame()
   
@@ -74,6 +79,8 @@ generateInputCORE <- function(chromosomeSizes){
 
 # TODO: Need to verify results - check with Pascal
 normalSegments <- generateInputCORE(chromosomeSizes)
+
+
 
 # TODO: Duplicate CODE from cnvCores.R! Need to modularize
 # A table of chromosome boundary positions for DNA copy number analysis
@@ -135,9 +142,25 @@ findCytolocation <- function(chrom, chrom.position){
   return(returnme)
 }
 
-cd_doc()
-sample <- "hT30"
 
+classes <- c("T")
+loaded_samples <- c(NA)
+loaded_samples.index <- 1
+for(sample in samples$Organoids){
+  for(class in classes){
+    if(substring(sample, 2,2) == class){
+      loaded_samples[loaded_samples.index] <- sample
+      loaded_samples.index <- loaded_samples.index + 1
+      next
+    }
+  }
+}
+
+for(sample in loaded_samples){
+  print(sample)
+}
+
+cd_doc()
 facets_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
 facets_bins_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.procSample-jseg.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
 
@@ -209,10 +232,20 @@ for(mean in means){
   color <- color + 1
 }
 
+col[which(col==1)] <- "black"
+col[which(col==2)] <- "firebrick1"
+
+col[which(col==3)] <- "gold"
+col[which(col==4)] <- "black"
+col[which(col==5)] <- "darkolivegreen1"
 hist(segtable$segmedian,
+     main = "Gaussian mixture model of segtable$segmedian,",
      col = col,
      breaks = tb,
      axes = FALSE)
 axis(side = 1, at=tb)
 axis(side = 2, at=seq(0, 20, 1))
 #lines(density(segtable$segmedian))
+
+cd_local()
+write.table(segtable, paste("segClusteringResults/", sample, "_segtable.tsv", sep = ""), row.names = F, sep = "\t", quote = FALSE)
