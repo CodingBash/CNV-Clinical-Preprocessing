@@ -13,8 +13,7 @@ library(rstudioapi) # load it
 
 # TODO: A lot of the code below is duplicate between many of my R scripts. Need to modularize
 cd_local <- function() {
-  current_path <- getActiveDocumentContext()$path 
-  setwd(dirname(current_path ))
+  setwd("C:/Users/bbece/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction")
 }
 
 cd_doc <- function() {
@@ -156,53 +155,6 @@ for(sample in samples$Organoids){
   }
 }
 
-for(sample in loaded_samples){
-  print(sample)
-}
-
-cd_doc()
-facets_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
-facets_bins_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.procSample-jseg.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
-
-
-# GENERATE SEGINPUT FROM FACETS SAMPLE
-seginput <- data.frame(stringsAsFactors = FALSE)
-for(facets_data.index in seq(1, nrow(facets_data))){
-  abs_position <- rescaleInput(facets_data[facets_data.index,]$X.chrom., facets_data[facets_data.index,]$X.start., facets_data[facets_data.index,]$X.end., chromosomeSizes)
-  
-  probes.start = 0
-  probes.end = 0
-  for(i in seq(1, facets_data.index)){
-    if(i != facets_data.index){
-      probes.start <- probes.start + facets_data[i,]$X.num.mark.
-    }
-    probes.end <- probes.end + facets_data[i,]$X.num.mark.
-  }
-  probes.start <- probes.start + 1
-  
-  
-  cytoband.my.start <- findCytolocation(chrom = facets_data[facets_data.index,]$X.chrom., chrom.position = facets_data[facets_data.index,]$X.start.)
-  cytoband.my.end <- findCytolocation(chrom = facets_data[facets_data.index,]$X.chrom., chrom.position = facets_data[facets_data.index,]$X.end.)
-  
-  
-  seginput.entry <- data.frame(ID = sample, start = probes.start, end = probes.end, 
-                               num.probes = facets_data[facets_data.index,]$X.num.mark., seg.median = facets_data[facets_data.index,]$X.cnlr.median., 
-                               chrom = facets_data[facets_data.index,]$X.chrom., chrom.pos.start = facets_data[facets_data.index,]$X.start., 
-                               chrom.pos.end = facets_data[facets_data.index,]$X.end., cytoband.start = cytoband.my.start, 
-                               cytoband.end = cytoband.my.end, abs.pos.start = abs_position$start,
-                               abs.pos.end = abs_position$end)
-  
-  
-  seginput <- rbind(seginput, seginput.entry)
-}
-
-ratinput <- data.frame(stringsAsFactors = FALSE)
-for(facets_bins_data.index in seq(1, nrow(facets_bins_data))){
-  ratinput.entry <- data.frame(sample = facets_bins_data[facets_bins_data.index,]$X.cnlr.)
-  names(ratinput.entry) <- c(sample)
-  ratinput <- rbind(ratinput, ratinput.entry)
-}
-
 norminput <- data.frame(stringsAsFactors = FALSE)
 for(normalSegments.index in seq(1, nrow(normalSegments))){
   norminput.entry <- data.frame(length = normalSegments[normalSegments.index, ]$X.end. - normalSegments[normalSegments.index, ]$X.start., segmedian = normalSegments[normalSegments.index, ]$X.cnlr.median.)
@@ -210,12 +162,77 @@ for(normalSegments.index in seq(1, nrow(normalSegments))){
 }
 
 
+for(sample in loaded_samples){
+  print(paste("Analyzing sample", sample))
+  
+  cd_doc()
+  facets_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+  facets_bins_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.procSample-jseg.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+  
+  
+  # GENERATE SEGINPUT FROM FACETS SAMPLE
+  seginput <- data.frame(stringsAsFactors = FALSE)
+  for(facets_data.index in seq(1, nrow(facets_data))){
+    abs_position <- rescaleInput(facets_data[facets_data.index,]$X.chrom., facets_data[facets_data.index,]$X.start., facets_data[facets_data.index,]$X.end., chromosomeSizes)
+    
+    probes.start = 0
+    probes.end = 0
+    for(i in seq(1, facets_data.index)){
+      if(i != facets_data.index){
+        probes.start <- probes.start + facets_data[i,]$X.num.mark.
+      }
+      probes.end <- probes.end + facets_data[i,]$X.num.mark.
+    }
+    probes.start <- probes.start + 1
+    
+    
+    cytoband.my.start <- findCytolocation(chrom = facets_data[facets_data.index,]$X.chrom., chrom.position = facets_data[facets_data.index,]$X.start.)
+    cytoband.my.end <- findCytolocation(chrom = facets_data[facets_data.index,]$X.chrom., chrom.position = facets_data[facets_data.index,]$X.end.)
+    
+    
+    seginput.entry <- data.frame(ID = sample, start = probes.start, end = probes.end, 
+                                 num.probes = facets_data[facets_data.index,]$X.num.mark., seg.median = facets_data[facets_data.index,]$X.cnlr.median., 
+                                 chrom = facets_data[facets_data.index,]$X.chrom., chrom.pos.start = facets_data[facets_data.index,]$X.start., 
+                                 chrom.pos.end = facets_data[facets_data.index,]$X.end., cytoband.start = cytoband.my.start, 
+                                 cytoband.end = cytoband.my.end, abs.pos.start = abs_position$start,
+                                 abs.pos.end = abs_position$end)
+    
+    
+    seginput <- rbind(seginput, seginput.entry)
+  }
+  
+  print(paste("Retrieved segment input for sample", sample))
+  
+  ratinput <- data.frame(stringsAsFactors = FALSE)
+  for(facets_bins_data.index in seq(1, nrow(facets_bins_data))){
+    ratinput.entry <- data.frame(sample = facets_bins_data[facets_bins_data.index,]$X.cnlr.)
+    names(ratinput.entry) <- c(sample)
+    ratinput <- rbind(ratinput, ratinput.entry)
+  }
+  
+  print(paste("Retrieved ratio input for sample", sample))
+  
 
-segtable<-CNpreprocessing(segall=seginput,ratall=ratinput,"ID","start","end",
-                          chromcol="chrom",bpstartcol="chrom.pos.start",bpendcol="chrom.pos.end",blsize=50,
-                          minjoin=0.25,cweight=0.4,bstimes=50,chromrange=1:22,distrib="Rparallel",njobs=40,
-                          modelNames="E",normalength=norminput[,1],normalmedian=norminput[,2])
+  
+  
+  segtable<-CNpreprocessing(segall=seginput,ratall=ratinput,"ID","start","end",
+                            chromcol="chrom",bpstartcol="chrom.pos.start",bpendcol="chrom.pos.end",blsize=50,
+                            minjoin=0.25,cweight=0.4,bstimes=50,chromrange=1:22,distrib="Rparallel",njobs=40,
+                            modelNames="E",normalength=norminput[,1],normalmedian=norminput[,2])
+  
+  print(paste("Produced segtable for sample", sample))
+  
+  cd_local()
+  write.table(segtable, paste("segClusteringResults/", sample, "_segtable.tsv", sep = ""), row.names = F, sep = "\t", quote = FALSE)
+  
+  print(paste("Wrote output for sample", sample))
+}
 
+
+
+
+
+########### TODO: Make separate script for visualization
 interval <- 0.1
 tb <- seq(-3, 3, interval)
 col <- rep(1, length(tb))
@@ -247,5 +264,3 @@ axis(side = 1, at=tb)
 axis(side = 2, at=seq(0, 20, 1))
 #lines(density(segtable$segmedian))
 
-cd_local()
-write.table(segtable, paste("segClusteringResults/", sample, "_segtable.tsv", sep = ""), row.names = F, sep = "\t", quote = FALSE)

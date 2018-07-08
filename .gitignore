@@ -39,6 +39,8 @@ rsconnect/
 *.pdf
 *.zip
 *.rds
+*.tsv
+*.csv
 /plot_saves
 *.bed
 /mappedFacetsFiles
