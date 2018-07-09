@@ -1,28 +1,13 @@
-source("https://bioconductor.org/biocLite.R")
-biocLite("Rsamtools")
-biocLite("BSgenome.Hsapiens.UCSC.hg19")
-
-library(BSgenome.Hsapiens.UCSC.hg19)
 library(CNprep)
-library(rstudioapi) # load it
+library(doParallel)
 
-
-
-# TODO: Remove the X and Y chromosome segments/bins
-# TODO: Do not include segments with lower than 5K bp (see paper)
-
-# TODO: A lot of the code below is duplicate between many of my R scripts. Need to modularize
-cd_local <- function() {
-  setwd("C:/Users/bbece/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction")
+cd_home <- function() {
+  setwd("~/code/cnprep_clustering")
 }
+cd_home()
 
-cd_doc <- function() {
-  setwd("C:/Users/bbece/Documents")
-}
-
-cd_local()
-samples <- read.table("sampleList.csv", header=T, sep = "\t", stringsAsFactors = F)
-cytobands <- read.table("cytoBand.txt", header=F, sep = "\t", stringsAsFactors = F)
+samples <- read.table("./resources/sampleList.csv", header=T, sep = "\t", stringsAsFactors = F)
+cytobands <- read.table("./resources/cytoBand.txt", header=F, sep = "\t", stringsAsFactors = F)
 names(cytobands) <- c("chrom", "start", "end", "cytoloc", "stain")
 
 # TODO: This is a duplicate from cnvCores.R!!! Modularize
@@ -46,11 +31,10 @@ for(sample in loaded_samples){
 generateInputCORE <- function(chromosomeSizes){
   dataInputCORE <- data.frame()
   
-  cd_doc()
   loaded_segments <- list(NA)
   loaded_segments.index <- 1
   for(sample in loaded_samples){
-    segments <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))  
+    segments <- as.data.frame(read.table(paste("./resources/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))  
     # TODO: CHANGED from cnvCores.R - removed event filtering
     #if(event == "A"){
     #  segments <- segments[segments$X.cnlr.median. > 0.2,]  
@@ -76,34 +60,12 @@ generateInputCORE <- function(chromosomeSizes){
   return(returnme)
 }
 
+chromosomeSizes <- readRDS("./resources/chromosomeSizes.rds")
+
 # TODO: Need to verify results - check with Pascal
 normalSegments <- generateInputCORE(chromosomeSizes)
 
 
-
-# TODO: Duplicate CODE from cnvCores.R! Need to modularize
-# A table of chromosome boundary positions for DNA copy number analysis
-generateChromosomeSizes <- function(){
-  genome <- BSgenome.Hsapiens.UCSC.hg19
-  seqlengths(genome) <- seqlengths(Hsapiens)
-  
-  # Create chromosome vector
-  chrom_vec <- c(NA)
-  chrom_vec.index <- 1
-  for(i in append(seq(1,22, by=1), c("X", "Y"))){
-    chrom_vec[chrom_vec.index] <- paste("chr", i, sep = "")  
-    chrom_vec.index <- chrom_vec.index + 1
-  }
-  chromosomeSizes <- data.frame()
-  
-  for(chrom_i in chrom_vec){
-    df = data.frame(chrom = chrom_i, size = seqlengths(genome)[chrom_i])
-    chromosomeSizes <- rbind(chromosomeSizes, df)
-  }
-  return(chromosomeSizes)
-}
-
-chromosomeSizes <- generateChromosomeSizes()
 
 # TODO: Duplicate code! -> The only thing changed is pass in a entry's chrom, start, and end instead of whole input
 # --- so we remove the input iteratation. Also, the result is stored in a 1-row dataframe and returned. Essentially, this is the same method but
@@ -161,15 +123,14 @@ for(normalSegments.index in seq(1, nrow(normalSegments))){
   norminput <- rbind(norminput, norminput.entry)
 }
 
-
-for(loaded_samples.i in seq(1, length(loaded_samples))){
+registerDoParallel()
+foreach(loaded_samples.i=1:length(loaded_samples)) %dopar% {
   sample <- loaded_samples[loaded_samples.i]
   
   print(paste("Analyzing sample", sample))
   
-  cd_doc()
-  facets_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
-  facets_bins_data <- as.data.frame(read.table(paste("CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.procSample-jseg.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+  facets_data <- as.data.frame(read.table(paste("./resources/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+  facets_bins_data <- as.data.frame(read.table(paste("./resources/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.procSample-jseg.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
   
   
   # GENERATE SEGINPUT FROM FACETS SAMPLE
@@ -204,10 +165,10 @@ for(loaded_samples.i in seq(1, length(loaded_samples))){
   }
   
   print(paste("Retrieved segment input for sample", sample))
-  
+
   ratinput <- data.frame(facets_bins_data$X.cnlr.)
   names(ratinput) <- c(sample)
-  
+ 
   print(paste("Retrieved ratio input for sample", sample))
   
 
@@ -220,7 +181,6 @@ for(loaded_samples.i in seq(1, length(loaded_samples))){
   
   print(paste("Produced segtable for sample", sample))
   
-  cd_local()
-  write.table(segtable, paste("segClusteringResultsPar/", sample, "_segtable.tsv", sep = ""), row.names = F, sep = "\t", quote = FALSE)
+  write.table(segtable, paste("./output/", sample, "_segtable.tsv", sep = ""), row.names = F, sep = "\t", quote = FALSE)
   print(paste("Wrote output for sample", sample))
 }
