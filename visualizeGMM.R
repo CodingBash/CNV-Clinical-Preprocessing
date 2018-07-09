@@ -1,6 +1,12 @@
 install.packages("ggplot2")
 library(ggplot2)
-sample <- "hT1"
+sample <- "hT30"
+
+cd_local <- function() {
+  setwd("C:/Users/bbece/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction")
+}
+
+cd_local()
 
 segtable <- read.table(paste("segClusteringResults/", sample, "_segtable.tsv", sep = ""), sep = "\t", header = TRUE)
 
@@ -26,20 +32,22 @@ col[which(col==2)] <- "firebrick1"
 col[which(col==3)] <- "gold"
 col[which(col==4)] <- "purple"
 col[which(col==5)] <- "darkolivegreen1"
-hist(segtable$segmedian,
-     main = "Gaussian mixture model of segtable$segmedian,",
-     col = col,
-     breaks = tb,
-     axes = FALSE,
-     prob = TRUE)
+#hist(segtable$segmedian,
+#     main = "Gaussian mixture model of segtable$segmedian,",
+#     col = col,
+#     breaks = tb,
+#     axes = FALSE,
+#     prob = TRUE)
 ggplot(data = segtable, aes(segtable$segmedian)) + 
   geom_histogram(aes(y = ..density..),
                  breaks = tb,
                  fill = head(col, length(tb)-1),
                  alpha = 0.6) + 
+  xlim(c(-3,3)) +
   labs(title = "Gaussian mixture model of segtable$segmedian") +
-  geom_density(col="black")
-
+  geom_density(col="black", stat = "density")
+  
+# TODO: GGplot looks weird now, also work on getting normal components with stats_function in an iterative fashion
 
 axis(side = 1, at=tb)
 axis(side = 2, at=seq(0, 20, 1))
