@@ -27,10 +27,10 @@ for(i in seq(1, length(loaded_samples))){
   sample <- loaded_samples[[i]]
   cd_local()
   
-  segtable <- read.table(paste("segClusteringResults/prev_run1/", sample, "_segtable.tsv", sep = ""), sep = "\t", header = TRUE)
+  segtable <- read.table(paste("segClusteringResults/", sample, "_segtable.tsv", sep = ""), sep = "\t", header = TRUE)
   gaussian_comps <- unique(segtable[c("maxzmean", "maxzsigma")])
   
-  interval <- 0.1
+  interval <- 0.05
   tb <- seq(-3, 3, interval)
   col <- rep(1, length(tb))
   means <- unique(segtable$maxzmean)
@@ -46,7 +46,7 @@ for(i in seq(1, length(loaded_samples))){
     color <- color + 1
   }
   
-  colors <- c("black", "firebrick1", "gold", "purple", "darkolivegreen1", "blue", "orange")
+  colors <- c("black", "red", "orange", "yellow", "blue", "purple", "gray")
   col[which(col==1)] <- colors[[1]]
   col[which(col==2)] <- colors[[2]]
   
