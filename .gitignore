@@ -49,3 +49,4 @@ rsconnect/
 /hT_results
 /hN_results
 /GMMs
+/segClusteringResults/**
