@@ -4,6 +4,7 @@
 
 #
 # Load library functions
+# WARNING: If sources don't load, manually setwd() to src file location
 #
 source("helperFunctions.R")
 source("visualizeGMMLibrary.R")

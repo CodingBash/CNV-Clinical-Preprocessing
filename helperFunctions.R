@@ -10,6 +10,14 @@ cd_local <- function() {
   setwd("C:/Users/bbece/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction")
 }
 
+#
+# Sets the directory to the project workspace
+# TODO: directory is hardcoded
+#
+cd_doc <- function() {
+  setwd("C:/Users/bbece/Documents")
+}
+
 # 
 # Load all sample names given a sample class
 #
