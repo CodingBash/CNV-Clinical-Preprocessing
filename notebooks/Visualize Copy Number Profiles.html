@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>Untitled</title>
+<title>Visualize Copy Number Profiles</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -11751,118 +11751,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="kn">library</span><span class="p">(</span>ggplot2<span class="p">)</span>
-<span class="kn">library</span><span class="p">(</span>reshape2<span class="p">)</span>
-
-cd_local <span class="o">&lt;-</span> <span class="kr">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;C:/Users/bbece/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction&quot;</span><span class="p">)</span>
-<span class="p">}</span>
-
-cd_local<span class="p">()</span>
-samples <span class="o">&lt;-</span> read.table<span class="p">(</span><span class="s">&quot;sampleList.csv&quot;</span><span class="p">,</span> header<span class="o">=</span><span class="bp">T</span><span class="p">,</span> sep <span class="o">=</span> <span class="s">&quot;\t&quot;</span><span class="p">,</span> stringsAsFactors <span class="o">=</span> <span class="bp">F</span><span class="p">)</span>
-
-<span class="c1"># TODO: This is a duplicate from cnvCores.R!!! Modularize</span>
-classes <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;T&quot;</span><span class="p">)</span>
-loaded_samples <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="kc">NA</span><span class="p">)</span>
-loaded_samples.index <span class="o">&lt;-</span> <span class="m">1</span>
-<span class="kr">for</span><span class="p">(</span>sample <span class="kr">in</span> samples<span class="o">$</span>Organoids<span class="p">){</span>
-  <span class="kr">for</span><span class="p">(</span>class <span class="kr">in</span> classes<span class="p">){</span>
-    <span class="kr">if</span><span class="p">(</span><span class="kp">substring</span><span class="p">(</span><span class="kp">sample</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">)</span> <span class="o">==</span> <span class="kp">class</span><span class="p">){</span>
-      loaded_samples<span class="p">[</span>loaded_samples.index<span class="p">]</span> <span class="o">&lt;-</span> <span class="kp">sample</span>
-      loaded_samples.index <span class="o">&lt;-</span> loaded_samples.index <span class="o">+</span> <span class="m">1</span>
-      <span class="kr">next</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-
-
-plots <span class="o">&lt;-</span> <span class="kt">list</span><span class="p">()</span>
-<span class="kr">for</span><span class="p">(</span>i <span class="kr">in</span> <span class="kp">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="kp">length</span><span class="p">(</span>loaded_samples<span class="p">))){</span>
-  sample <span class="o">&lt;-</span> loaded_samples<span class="p">[[</span>i<span class="p">]]</span>
-  cd_local<span class="p">()</span>
-  
-  
-  
-  segtable <span class="o">&lt;-</span> read.table<span class="p">(</span><span class="kp">paste</span><span class="p">(</span><span class="s">&quot;segClusteringResults/&quot;</span><span class="p">,</span> <span class="kp">sample</span><span class="p">,</span> <span class="s">&quot;_segtable.tsv&quot;</span><span class="p">,</span> sep <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">),</span> sep <span class="o">=</span> <span class="s">&quot;\t&quot;</span><span class="p">,</span> header <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
-  gaussian_comps <span class="o">&lt;-</span> <span class="kp">unique</span><span class="p">(</span>segtable<span class="p">[</span><span class="kt">c</span><span class="p">(</span><span class="s">&quot;maxzmean&quot;</span><span class="p">,</span> <span class="s">&quot;maxzsigma&quot;</span><span class="p">)])</span>
-  
-  interval <span class="o">&lt;-</span> <span class="m">0.1</span>
-  min <span class="o">&lt;-</span> <span class="m">-2.5</span>
-  max <span class="o">&lt;-</span> <span class="o">-</span><span class="kp">min</span>
-  tb <span class="o">&lt;-</span> <span class="kp">seq</span><span class="p">(</span><span class="kp">min</span><span class="p">,</span> <span class="kp">max</span><span class="p">,</span> interval<span class="p">)</span>
-  <span class="c1">#col &lt;- rep(1, length(tb))</span>
-  <span class="c1">#means &lt;- unique(segtable$maxzmean)</span>
-  <span class="c1">#color &lt;- 2</span>
-  <span class="c1">#for(mean in means){</span>
-  <span class="c1">#  mediandevs &lt;- segtable[segtable$maxzmean == mean, ]$mediandev</span>
-  <span class="c1">#  print(paste(mean, &quot;cluster between&quot;, min(mediandevs), &quot;and&quot;, max(mediandevs)))</span>
-  <span class="c1">#  for(tb.index in seq(1, length(tb))){</span>
-  <span class="c1">#    if(tb[tb.index] &gt;= min(mediandevs) - (interval) &amp; tb[tb.index] &lt;= max(mediandevs) + (interval)){</span>
-  <span class="c1">#      col[tb.index] &lt;- color  </span>
-  <span class="c1">#    } </span>
-  <span class="c1">#  }</span>
-  <span class="c1">#  color &lt;- color + 1</span>
-  <span class="c1">#}</span>
-  
-  colors <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;black&quot;</span><span class="p">,</span> <span class="s">&quot;red&quot;</span><span class="p">,</span> <span class="s">&quot;orange&quot;</span><span class="p">,</span> <span class="s">&quot;yellow&quot;</span><span class="p">,</span> <span class="s">&quot;blue&quot;</span><span class="p">,</span> <span class="s">&quot;purple&quot;</span><span class="p">,</span> <span class="s">&quot;gray&quot;</span><span class="p">)</span>
-  <span class="c1">#col[which(col==1)] &lt;- colors[[1]]</span>
-  <span class="c1">#col[which(col==2)] &lt;- colors[[2]]</span>
-  
-  <span class="c1">#col[which(col==3)] &lt;- colors[[3]]</span>
-  <span class="c1">#col[which(col==4)] &lt;- colors[[4]]</span>
-  <span class="c1">#col[which(col==5)] &lt;- colors[[5]]</span>
-  <span class="c1">#col[which(col==6)] &lt;- colors[[6]]</span>
-  <span class="c1">#col[which(col==7)] &lt;- colors[[7]]</span>
-  
-  
-  <span class="c1">## Stacked histogram logic:</span>
-  cluster_list <span class="o">&lt;-</span> <span class="kt">list</span><span class="p">()</span>
-  <span class="kr">for</span><span class="p">(</span>gaussian_comps.index <span class="kr">in</span> <span class="kp">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="kp">nrow</span><span class="p">(</span>gaussian_comps<span class="p">))){</span>
-    cluster_medians <span class="o">&lt;-</span> <span class="kt">list</span><span class="p">(</span>segtable<span class="p">[</span>gaussian_comps<span class="p">[</span>gaussian_comps.index<span class="p">,</span> <span class="p">]</span><span class="o">$</span>maxzmean <span class="o">==</span> segtable<span class="o">$</span>maxzmean <span class="o">&amp;</span> gaussian_comps<span class="p">[</span>gaussian_comps.index<span class="p">,</span> <span class="p">]</span><span class="o">$</span>maxzsigma <span class="o">==</span> segtable<span class="o">$</span>maxzsigma<span class="p">,</span> <span class="p">]</span><span class="o">$</span>mediandev<span class="p">)</span>
-    cluster_list<span class="p">[</span>gaussian_comps.index<span class="p">]</span> <span class="o">&lt;-</span> cluster_medians
-  <span class="p">}</span>
-  
-  hist_data <span class="o">&lt;-</span> melt<span class="p">(</span>cluster_list<span class="p">)</span>
-  
-  plt <span class="o">&lt;-</span> ggplot<span class="p">(</span>data <span class="o">=</span> hist_data<span class="p">,</span> aes<span class="p">(</span>x<span class="o">=</span>value<span class="p">,</span> fill <span class="o">=</span> <span class="kp">as.factor</span><span class="p">(</span>L1<span class="p">)))</span> <span class="o">+</span> 
-    geom_histogram<span class="p">(</span>aes<span class="p">(</span>y <span class="o">=</span> <span class="m">..</span>density..<span class="p">),</span>
-                   breaks <span class="o">=</span> tb<span class="p">,</span>
-                   position <span class="o">=</span> <span class="s">&quot;stack&quot;</span><span class="p">,</span>
-                   alpha <span class="o">=</span> <span class="m">0.6</span><span class="p">)</span> <span class="o">+</span>
-    scale_fill_manual<span class="p">(</span>values<span class="o">=</span><span class="kp">tail</span><span class="p">(</span>colors<span class="p">,</span> <span class="kp">length</span><span class="p">(</span>colors<span class="p">)</span> <span class="o">-</span> <span class="m">1</span><span class="p">))</span> <span class="o">+</span> 
-    xlim<span class="p">(</span><span class="kt">c</span><span class="p">(</span><span class="kp">min</span><span class="p">,</span><span class="kp">max</span><span class="p">))</span> <span class="o">+</span>
-    labs<span class="p">(</span>title <span class="o">=</span> <span class="kp">paste</span><span class="p">(</span><span class="s">&quot;Gaussian mixture model of segtable$segmedian for sample&quot;</span><span class="p">,</span> <span class="kp">sample</span><span class="p">))</span>
-  
-  <span class="c1">#hist(segtable$mediandev,</span>
-  <span class="c1">#     main = &quot;Gaussian mixture model of segtable$mediandev,&quot;,</span>
-  <span class="c1">#     col = col,</span>
-  <span class="c1">#     breaks = tb,</span>
-  <span class="c1">#     axes = FALSE,</span>
-  <span class="c1">#     prob = TRUE)</span>
-  
-  <span class="c1">#plt &lt;- ggplot2::ggplot(data = segtable, aes(segtable$mediandev)) + </span>
-  <span class="c1">#  geom_histogram(aes(y = ..density..),</span>
-  <span class="c1">#                 breaks = tb,</span>
-  <span class="c1">#                 fill = head(col, length(col)-1),</span>
-  <span class="c1">#                 alpha = 0.6) + </span>
-  <span class="c1">#  xlim(c(-3,3)) +</span>
-  <span class="c1">#  labs(title = &quot;Gaussian mixture model of segtable$mediandev&quot;) +</span>
-  <span class="c1">#  geom_density(col=&quot;black&quot;, stat = &quot;density&quot;)</span>
-  
-  components <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">()</span>
-  components.index <span class="o">&lt;-</span> <span class="m">1</span>
-  <span class="kr">for</span><span class="p">(</span>gaussian_comps.index <span class="kr">in</span> <span class="kp">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="kp">nrow</span><span class="p">(</span>gaussian_comps<span class="p">))){</span>
-    mean <span class="o">&lt;-</span> <span class="kp">as.numeric</span><span class="p">(</span>gaussian_comps<span class="p">[</span>gaussian_comps.index<span class="p">,]</span><span class="o">$</span>maxzmean<span class="p">)</span>
-    sd <span class="o">&lt;-</span> <span class="kp">as.numeric</span><span class="p">(</span>gaussian_comps<span class="p">[</span>gaussian_comps.index<span class="p">,]</span><span class="o">$</span>maxzsigma<span class="p">)</span>
-    a <span class="o">&lt;-</span> rnorm<span class="p">(</span><span class="m">1000</span><span class="p">,</span> <span class="kp">mean</span><span class="p">,</span> sd<span class="p">)</span>
-    components<span class="p">[[</span>components.index<span class="p">]]</span> <span class="o">&lt;-</span> a
-    components.index <span class="o">&lt;-</span> components.index <span class="o">+</span> <span class="m">1</span>
-    plt <span class="o">&lt;-</span> plt <span class="o">+</span> stat_function<span class="p">(</span>fun <span class="o">=</span> dnorm<span class="p">,</span> n<span class="o">=</span><span class="m">1000</span><span class="p">,</span> args <span class="o">=</span> <span class="kt">list</span><span class="p">(</span>mean <span class="o">=</span> <span class="kp">mean</span><span class="p">,</span> sd <span class="o">=</span> sd<span class="p">),</span> col <span class="o">=</span> colors<span class="p">[</span>gaussian_comps.index <span class="o">+</span> <span class="m">1</span><span class="p">])</span>
-  <span class="p">}</span>
-  
-  plt
-  <span class="c1">#plt &lt;- plt + stat_density(aes(x = components), position = &quot;identity&quot;, geom=&quot;line&quot;)</span>
-<span class="p">}</span>
+<div class=" highlight hl-r"><pre><span></span>
 </pre></div>
 
 </div>
