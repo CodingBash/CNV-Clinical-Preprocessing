@@ -18,6 +18,12 @@ cd_doc <- function() {
   setwd("C:/Users/bbece/Documents")
 }
 
+#
+# Sets the directory to HPC home directory
+#
+cd_home <- function() {
+  setwd("~/code/hN_core_artifacts")
+}
 # 
 # Load all sample names given a sample class
 #

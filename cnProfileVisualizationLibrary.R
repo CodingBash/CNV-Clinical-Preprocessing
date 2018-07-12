@@ -17,7 +17,14 @@ library(ComplexHeatmap)
 retrieveFacetsSegments <- function(sample, dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/"){
   facets_segment_data <- as.data.frame(read.table(paste(dir, "Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
   return(facets_segment_data)
-  
+}
+
+#
+# Retrieve a sample's FACETS segmented cluster (cnlr.median.clust) data from specified directory
+#
+retrieveFacetsSegmentClusters <- function(sample, dir = "segClusteringResults/"){
+  facets_segment_clusters <- as.data.frame(read.table(paste(dir, sample, "_segtable.tsv", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+  return(facets_segment_clusters)
 }
 
 #
@@ -35,7 +42,20 @@ retrieveFacetsSnps <- function(sample, dir = "CSHL/Project_TUV_12995_B01_SOM_Tar
 segmentsToBedFormat <- function(facets_segment_data){
   facets_segment_data <- facets_segment_data[,c(1, 10, 11, 5)]
   facets_segment_data$X.chrom. <- paste("chr", facets_segment_data$X.chrom., sep="")
+  names(facets_segment_data) <- c("chrom", "start", "end", "value")
   return(facets_segment_data)
+}
+
+#
+# Simplifies FACETS segment cluster original format into BED format with
+# the columns: "chrom", "chrom.start", "chrom.end", "median cnlr"
+#
+segmentClustersToBedFormat <- function(facets_segment_clusters){
+  facets_segment_clusters <- facets_segment_clusters[,c(6,7,8,20)]
+  facets_segment_clusters <- facets_segment_clusters[facets_segment_clusters$chrom != "X",]
+  facets_segment_clusters$chrom <- paste("chr", facets_segment_clusters$chrom, sep = "")
+  names(facets_segment_clusters) <- c("chrom", "start", "end", "value")
+  return(facets_segment_clusters)
 }
 
 #
@@ -48,6 +68,7 @@ snpsToBedFormat <- function(facets_snp_data){
   facets_snp_data$end <- seq(2, length.out=nrow(facets_snp_data), by=1)
   facets_snp_data <- facets_snp_data[,c(1, 2, 2, 11)]
   facets_snp_data$X.chrom. <- paste("chr", facets_snp_data$X.chrom., sep="")
+  names(facets_snp_data) <- c("chrom", "start", "end", "value")
   return(facets_snp_data)
 }
 
@@ -102,9 +123,9 @@ visualizeCNProfile <- function(facets_segment_data, facets_snp_data, categories,
   })
   
   # Add SNP/bin track to GTRELLIS  
-  add_points_track(facets_snp_data, facets_snp_data$X.cnlr., gp = gpar(fill = "gray"))
+  add_points_track(facets_snp_data, facets_snp_data$value, gp = gpar(fill = "gray"))
   # Add segment track overlayed over the SNP/bins to GTRELLIS
-  add_segments_track(facets_segment_data, facets_segment_data$X.cnlr.median., track = current_track(), gp = gpar(col = ifelse(facets_segment_data$X.cnlr.median. > 0.2, "orange", ifelse(facets_segment_data$X.cnlr.median. > -0.23, "blue", "red")), lwd = 4))
+  add_segments_track(facets_segment_data, facets_segment_data$value, track = current_track(), gp = gpar(col = ifelse(facets_segment_data$value > 0.2, "orange", ifelse(facets_segment_data$value > -0.23, "blue", "red")), lwd = 4))
   
   # Add cytobands to bottom of panel to GTRELLIS
   cytoband_df = circlize::read.cytoband(species = "hg19")$df
