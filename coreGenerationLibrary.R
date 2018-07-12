@@ -78,16 +78,17 @@ absoluteToChromosomeBPConversion <- function(outputCores, chromosomeSizes){
 # @param extension - extension of the input files
 # TODO: segment filename still too hardcoded. Allow caller to send file name themselves
 # @param rescaleInput - indicator if sample segments should be scaled (usually if it is not absolute scaled and is chromsome scaled instead). If TRUE, rescaling with chromosomeSizes is performed
+# @param inSampleFolder - ad-hoc solution when the sample file is contained in a folder with sample name
 # @param ampCall - lower threshold to call amplifications
 # @param delCall - higher threshold to call deletions
 #
-generateInputCORESegments <- function(event, samples, chromosomeSizes, dir, extension = "cnv.facets.v0.5.2.txt", rescaleInput = FALSE, ampCall = 0.2, delCall = -0.235){
+generateInputCORESegments <- function(event, samples, chromosomeSizes, dir, extension = "cnv.facets.v0.5.2.txt", inSampleFolder = FALSE, rescaleInput = FALSE, ampCall = 0.2, delCall = -0.235){
   dataInputCORE <- data.frame()
   
   loaded_segments <- list(NA)
   loaded_segments.index <- 1
   for(sample in samples){
-    segments <- as.data.frame(read.table(paste(dir, sample, "--NA12878.", extension, sep = ""), header = TRUE, sep=",", stringsAsFactors=FALSE, quote=""))  
+    segments <- as.data.frame(read.table(paste(dir, if(inSampleFolder == TRUE) paste("Sample_", sample, "/analysis/structural_variants/", sep = "") else "",sample, "--NA12878.", extension, sep = ""), header = TRUE, sep=",", stringsAsFactors=FALSE, quote=""))  
     if(event == "A"){
       segments <- segments[segments$X.cnlr. > 0.2,]  
     } else if (event == "D"){
