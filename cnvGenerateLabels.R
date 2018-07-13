@@ -1,14 +1,10 @@
-install.packages("rstudioapi")
-library("rstudioapi")
+#
+# This script iterates through the directory will all sample files and creates a CSV containing the names of all samples
+# to support downstream analysis scripts.
+# Output file is named "sampleList.csv"
+#
 
-cd_doc <- function() {
-  setwd("C:/Users/bbece/Documents")
-}
-
-cd_local <- function() {
-  current_path <- getActiveDocumentContext()$path 
-  setwd(dirname(current_path ))
-}
+source("helperFunctions.R")
 
 cd_doc()
 files <- list.dirs(path = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", full.names = FALSE, recursive = FALSE)
