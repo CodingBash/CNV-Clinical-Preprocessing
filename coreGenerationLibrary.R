@@ -31,67 +31,6 @@ absoluteToChromosomeBPConversion <- function(outputCores, chromosomeSizes){
   return(outputCores)
 }
 
-#
-# Concatenates all segments in sample that follow a specific set of events 
-#
-# @param event - either "A" (amplification) or "D" (deletion) segments or "N" (neutral) segments are extracted
-# @param samples - names of samples to retrieve
-# @param chromosomeSizes - df of chromosomeSizes for rescaling (if necessary)
-# @param dir - directory of the input files
-# @param extension - extension of the input files
-# TODO: segment filename still too hardcoded. Allow caller to send file name themselves
-# @param rescaleInput - indicator if sample segments should be scaled (usually if it is not absolute scaled and is chromsome scaled instead). If TRUE, rescaling with chromosomeSizes is performed
-# @param inSampleFolder - ad-hoc solution when the sample file is contained in a folder with sample name
-# @param ampCall - lower threshold to call amplifications
-# @param delCall - higher threshold to call deletions
-#
-# TODO: This method is also used in segmentClustering.R script. Perhaps move this function to a more general library?
-#
-selectSegmentsWithEvents <- function(events, samples, chromosomeSizes, dir, extension = "cnv.facets.v0.5.2.txt", inSampleFolder = FALSE, rescaleInput = FALSE, ampCall = 0.2, delCall = -0.235){
-  totalSelectedSegments <- data.frame()
-  
-  loaded_segments <- list(NA)
-  loaded_segments.index <- 1
-  for(sample in samples){
-    segments <- as.data.frame(read.table(paste(dir, if(inSampleFolder == TRUE) paste("Sample_", sample, "/analysis/structural_variants/", sep = "") else "",sample, "--NA12878.", extension, sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
-    selected_segments <- data.frame()
-    
-    # Retrieve amplification events from sample if asked
-    if("A" %in% events){
-      selected_segments <- rbind(selected_segments, segments[segments$X.cnlr.median. > ampCall,])  
-    }
-    
-    # Retrieve deletion events from sample if asked
-    if ("D" %in% events){
-      selected_segments <- rbind(selected_segments, segments[segments$X.cnlr.median. < delCall,])
-    }
-    
-    # Retrieve nuetral events from sample if asked
-    if("N" %in% events){
-      selected_segments <- rbind(selected_segments, segments[segments$X.cnlr.median. >= delCall & segments$X.cnlr.median. <= ampCall,]) # TODO: This is an untested line of code
-    }
-    
-    # If any segments from sample selected, let's preprocess the dataframe and add to total list
-    if(nrow(selected_segments) != 0){
-      # Filters to only chrom, start, end, cnlr
-      selected_segments <- selected_segments[,c(1, 10, 11, 5)] # TODO: Just added CNLR, may have issues in CORE script
-      
-      names(selected_segments) <- c("chrom", "start", "end", "cnlr")
-      
-      if(rescaleInput == TRUE){
-        selected_segments <- chromsomeToAbsoluteBPConversion(selected_segments, chromosomeSizes)
-      }
-      
-      totalSelectedSegments <- rbind(totalSelectedSegments, selected_segments)
-    }
-  }
-  
-  returnme <-  cbind(totalSelectedSegments)
-  returnme <- returnme[returnme$chrom != "X" & returnme$chrom != "Y",] # REMOVE X and Y chromosome
-  returnme$chrom <- as.numeric(returnme$chrom)
-  return(returnme)
-}
-
 # 
 # Generate BP unit chromosomal boundaries based on chromosomeSizes df
 # Similar logic to chromsomeToAbsoluteBPConversion function

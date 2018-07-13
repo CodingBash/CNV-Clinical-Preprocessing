@@ -1,5 +1,4 @@
 library(CNprep)
-source("coreGenerationLibrary.R") # TODO: remove dependency
 
 retrieveCytobands <- function(dir = "cytoBand.txt"){
   cytobands <- read.table(dir, header=F, sep = "\t", stringsAsFactors = F)

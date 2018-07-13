@@ -10,7 +10,7 @@ source("segmentClusteringLibrary.R")
 #
 # Load input
 #
-cd_home()
+cd_cnprep()
 normal_samples <- load_samples(classes = c("N"), sampleList = "./resources/sampleList.csv")
 cytobands <- retrieveCytobands(dir = "./resources/cytoBand.txt")
 chromosomeSizes <- readRDS("./resources/chromosomeSizes.rds")
