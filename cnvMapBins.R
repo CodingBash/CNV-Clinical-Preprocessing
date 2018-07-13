@@ -1,4 +1,3 @@
-install.packages("rstudioapi")
 # Import libraries
 library(rstudioapi) # load it
 #

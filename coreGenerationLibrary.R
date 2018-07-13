@@ -1,6 +1,28 @@
 library(CORE)
 
 #
+# Given a genome (i.e. hg19), generate the chromosome sizes
+#
+generateChromosomeSizes <- function(genome){
+  seqlengths(genome) <- seqlengths(Hsapiens)
+  
+  # Create chromosome vector
+  chrom_vec <- c(NA)
+  chrom_vec.index <- 1
+  for(i in append(seq(1,22, by=1), c("X", "Y"))){
+    chrom_vec[chrom_vec.index] <- paste("chr", i, sep = "")  
+    chrom_vec.index <- chrom_vec.index + 1
+  }
+  chromosomeSizes <- data.frame()
+  
+  for(chrom_i in chrom_vec){
+    df = data.frame(chrom = chrom_i, size = seqlengths(genome)[chrom_i])
+    chromosomeSizes <- rbind(chromosomeSizes, df)
+  }
+  return(chromosomeSizes)
+}
+
+#
 # Take a input of multiple segments with the chromosomeSizes, and convert
 # segment maploc from chrom.location to absolute.location in bp units
 #
@@ -88,15 +110,15 @@ generateInputCORESegments <- function(event, samples, chromosomeSizes, dir, exte
   loaded_segments <- list(NA)
   loaded_segments.index <- 1
   for(sample in samples){
-    segments <- as.data.frame(read.table(paste(dir, if(inSampleFolder == TRUE) paste("Sample_", sample, "/analysis/structural_variants/", sep = "") else "",sample, "--NA12878.", extension, sep = ""), header = TRUE, sep=",", stringsAsFactors=FALSE, quote=""))  
+    segments <- as.data.frame(read.table(paste(dir, if(inSampleFolder == TRUE) paste("Sample_", sample, "/analysis/structural_variants/", sep = "") else "",sample, "--NA12878.", extension, sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
     if(event == "A"){
-      segments <- segments[segments$X.cnlr. > 0.2,]  
+      segments <- segments[segments$X.cnlr.median. > 0.2,]  
     } else if (event == "D"){
-      segments <- segments[segments$X.cnlr. < -0.235,]  
+      segments <- segments[segments$X.cnlr.median. < -0.235,]  
     } else {
       print("No event selected.")
     }
-    segments <- segments[,c(1, 2, 3)]
+    segments <- segments[,c(1, 10, 11)]
     
     names(segments) <- c("chrom", "start", "end")
     
@@ -108,6 +130,7 @@ generateInputCORESegments <- function(event, samples, chromosomeSizes, dir, exte
   }
   
   returnme <-  cbind(dataInputCORE)
+  returnme <- returnme[returnme$chrom != "X" & returnme$chrom != "Y",] # REMOVE X and Y chromosome
   returnme$chrom <- as.numeric(returnme$chrom)
   return(returnme)
 }
@@ -154,6 +177,7 @@ generateInputCOREBoundaries <- function(chromosomeSizes){
 # Run CORE analysis
 #
 runCORE <- function(inputCORESegments, inputCOREBoundaries, distrib="Rparallel", maxmark=10, nshuffle=50, seedme, njobs=4) {
+  
   myCOREobj<-CORE(dataIn=inputCORESegments, maxmark=maxmark, nshuffle=0,
                   boundaries=inputCOREBoundaries,seedme=seedme)
   
