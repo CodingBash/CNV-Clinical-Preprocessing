@@ -4,27 +4,16 @@
 
 #
 # Sets the directory to the project workspace
-# TODO: directory is hardcoded
 #
 cd_local <- function() {
-  setwd("C:/Users/bbece/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction")
+  setwd("~/Git-Projects/Git-Research-Projects/drug-response-prediction")
 }
 
 #
 # Sets the directory to the project workspace
-# TODO: directory is hardcoded
 #
 cd_doc <- function() {
-  setwd("C:/Users/bbece/Documents")
-}
-
-#
-# @deprecated
-# Sets the directory to HPC home directory
-# TODO: migrate off of this function and use cd_core() instead
-#
-cd_home <- function() {
-  setwd("~/code/hN_core_artifacts")
+  setwd("~")
 }
 
 cd_core <- function() {

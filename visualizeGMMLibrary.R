@@ -49,7 +49,7 @@ displayGMM <- function(segtable, sample, print = FALSE, save = FALSE){
   
   #
   # Create the plot
-  # TODO: geom_density is not working - currently creates density for each GMM component instead of whole model
+  # TODO: geom_density is not working - currently creates density within the scope of each GMM component instead of whole model
   #
   plt <- ggplot(data = hist_data, aes(x=value, fill = as.factor(L1))) + 
     geom_histogram(aes(y = ..density..),

@@ -4,8 +4,8 @@
 
 #
 # Load sources
-# WARNING: If sources don't load, manually setwd() to src file location
 #
+setwd("~/Git-Projects/Git-Research-Projects/drug-response-prediction")
 source("cnProfileVisualizationLibrary.R")
 source("helperFunctions.R")
 

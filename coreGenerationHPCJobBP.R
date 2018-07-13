@@ -29,7 +29,7 @@ source("helperFunctions.R")
 #
 # Get CORE input
 #
-cd_home()
+cd_core()
 samples <- load_samples(classes = c("N"), sampleList = "./resources/sampleList.csv")
 chromosomeSizes <- readRDS("./resources/chromosomeSizes.rds")
 inputCORESegments <- generateInputCORESegments(events = c(event), samples, chromosomeSizes, dir = "./resources/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE, rescaleInput = TRUE, ampCall = 0.2, delCall = -0.235)

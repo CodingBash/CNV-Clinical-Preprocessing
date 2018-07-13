@@ -1,17 +1,26 @@
 library(CNprep)
 
+#
+# Retrieve information of cytobands (downloaded for genome hg19)
+#
 retrieveCytobands <- function(dir = "cytoBand.txt"){
   cytobands <- read.table(dir, header=F, sep = "\t", stringsAsFactors = F)
   names(cytobands) <- c("chrom", "start", "end", "cytoloc", "stain")
   return(cytobands)
 }
 
+#
+# With the chromosome and chromosome location, retrieve the cytoband location
+#
 findCytolocation <- function(cytobands, chrom, chrom.position){
   row <- cytobands[cytobands$chrom == paste("chr", chrom, sep = "") & cytobands$start <= chrom.position & cytobands$end >= chrom.position, ]
   returnme <- data.frame(row)$cytoloc
   return(returnme)
 }
 
+#
+# Retrieve the norminput argument for CNprep::CNpreprocessing()
+#
 retrieveNormInput <- function(normalSegments){
   norminput <- data.frame(stringsAsFactors = FALSE)
   for(normalSegments.index in seq(1, nrow(normalSegments))){
@@ -21,6 +30,9 @@ retrieveNormInput <- function(normalSegments){
   return(norminput)
 }
 
+#
+# Retrieve the seginput argument for CNprep::CNpreprocessing()
+#
 retrieveSegInput <- function(facets_segment_data, cytobands){
   seginput <- data.frame(stringsAsFactors = FALSE)
   for(facets_segment_data.index in seq(1, nrow(facets_segment_data))){
@@ -54,12 +66,18 @@ retrieveSegInput <- function(facets_segment_data, cytobands){
   return(seginput)
 }
 
+#
+# Retrieve the ratinput argument for CNprep::CNpreprocessing()
+#
 retrieveRatInput <- function(facets_snp_data){
   ratinput <- data.frame(facets_snp_data$X.cnlr.)
   names(ratinput) <- c(sample)
   return(ratinput)
 }
 
+#
+# Wrapper function for CNprep::CNpreprocessing()
+#
 runCNpreprocessing <- function(seginput, ratinput, norminput, 
                                blsize=50, minjoin=0.25, cweight=0.4, bstimes=50, 
                                chromrange=1:22, distrib="Rparallel", njobs=40, modelNames="E"){

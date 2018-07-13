@@ -2,7 +2,7 @@
 # This script will go through the segment files and assign bin IDs.
 # TODO: The binning scheme between samples are not same since FACETS subsamples SNPs. Need to implement different strategy
 #
-
+setwd("~/Git-Projects/Git-Research-Projects/drug-response-prediction")
 source("helperFunctions.R")
 
 #

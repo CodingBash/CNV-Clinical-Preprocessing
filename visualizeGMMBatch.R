@@ -1,11 +1,12 @@
 #
 # This script saves the GMM visualization for all hT samples
+# TODO: Make this into callable script with "dir" as command arg
 #
 
 #
 # Load library functions
-# WARNING: If sources don't load, manually setwd() to src file location
 #
+setwd("~/Git-Projects/Git-Research-Projects/drug-response-prediction")
 source("helperFunctions.R")
 source("visualizeGMMLibrary.R")
 

@@ -4,6 +4,7 @@
 # Output file is named "sampleList.csv"
 #
 
+setwd("~/Git-Projects/Git-Research-Projects/drug-response-prediction")
 source("helperFunctions.R")
 
 cd_doc()

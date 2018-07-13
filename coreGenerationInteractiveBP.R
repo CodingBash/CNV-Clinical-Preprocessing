@@ -12,6 +12,7 @@ install.packages("CORE")
 
 library(BSgenome.Hsapiens.UCSC.hg19)
 
+setwd("~/Git-Projects/Git-Research-Projects/drug-response-prediction")
 source("coreGenerationLibrary.R")
 source("helperFunctions.R")
 
