@@ -4,7 +4,6 @@
 #
 source("helperFunctions.R")
 source("segmentClusteringLibrary.R")
-source("coreGenerationLibrary.R")
 
 # TODO: Do not include segments with lower than 5K bp (see paper)
 
