@@ -1,35 +1,12 @@
-#
-# This script generates CORES from input files in BP units (instead of SNP/bin units).
-# This script is interactive and is NOT meant to be ran on a HPC job from a shell script.
-#
-
-#
-# Only run if not installed
-#
-source("https://bioconductor.org/biocLite.R")
-biocLite("BSgenome.Hsapiens.UCSC.hg19")
-install.packages("CORE")
-
-library(BSgenome.Hsapiens.UCSC.hg19)
-library(CORE)
-
-source("coreGenerationLibrary.R")
-source("helperFunctions.R")
-
-event <- "D" # "A" - amplification, "D" - deletion
-
-cd_local()
-samples <- load_samples(classes = c("T"), sampleList = "sampleList.csv")
-chromosomeSizes <- generateChromosomeSizes(genome = BSgenome.Hsapiens.UCSC.hg19)
-cd_doc()
-inputCORESegments <- generateInputCORESegments(event, samples, chromosomeSizes, dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE, rescaleInput = TRUE, ampCall = 0.2, delCall = -0.235)
-inputCOREBoundaries <- generateInputCOREBoundaries(chromosomeSizes)
-
-outputCOREobj <- runCORE(inputCORE, inputCOREBoundaries, distrib="Rparallel", maxmark=10, nshuffle=20, seedme=123, njobs=4)
-
-retrieveCORETable(outputCOREobj, chromosomeSizes, rescaleOutput = TRUE)
+library(gtrellis)
+library(circlize)
+library(ComplexHeatmap)
 
 # TODO: Verify outputCOREobj results, and create Jupyter notebook for CORE visualization
+
+densityInput <- cbind(absoluteToChromosomeBPConversion(inputCORESegments, chromosomeSizes))
+densityInput$chrom <- paste("chr", densityInput$chrom, sep = "")
+dataInputCORE_density = circlize::genomicDensity(densityInput, window.size = 1e7, overlap = FALSE)
 
 lgd = Legend(at = c("duplication", "nuetral", "deletion"), title = "Class", type = "lines", legend_gp = gpar(col = c("orange", "blue", "red")))
 gtrellis_layout(track_height = unit.c(2*grobHeight(textGrob("chr1")), 
@@ -37,14 +14,14 @@ gtrellis_layout(track_height = unit.c(2*grobHeight(textGrob("chr1")),
                                       unit(0.5, "null"), 
                                       unit(3, "mm")),
                 track_axis = c(FALSE, TRUE, TRUE, FALSE), 
-                track_ylim = c(0, 1, range(data.frame(coreTable$score)), c(0, max(dataInputCORE_density[[4]])), 0, 1),
+                track_ylim = c(0, 1, range(data.frame(COREtable$score)), c(0, max(dataInputCORE_density[[4]])), 0, 1),
                 nrow = 3, 
                 n_track = 4, 
                 byrow = FALSE, 
                 species="hg19",
                 legend = lgd
                 #,category = c("chr19")
-                )
+)
 
 # gtrellis_layout(track_height = c(2,5,1),
 #                 track_axis = c(FALSE, TRUE, FALSE), 
@@ -61,7 +38,7 @@ add_track(panel_fun = function(gr) {
   grid.text(chr)
 })
 
-add_segments_track(coreTable, coreTable$score, gp = gpar(col = "black", lwd = 4))
+add_segments_track(COREtable, COREtable$score, gp = gpar(col = "black", lwd = 4))
 
 fill_string <- NA
 if(event == "A"){
@@ -88,4 +65,3 @@ add_track(cytoband_df, panel_fun = function(gr) {
 })
 
 # TODO: SAVE DATA
-

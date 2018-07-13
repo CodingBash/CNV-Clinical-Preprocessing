@@ -53,8 +53,8 @@ print(paste("Saved CORE obj to", outputObj, sep = ""))
 #
 # Save CORE table
 #
-retrieveCORETable(outputCOREobj, chromosomeSizes, rescaleOutput = TRUE)
-write.csv(coreTable, outputCsv)
+CORETable <- retrieveCORETable(outputCOREobj, chromosomeSizes, rescaleOutput = TRUE)
+write.csv(CORETable, outputCsv)
 print(paste("Saved coreTable as", outputCsv, sep = ""))
 
 print("script complete")

@@ -51,8 +51,8 @@ print(paste("Saved CORE obj to", outputObj, sep = ""))
 #
 # Save CORE table
 #
-retrieveCORETable(outputCOREobj, rescaleOutput = FALSE)
-write.csv(coreTable, outputCsv)
+COREtable <- retrieveCORETable(outputCOREobj, rescaleOutput = FALSE)
+write.csv(COREtable, outputCsv)
 print(paste("Saved coreTable as", outputCsv, sep = ""))
 
 print("script complete")
