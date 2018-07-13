@@ -20,10 +20,20 @@ cd_doc <- function() {
 
 #
 # Sets the directory to HPC home directory
+# TODO: migrate off of this function and use cd_core() instead
 #
 cd_home <- function() {
   setwd("~/code/hN_core_artifacts")
 }
+
+cd_core <- function() {
+  setwd("~/code/hN_core_artifacts")  
+}
+
+cd_cnprep <- function() {
+  setwd("~/code/cnprep_clustering")
+}
+
 # 
 # Load all sample names given a sample class
 #

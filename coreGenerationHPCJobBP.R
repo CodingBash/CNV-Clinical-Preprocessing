@@ -32,7 +32,7 @@ source("helperFunctions.R")
 cd_home()
 samples <- load_samples(classes = c("N"), sampleList = "./resources/sampleList.csv")
 chromosomeSizes <- readRDS("./resources/chromosomeSizes.rds")
-inputCORESegments <- generateInputCORESegments(event, samples, chromosomeSizes, dir = "./resources/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE, rescaleInput = TRUE, ampCall = 0.2, delCall = -0.235)
+inputCORESegments <- generateInputCORESegments(events = c(event), samples, chromosomeSizes, dir = "./resources/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE, rescaleInput = TRUE, ampCall = 0.2, delCall = -0.235)
 inputCOREBoundaries <- generateInputCOREBoundaries(chromosomeSizes)
 print("Prepared all inputs - now running CORE")
 

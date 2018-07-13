@@ -31,7 +31,7 @@ source("helperFunctions.R")
 #
 cd_home()
 samples <- load_samples(classes = c("N"), sampleList = "./resources/sampleList.csv")
-inputCORESegments <- generateInputCORESegments(event, samples, dir = "./resources/mappedFacetsFiles/", extension = "mapped.cnv.facets.v0.5.2.bed", inSampleFolder = FALSE, rescaleInput = FALSE, ampCall = 0.2, delCall = -0.235)
+inputCORESegments <- generateInputCORESegments(events = c(event), samples, dir = "./resources/mappedFacetsFiles/", extension = "mapped.cnv.facets.v0.5.2.bed", inSampleFolder = FALSE, rescaleInput = FALSE, ampCall = 0.2, delCall = -0.235)
 print("Prepared all inputs - now running CORE")
 
 #

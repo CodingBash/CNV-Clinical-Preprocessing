@@ -15,7 +15,7 @@ library(BSgenome.Hsapiens.UCSC.hg19)
 source("coreGenerationLibrary.R")
 source("helperFunctions.R")
 
-event <- "D" # "A" - amplification, "D" - deletion
+events <- c("D") # "A" - amplification, "D" - deletion
 
 #
 # Get CORE input
@@ -24,7 +24,9 @@ cd_local()
 samples <- load_samples(classes = c("T"), sampleList = "sampleList.csv")
 chromosomeSizes <- generateChromosomeSizes(genome = BSgenome.Hsapiens.UCSC.hg19)
 cd_doc()
-inputCORESegments <- generateInputCORESegments(event, samples, chromosomeSizes, dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE, rescaleInput = TRUE, ampCall = 0.2, delCall = -0.235)
+inputCORESegments <- selectSegmentsWithEvents(events = events, samples = samples, chromosomeSizes = chromosomeSizes, 
+                                               dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE, 
+                                               rescaleInput = TRUE, ampCall = 0.2, delCall = -0.235)
 inputCOREBoundaries <- generateInputCOREBoundaries(chromosomeSizes)
 
 #

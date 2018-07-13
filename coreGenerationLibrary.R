@@ -22,40 +22,47 @@ generateChromosomeSizes <- function(genome){
   return(chromosomeSizes)
 }
 
+chromsomeToAbsoluteBPConversionForSingleEntry <- function(chrom, start, end, chromosomeSizes){
+  chrom_r <- chrom
+  if (is.na(chrom_r) || length(chrom_r) == 0){
+    next # TODO: This is to resolve the NA row. Where did it come from?
+  } 
+  total_bp <- 0
+  if(chrom_r %in% seq(2,22)){
+    for(i in seq(1, as.numeric(chrom_r) - 1)){
+      total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+    }  
+  } else if (chrom_r == "X") {
+    for(i in seq(1, 22)){
+      total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+    }  
+  }  else if (chrom_r == "Y") {
+    for(i in seq(1, 22)){
+      total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
+    }  
+    total_bp <- total_bp + chromosomeSizes["chrX", ]$size
+  }
+  abs_start <- start + total_bp
+  abs_end <- end + total_bp
+  returnme <- data.frame(start = abs_start, end = abs_end)
+  return(returnme)
+}
+
 #
 # Take a input of multiple segments with the chromosomeSizes, and convert
 # segment maploc from chrom.location to absolute.location in bp units
 #
 chromsomeToAbsoluteBPConversion <- function(input, chromosomeSizes){
   for(row.index in seq(1, nrow(input))){
-    chrom_r <- input[row.index, ]$chrom
-    if (is.na(chrom_r) || length(chrom_r) == 0){
-      next # TODO: This is to resolve the NA row. Where did it come from?
-    }
-    
-    # Calculate BP to add on.
-    total_bp <- 0
-    if(chrom_r %in% seq(2,22)){ # If chrom is autosomal
-      for(i in seq(1, as.numeric(chrom_r) - 1)){ 
-        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size # Calculate additional BP from sum of prior autosomal sizes
-      }  
-    } else if (chrom_r == "X") { # If chrom is X
-      for(i in seq(1, 22)){
-        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size # Calculate additional BP from sum from all autosomal
-      }  
-    }  else if (chrom_r == "Y") { # If chrom is Y
-      for(i in seq(1, 22)){
-        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size # Calculate additional BP from sum from all autosomal and X
-      }  
-      total_bp <- total_bp + chromosomeSizes["chrX", ]$size
-    }
+    # Rescale row
+    absoluteRow <- chromsomeToAbsoluteBPConversionForSingleEntry(chrom = input[row.index, ]$chrom, start = input[row.index, ]$start, end = input[row.index, ]$end, chromosomeSizes = chromosomeSizes)
     
     #
     # Update start and end maploc with new absolute location
     #
-    input[row.index, ]$start <- input[row.index, ]$start + total_bp
-    input[row.index, ]$end <- input[row.index, ]$end + total_bp
-  }
+    input[row.index, ]$start <- absoluteRow$start
+    input[row.index, ]$end <- absoluteRow$end
+    }
   return(input)
 }
 
@@ -91,9 +98,9 @@ absoluteToChromosomeBPConversion <- function(outputCores, chromosomeSizes){
 }
 
 #
-# Generates the input segments for CORE analysis
+# Concatenates all segments in sample that follow a specific set of events 
 #
-# @param event - either "A" (amplification) or "D" (deletion) segments extracted
+# @param event - either "A" (amplification) or "D" (deletion) segments or "N" (neutral) segments are extracted
 # @param samples - names of samples to retrieve
 # @param chromosomeSizes - df of chromosomeSizes for rescaling (if necessary)
 # @param dir - directory of the input files
@@ -104,32 +111,48 @@ absoluteToChromosomeBPConversion <- function(outputCores, chromosomeSizes){
 # @param ampCall - lower threshold to call amplifications
 # @param delCall - higher threshold to call deletions
 #
-generateInputCORESegments <- function(event, samples, chromosomeSizes, dir, extension = "cnv.facets.v0.5.2.txt", inSampleFolder = FALSE, rescaleInput = FALSE, ampCall = 0.2, delCall = -0.235){
-  dataInputCORE <- data.frame()
+# TODO: This method is also used in segmentClustering.R script. Perhaps move this function to a more general library?
+#
+selectSegmentsWithEvents <- function(events, samples, chromosomeSizes, dir, extension = "cnv.facets.v0.5.2.txt", inSampleFolder = FALSE, rescaleInput = FALSE, ampCall = 0.2, delCall = -0.235){
+  totalSelectedSegments <- data.frame()
   
   loaded_segments <- list(NA)
   loaded_segments.index <- 1
   for(sample in samples){
     segments <- as.data.frame(read.table(paste(dir, if(inSampleFolder == TRUE) paste("Sample_", sample, "/analysis/structural_variants/", sep = "") else "",sample, "--NA12878.", extension, sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
-    if(event == "A"){
-      segments <- segments[segments$X.cnlr.median. > 0.2,]  
-    } else if (event == "D"){
-      segments <- segments[segments$X.cnlr.median. < -0.235,]  
-    } else {
-      print("No event selected.")
-    }
-    segments <- segments[,c(1, 10, 11)]
+    selected_segments <- data.frame()
     
-    names(segments) <- c("chrom", "start", "end")
-    
-    if(rescaleInput == TRUE){
-      segments <- chromsomeToAbsoluteBPConversion(segments, chromosomeSizes)
+    # Retrieve amplification events from sample if asked
+    if("A" %in% events){
+      selected_segments <- rbind(selected_segments, segments[segments$X.cnlr.median. > ampCall,])  
     }
     
-    dataInputCORE <- rbind(dataInputCORE, segments)
+    # Retrieve deletion events from sample if asked
+    if ("D" %in% events){
+      selected_segments <- rbind(selected_segments, segments[segments$X.cnlr.median. < delCall,])
+    }
+    
+    # Retrieve nuetral events from sample if asked
+    if("N" %in% events){
+      selected_segments <- rbind(selected_segments, segments[segments$X.cnlr.median. >= delCall & segments$X.cnlr.median. <= ampCall,]) # TODO: This is an untested line of code
+    }
+    
+    # If any segments from sample selected, let's preprocess the dataframe and add to total list
+    if(nrow(selected_segments) != 0){
+      # Filters to only chrom, start, end, cnlr
+      selected_segments <- selected_segments[,c(1, 10, 11, 5)] # TODO: Just added CNLR, may have issues in CORE script
+      
+      names(selected_segments) <- c("chrom", "start", "end", "cnlr")
+      
+      if(rescaleInput == TRUE){
+        selected_segments <- chromsomeToAbsoluteBPConversion(selected_segments, chromosomeSizes)
+      }
+      
+      totalSelectedSegments <- rbind(totalSelectedSegments, selected_segments)
+    }
   }
   
-  returnme <-  cbind(dataInputCORE)
+  returnme <-  cbind(totalSelectedSegments)
   returnme <- returnme[returnme$chrom != "X" & returnme$chrom != "Y",] # REMOVE X and Y chromosome
   returnme$chrom <- as.numeric(returnme$chrom)
   return(returnme)

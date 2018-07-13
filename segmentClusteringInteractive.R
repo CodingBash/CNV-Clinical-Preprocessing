@@ -1,0 +1,71 @@
+#
+# Install if needed
+#
+source("https://bioconductor.org/biocLite.R")
+biocLite("Rsamtools")
+biocLite("BSgenome.Hsapiens.UCSC.hg19")
+
+#
+# Load genome
+#
+library(BSgenome.Hsapiens.UCSC.hg19)
+
+#
+# Load source libraries
+# TODO: Organize dependencies
+#
+source("helperFunctions.R")
+source("segmentClusteringLibrary.R")
+source("coreGenerationLibrary.R")
+
+# TODO: Do not include segments with lower than 5K bp (see paper)
+
+#
+# Load input
+#
+cd_local()
+normal_samples <- load_samples(classes = c("N"), sampleList = "sampleList.csv")
+cytobands <- retrieveCytobands(dir = "cytoBand.txt")
+chromosomeSizes <- generateChromosomeSizes(genome = BSgenome.Hsapiens.UCSC.hg19)
+cd_doc()
+normalSegments <- selectSegmentsWithEvents(events = c("A", "D", "N"), samples = normal_samples, chromosomeSizes = chromosomeSizes, 
+                                              dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE, 
+                                              rescaleInput = TRUE, ampCall = 0.2, delCall = -0.235)
+tumor_samples <- load_samples(classes = c("T"), sampleList = "sampleList.csv") # TODO: THIS WAS ORIGINAL CLASS "N", RECOMPUTE RESUTS
+
+# Generate norminput argument
+norminput <- retrieveNormInput(normalSegments)
+
+
+for(tumor_samples.i in seq(1, length(tumor_samples))){
+  sample <- tumor_samples[tumor_samples.i]
+  
+  print(paste("Analyzing sample", sample))
+  
+  #
+  # Retrieve sample data
+  #
+  cd_doc()
+  facets_segment_data <- retrieveFacetsSegments(sample, dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/")
+  facets_snp_data <- retrieveFacetsSnps(sample, dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/")
+  
+  # Generate seginput argument
+  seginput <- retrieveSegInput(facets_segment_data, cytobands)
+  print(paste("Retrieved segment input for sample", sample))
+  
+  # Generate ratinput argument
+  ratinput <- retrieveRatInput(facets_snp_data)
+  print(paste("Retrieved ratio input for sample", sample))
+  
+  # Run CNprep:CNpreprocessing
+  segtable <- runCNpreprocessing(seginput = seginput, ratinput = ratinput, norminput = norminput, modelNames = "E")
+  print(paste("Produced segtable for sample", sample))
+  
+  #
+  # Write results out
+  #
+  cd_local()
+  #write.table(segtable, paste("segClusteringResultsPar/", sample, "_segtable.tsv", sep = ""), row.names = F, sep = "\t", quote = FALSE)
+  print(head(segtable))
+  print(paste("Wrote output for sample", sample))
+}
