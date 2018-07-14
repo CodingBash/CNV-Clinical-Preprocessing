@@ -11757,7 +11757,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="kn">source</span><span class="p">(</span><span class="s">&quot;https://bioconductor.org/biocLite.R&quot;</span><span class="p">)</span>
@@ -11774,16 +11774,6 @@ biocLite<span class="p">(</span><span class="s">&quot;ComplexHeatmap&quot;</span
 
 
 <div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>package &#39;BiocInstaller&#39; successfully unpacked and MD5 sums checked
-
-The downloaded binary packages are in
-	C:\Users\bbece\AppData\Local\Temp\RtmpmYDpeS\downloaded_packages
-</pre>
-</div>
-</div>
-
-<div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>Bioconductor version 3.6 (BiocInstaller 1.28.0), ?biocLite for help
 A new version of Bioconductor is available after installing the most recent
@@ -11791,46 +11781,63 @@ A new version of Bioconductor is available after installing the most recent
 BioC_mirror: https://bioconductor.org
 Using Bioconductor 3.6 (BiocInstaller 1.28.0), R 3.4.3 (2017-11-30).
 Installing package(s) &#39;gtrellis&#39;
-also installing the dependencies &#39;GenomeInfoDbData&#39;, &#39;zlibbioc&#39;, &#39;BiocGenerics&#39;, &#39;S4Vectors&#39;, &#39;GenomeInfoDb&#39;, &#39;XVector&#39;, &#39;GlobalOptions&#39;, &#39;shape&#39;, &#39;rjson&#39;, &#39;IRanges&#39;, &#39;GenomicRanges&#39;, &#39;circlize&#39;, &#39;GetoptLong&#39;
-
 </pre>
 </div>
 </div>
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>package &#39;zlibbioc&#39; successfully unpacked and MD5 sums checked
-package &#39;BiocGenerics&#39; successfully unpacked and MD5 sums checked
-package &#39;S4Vectors&#39; successfully unpacked and MD5 sums checked
-package &#39;GenomeInfoDb&#39; successfully unpacked and MD5 sums checked
-package &#39;XVector&#39; successfully unpacked and MD5 sums checked
-package &#39;GlobalOptions&#39; successfully unpacked and MD5 sums checked
-package &#39;shape&#39; successfully unpacked and MD5 sums checked
-package &#39;rjson&#39; successfully unpacked and MD5 sums checked
-package &#39;IRanges&#39; successfully unpacked and MD5 sums checked
-package &#39;GenomicRanges&#39; successfully unpacked and MD5 sums checked
-package &#39;circlize&#39; successfully unpacked and MD5 sums checked
-package &#39;GetoptLong&#39; successfully unpacked and MD5 sums checked
-package &#39;gtrellis&#39; successfully unpacked and MD5 sums checked
+<pre>package &#39;gtrellis&#39; successfully unpacked and MD5 sums checked
 
 The downloaded binary packages are in
-	C:\Users\bbece\AppData\Local\Temp\RtmpmYDpeS\downloaded_packages
+	C:\Users\bbece\AppData\Local\Temp\RtmpqAKZYK\downloaded_packages
 </pre>
 </div>
 </div>
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>installing the source package &#39;GenomeInfoDbData&#39;
-
-Old packages: &#39;BH&#39;, &#39;bindr&#39;, &#39;bindrcpp&#39;, &#39;bit&#39;, &#39;blob&#39;, &#39;broom&#39;, &#39;callr&#39;,
+<pre>Old packages: &#39;BH&#39;, &#39;bindr&#39;, &#39;bindrcpp&#39;, &#39;bit&#39;, &#39;blob&#39;, &#39;broom&#39;, &#39;callr&#39;,
   &#39;car&#39;, &#39;caret&#39;, &#39;clipr&#39;, &#39;cluster&#39;, &#39;config&#39;, &#39;curl&#39;, &#39;CVST&#39;, &#39;data.table&#39;,
   &#39;DBI&#39;, &#39;dbplyr&#39;, &#39;ddalpha&#39;, &#39;digest&#39;, &#39;dplyr&#39;, &#39;DRR&#39;, &#39;forcats&#39;, &#39;foreign&#39;,
   &#39;ggplot2&#39;, &#39;gistr&#39;, &#39;glmnet&#39;, &#39;haven&#39;, &#39;hexbin&#39;, &#39;highr&#39;, &#39;hms&#39;,
-  &#39;htmlwidgets&#39;, &#39;httpuv&#39;, &#39;IRdisplay&#39;, &#39;kernlab&#39;, &#39;knitr&#39;, &#39;lava&#39;, &#39;lme4&#39;,
-  &#39;lubridate&#39;, &#39;maps&#39;, &#39;MASS&#39;, &#39;Matrix&#39;, &#39;mgcv&#39;, &#39;miniUI&#39;, &#39;modelr&#39;,
-  &#39;mongolite&#39;, &#39;munsell&#39;, &#39;nlme&#39;, &#39;odbc&#39;, &#39;openssl&#39;, &#39;packrat&#39;, &#39;pbdZMQ&#39;,
-  &#39;pillar&#39;, &#39;plogr&#39;, &#39;prodlim&#39;, &#39;profvis&#39;, &#39;pryr&#39;, &#39;psych&#39;, &#39;purrr&#39;,
+  &#39;htmlwidgets&#39;, &#39;httpuv&#39;, &#39;IRdisplay&#39;, &#39;iterators&#39;, &#39;kernlab&#39;, &#39;knitr&#39;,
+  &#39;lava&#39;, &#39;lme4&#39;, &#39;lubridate&#39;, &#39;maps&#39;, &#39;MASS&#39;, &#39;Matrix&#39;, &#39;mgcv&#39;, &#39;miniUI&#39;,
+  &#39;modelr&#39;, &#39;mongolite&#39;, &#39;munsell&#39;, &#39;nlme&#39;, &#39;odbc&#39;, &#39;openssl&#39;, &#39;packrat&#39;,
+  &#39;pbdZMQ&#39;, &#39;pillar&#39;, &#39;plogr&#39;, &#39;prodlim&#39;, &#39;profvis&#39;, &#39;pryr&#39;, &#39;psych&#39;, &#39;purrr&#39;,
+  &#39;quantmod&#39;, &#39;quantreg&#39;, &#39;randomForest&#39;, &#39;Rcpp&#39;, &#39;RcppEigen&#39;, &#39;RcppRoll&#39;,
+  &#39;RCurl&#39;, &#39;readxl&#39;, &#39;recipes&#39;, &#39;repr&#39;, &#39;reprex&#39;, &#39;rJava&#39;, &#39;RJDBC&#39;, &#39;rlang&#39;,
+  &#39;rmarkdown&#39;, &#39;robustbase&#39;, &#39;rpart&#39;, &#39;rprojroot&#39;, &#39;rsconnect&#39;, &#39;selectr&#39;,
+  &#39;sfsmisc&#39;, &#39;shiny&#39;, &#39;sourcetools&#39;, &#39;sparklyr&#39;, &#39;stringi&#39;, &#39;stringr&#39;,
+  &#39;survival&#39;, &#39;tibble&#39;, &#39;tidyr&#39;, &#39;tidyselect&#39;, &#39;timeDate&#39;, &#39;TTR&#39;, &#39;utf8&#39;,
+  &#39;viridisLite&#39;, &#39;withr&#39;, &#39;xml2&#39;, &#39;xts&#39;, &#39;yaml&#39;, &#39;zoo&#39;
+BioC_mirror: https://bioconductor.org
+Using Bioconductor 3.6 (BiocInstaller 1.28.0), R 3.4.3 (2017-11-30).
+Installing package(s) &#39;ComplexHeatmap&#39;
+</pre>
+</div>
+</div>
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>package &#39;ComplexHeatmap&#39; successfully unpacked and MD5 sums checked
+
+The downloaded binary packages are in
+	C:\Users\bbece\AppData\Local\Temp\RtmpqAKZYK\downloaded_packages
+</pre>
+</div>
+</div>
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Old packages: &#39;BH&#39;, &#39;bindr&#39;, &#39;bindrcpp&#39;, &#39;bit&#39;, &#39;blob&#39;, &#39;broom&#39;, &#39;callr&#39;,
+  &#39;car&#39;, &#39;caret&#39;, &#39;clipr&#39;, &#39;cluster&#39;, &#39;config&#39;, &#39;curl&#39;, &#39;CVST&#39;, &#39;data.table&#39;,
+  &#39;DBI&#39;, &#39;dbplyr&#39;, &#39;ddalpha&#39;, &#39;digest&#39;, &#39;dplyr&#39;, &#39;DRR&#39;, &#39;forcats&#39;, &#39;foreign&#39;,
+  &#39;ggplot2&#39;, &#39;gistr&#39;, &#39;glmnet&#39;, &#39;haven&#39;, &#39;hexbin&#39;, &#39;highr&#39;, &#39;hms&#39;,
+  &#39;htmlwidgets&#39;, &#39;httpuv&#39;, &#39;IRdisplay&#39;, &#39;iterators&#39;, &#39;kernlab&#39;, &#39;knitr&#39;,
+  &#39;lava&#39;, &#39;lme4&#39;, &#39;lubridate&#39;, &#39;maps&#39;, &#39;MASS&#39;, &#39;Matrix&#39;, &#39;mgcv&#39;, &#39;miniUI&#39;,
+  &#39;modelr&#39;, &#39;mongolite&#39;, &#39;munsell&#39;, &#39;nlme&#39;, &#39;odbc&#39;, &#39;openssl&#39;, &#39;packrat&#39;,
+  &#39;pbdZMQ&#39;, &#39;pillar&#39;, &#39;plogr&#39;, &#39;prodlim&#39;, &#39;profvis&#39;, &#39;pryr&#39;, &#39;psych&#39;, &#39;purrr&#39;,
   &#39;quantmod&#39;, &#39;quantreg&#39;, &#39;randomForest&#39;, &#39;Rcpp&#39;, &#39;RcppEigen&#39;, &#39;RcppRoll&#39;,
   &#39;RCurl&#39;, &#39;readxl&#39;, &#39;recipes&#39;, &#39;repr&#39;, &#39;reprex&#39;, &#39;rJava&#39;, &#39;RJDBC&#39;, &#39;rlang&#39;,
   &#39;rmarkdown&#39;, &#39;robustbase&#39;, &#39;rpart&#39;, &#39;rprojroot&#39;, &#39;rsconnect&#39;, &#39;selectr&#39;,
@@ -11852,7 +11859,7 @@ Old packages: &#39;BH&#39;, &#39;bindr&#39;, &#39;bindrcpp&#39;, &#39;bit&#39;, 
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Install-source-libraries">Install source libraries<a class="anchor-link" href="#Install-source-libraries">&#182;</a></h3><ul>
 <li><strong>cnProfileVisualizationLibrary.R</strong> - contains visualization methods</li>
-<li><strong>helperFunctions.R</strong> - contains cd methods</li>
+<li><strong>helperFunctions.R</strong> - contains utility methods</li>
 </ul>
 
 </div>
@@ -11860,7 +11867,7 @@ Old packages: &#39;BH&#39;, &#39;bindr&#39;, &#39;bindrcpp&#39;, &#39;bit&#39;, 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction&quot;</span><span class="p">)</span>
@@ -11869,6 +11876,91 @@ Old packages: &#39;BH&#39;, &#39;bindr&#39;, &#39;bindrcpp&#39;, &#39;bit&#39;, 
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Loading required package: grid
+Loading required package: IRanges
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: &#39;BiocGenerics&#39;
+
+The following objects are masked from &#39;package:parallel&#39;:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from &#39;package:stats&#39;:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from &#39;package:base&#39;:
+
+    anyDuplicated, append, as.data.frame, cbind, colMeans, colnames,
+    colSums, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, lengths, Map, mapply, match,
+    mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which, which.max, which.min
+
+Loading required package: S4Vectors
+Loading required package: stats4
+
+Attaching package: &#39;S4Vectors&#39;
+
+The following object is masked from &#39;package:base&#39;:
+
+    expand.grid
+
+Loading required package: GenomicRanges
+Warning message:
+&#34;package &#39;GenomicRanges&#39; was built under R version 3.4.4&#34;Loading required package: GenomeInfoDb
+========================================
+gtrellis version 1.11.1
+Bioconductor page: http://bioconductor.org/packages/gtrellis/
+Github page: https://github.com/jokergoo/gtrellis
+Documentation: http://bioconductor.org/packages/gtrellis/
+
+If you use it in published research, please cite:
+Gu, Z. gtrellis: an R/Bioconductor package for making genome-level 
+  Trellis graphics. BMC Bioinformatics 2016.
+========================================
+
+Warning message:
+&#34;package &#39;circlize&#39; was built under R version 3.4.4&#34;========================================
+circlize version 0.4.4
+CRAN page: https://cran.r-project.org/package=circlize
+Github page: https://github.com/jokergoo/circlize
+Documentation: http://jokergoo.github.io/circlize_book/book/
+
+If you use it in published research, please cite:
+Gu, Z. circlize implements and enhances circular visualization 
+  in R. Bioinformatics 2014.
+========================================
+
+========================================
+ComplexHeatmap version 1.17.1
+Bioconductor page: http://bioconductor.org/packages/ComplexHeatmap/
+Github page: https://github.com/jokergoo/ComplexHeatmap
+Documentation: http://bioconductor.org/packages/ComplexHeatmap/
+
+If you use it in published research, please cite:
+Gu, Z. Complex heatmaps reveal patterns and correlations in multidimensional 
+  genomic data. Bioinformatics 2016.
+========================================
+
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -11888,7 +11980,7 @@ Old packages: &#39;BH&#39;, &#39;bindr&#39;, &#39;bindrcpp&#39;, &#39;bit&#39;, 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>sample <span class="o">&lt;-</span> <span class="s">&quot;hT30&quot;</span>
@@ -11914,22 +12006,37 @@ Old packages: &#39;BH&#39;, &#39;bindr&#39;, &#39;bindrcpp&#39;, &#39;bit&#39;, 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span>cd_doc<span class="p">()</span>    
+<div class=" highlight hl-r"><pre><span></span><span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents&quot;</span><span class="p">)</span>
+<span class="kp">print</span><span class="p">(</span><span class="kp">getwd</span><span class="p">())</span>
 facets_segment_data <span class="o">&lt;-</span> retrieveFacetsSegments<span class="p">(</span><span class="kp">sample</span><span class="p">,</span> dir <span class="o">=</span> <span class="s">&quot;CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/&quot;</span><span class="p">)</span>
 facets_segment_data <span class="o">&lt;-</span> segmentsToBedFormat<span class="p">(</span>facets_segment_data<span class="p">)</span>  
 
 facets_snp_data <span class="o">&lt;-</span> retrieveFacetsSnps<span class="p">(</span><span class="kp">sample</span><span class="p">,</span> dir <span class="o">=</span> <span class="s">&quot;CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/&quot;</span><span class="p">)</span>
 facets_snp_data <span class="o">&lt;-</span> snpsToBedFormat<span class="p">(</span>facets_snp_data<span class="p">)</span>
 
-cd_local<span class="p">()</span>
+<span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction&quot;</span><span class="p">)</span>
 facets_segment_clusters <span class="o">&lt;-</span> retrieveFacetsSegmentClusters<span class="p">(</span><span class="kp">sample</span><span class="p">,</span> dir <span class="o">=</span> <span class="s">&quot;segClusteringResults/prev_run1/&quot;</span><span class="p">)</span>
 facets_segment_clusters <span class="o">&lt;-</span> segmentClustersToBedFormat<span class="p">(</span>facets_segment_clusters<span class="p">)</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[1] &#34;C:/Users/bbece/Documents&#34;
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -11950,7 +12057,7 @@ facets_segment_clusters <span class="o">&lt;-</span> segmentClustersToBedFormat<
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>visualizeCNProfile<span class="p">(</span>facets_segment_data <span class="o">=</span> facets_segment_data<span class="p">,</span> facets_snp_data <span class="o">=</span> facets_snp_data<span class="p">)</span>
@@ -12435,7 +12542,7 @@ Tp3DJAAAAABJRU5ErkJggg=="
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>visualizeCNProfile<span class="p">(</span>facets_segment_data <span class="o">=</span> facets_segment_data<span class="p">,</span> facets_snp_data <span class="o">=</span> facets_snp_data<span class="p">,</span> categories <span class="o">=</span> <span class="s">&quot;chr19&quot;</span><span class="p">)</span>
@@ -12802,7 +12909,7 @@ GAmAAcBIAAzg/wOZOzcMjMuR8QAAAABJRU5ErkJggg=="
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[53]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>visualizeCNProfile<span class="p">(</span>facets_segment_data <span class="o">=</span> facets_segment_clusters<span class="p">,</span> facets_snp_data <span class="o">=</span> facets_snp_data<span class="p">,</span> categories <span class="o">=</span> <span class="s">&quot;chr19&quot;</span><span class="p">)</span>

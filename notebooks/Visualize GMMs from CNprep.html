@@ -11757,10 +11757,10 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="c1"># WARNING: If sources don&#39;t load, manually setwd() to src file location</span>
+<div class=" highlight hl-r"><pre><span></span><span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction&quot;</span><span class="p">)</span>
 <span class="kn">source</span><span class="p">(</span><span class="s">&quot;helperFunctions.R&quot;</span><span class="p">)</span>
 <span class="kn">source</span><span class="p">(</span><span class="s">&quot;visualizeGMMLibrary.R&quot;</span><span class="p">)</span>
 </pre></div>
@@ -11781,7 +11781,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>sample_list <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;hT3&quot;</span><span class="p">,</span> <span class="s">&quot;hT30&quot;</span><span class="p">)</span> <span class="c1"># Set the sample that you want to view the GMM for here.</span>
@@ -11803,11 +11803,11 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="kr">for</span><span class="p">(</span>sample <span class="kr">in</span> sample_list<span class="p">){</span>
-    cd_local<span class="p">()</span>
+    <span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction&quot;</span><span class="p">)</span>
     segtable_mclust_V <span class="o">&lt;-</span> retrieveSegtable<span class="p">(</span><span class="kp">sample</span><span class="p">,</span> dir <span class="o">=</span> <span class="s">&quot;segClusteringResults/prev_run3/&quot;</span><span class="p">)</span>
     displayGMM<span class="p">(</span>segtable <span class="o">=</span> segtable_mclust_V<span class="p">,</span> sample <span class="o">=</span> <span class="kp">sample</span><span class="p">,</span> print <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> save <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
 <span class="p">}</span>
@@ -12308,11 +12308,11 @@ ARJCCgIkhBQESAgpCJAQUtD/B4KFCjkY7MDKAAAAAElFTkSuQmCC"
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="kr">for</span><span class="p">(</span>sample <span class="kr">in</span> sample_list<span class="p">){</span>
-    cd_local<span class="p">()</span>
+    <span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction&quot;</span><span class="p">)</span>
     segtable_mclust_E <span class="o">&lt;-</span> retrieveSegtable<span class="p">(</span><span class="kp">sample</span><span class="p">,</span> dir <span class="o">=</span> <span class="s">&quot;segClusteringResults/prev_run1/&quot;</span><span class="p">)</span>
     displayGMM<span class="p">(</span>segtable <span class="o">=</span> segtable_mclust_E<span class="p">,</span> sample <span class="o">=</span> <span class="kp">sample</span><span class="p">,</span> print <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> save <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
 <span class="p">}</span>

@@ -2,7 +2,7 @@
 # Load source libraries
 # TODO: Organize dependencies
 #
-setwd("~/Git-Projects/Git-Research-Projects/drug-response-prediction")
+setwd("~/code/cnprep_clustering/scripts")
 source("helperFunctions.R")
 source("segmentClusteringLibrary.R")
 
