@@ -31,4 +31,7 @@ write.table(coreTable, sep = "\t", quote = FALSE, col.names = FALSE, row.names =
 # Remove artifacts from hT cores with fractional subtraction
 subtractBed -a AcoresBP.bed -b ../../../hN_results/coresResults/prev_run_7_3_2018/AcoresBP.bed -A -f 0.5 > ../AfinalCoresBP_subtractFraction.bed
 
+#Run segment clustering qsub
+qsub -N produceSegtable15 -v output_dir='prev_run_7_15_2018_14' -v mclust_model='E' -v minjoin='0.25' -v ntrial='40' -v description='Running with E model with default minjoin and high ntrial to see if we can capture small clusters' runSegmentClustering.sh
+
 
