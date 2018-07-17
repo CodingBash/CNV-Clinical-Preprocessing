@@ -14,7 +14,7 @@ library(ComplexHeatmap)
 #
 # Visualizes CN profile from segment/SNP data using GTRELLIS visualization library
 #
-visualizeCNProfile <- function(facets_segment_data, facets_snp_data, categories, save = FALSE, saveDir = "", saveMeta = ""){
+visualizeCNProfile <- function(facets_segment_data, facets_snp_data, categories, save = FALSE, saveDir = "", saveMeta = "", ymin = -6, ymax = 2){
   if(save == TRUE){
     pdf(paste(saveDir, "cnprofile_", saveMeta, "_", sample, ".pdf", sep = ""), width = 44, height = 16)
   }
@@ -26,7 +26,7 @@ visualizeCNProfile <- function(facets_segment_data, facets_snp_data, categories,
   #
   track_height <- c(1,8,1)
   track_axis <- c(FALSE, TRUE, FALSE)
-  track_ylim <- range(seq(-6,2))
+  track_ylim <- range(seq(ymin, ymax))
   nrow <- 3
   n_track <- 3
   byrow <- FALSE
@@ -60,10 +60,20 @@ visualizeCNProfile <- function(facets_segment_data, facets_snp_data, categories,
     grid.text(chr)
   })
   
-  # Add SNP/bin track to GTRELLIS  
-  add_points_track(facets_snp_data, facets_snp_data$value, gp = gpar(fill = "gray"))
-  # Add segment track overlayed over the SNP/bins to GTRELLIS
-  add_segments_track(facets_segment_data, facets_segment_data$value, track = current_track(), gp = gpar(col = ifelse(facets_segment_data$value > 0.2, "orange", ifelse(facets_segment_data$value > -0.23, "blue", "red")), lwd = 4))
+  if(!missing(facets_segment_data)){
+    # Add segment track
+    add_segments_track(facets_segment_data, facets_segment_data$value, gp = gpar(col = ifelse(facets_segment_data$value > 0.2, "orange", ifelse(facets_segment_data$value > -0.23, "blue", "red")), lwd = 4))
+  }
+  # If SNPs were provided
+  if(!missing(facets_snp_data)){
+    # Add SNP/bin track to GTRELLIS (overlayed over segment)
+    if(!missing(facets_segment_data)){
+      add_points_track(facets_snp_data, facets_snp_data$value, track = current_track(), gp = gpar(fill = "gray"))  
+    } else {
+      add_points_track(facets_snp_data, facets_snp_data$value, gp = gpar(fill = "gray"))  
+    }
+  }
+  
   
   # Add cytobands to bottom of panel to GTRELLIS
   cytoband_df = circlize::read.cytoband(species = "hg19")$df

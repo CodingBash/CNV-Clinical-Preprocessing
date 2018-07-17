@@ -10,6 +10,15 @@ cd_local <- function() {
 }
 
 #
+# Sets the directory to facets_testing workspace
+# TODO: all scripts that go under facets_testing should be moved to that workspace
+#
+cd_facets <- function(subdir = ""){
+  setwd(paste0("~/Git-Projects/Git-Research-Projects/FACETS_nonmatching_test/", subdir))
+}
+
+
+#
 # Sets the directory to the project workspace
 #
 cd_doc <- function() {
@@ -52,7 +61,7 @@ retrieveFacetsSegments <- function(sample, dir = "CSHL/Project_TUV_12995_B01_SOM
 }
 
 #
-# Retrieve a sample's FACETS segmented cluster (cnlr.median.clust) data from specified directory
+# Retrieve a sample's FACETS segmented cluster (cnlr.median.clust) data from specified directory from CNprep results
 #
 retrieveFacetsSegmentClusters <- function(sample, dir = "segClusteringResults/"){
   facets_segment_clusters <- as.data.frame(read.table(paste(dir, sample, "_segtable.tsv", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
@@ -71,12 +80,25 @@ retrieveFacetsSnps <- function(sample, dir = "CSHL/Project_TUV_12995_B01_SOM_Tar
 # Simplifies FACETS segment original format into BED format with
 # the columns: "chrom", "chrom.start", "chrom.end", "median cnlr"
 #
-segmentsToBedFormat <- function(facets_segment_data){
-  facets_segment_data <- facets_segment_data[,c(1, 10, 11, 5)]
+segmentsToBedFormat <- function(facets_segment_data, median.clust = FALSE){
+  facets_segment_data <- facets_segment_data[,c(1, 10, 11, if(median.clust == FALSE) 5 else 8)]
+  facets_segment_data[[1]] <- paste("chr", facets_segment_data[[1]], sep="")
+  names(facets_segment_data) <- c("chrom", "start", "end", "value")
+  return(facets_segment_data)
+}
+
+#
+# Simplifies FACETS segment original format into BED format with
+# the columns: "chrom", "chrom.start", "chrom.end", "median cnlr"
+#
+segmentsToBedFormatWithClusters <- function(facets_segment_data){
+  facets_segment_data <- facets_segment_data[,c(1, 10, 11, 8)]
   facets_segment_data$X.chrom. <- paste("chr", facets_segment_data$X.chrom., sep="")
   names(facets_segment_data) <- c("chrom", "start", "end", "value")
   return(facets_segment_data)
 }
+
+
 
 #
 # Simplifies FACETS segment cluster original format into BED format with
@@ -99,7 +121,7 @@ snpsToBedFormat <- function(facets_snp_data){
   facets_snp_data$start <- seq(1, length.out=nrow(facets_snp_data), by=1)
   facets_snp_data$end <- seq(2, length.out=nrow(facets_snp_data), by=1)
   facets_snp_data <- facets_snp_data[,c(1, 2, 2, 11)]
-  facets_snp_data$X.chrom. <- paste("chr", facets_snp_data$X.chrom., sep="")
+  facets_snp_data[[1]] <- paste("chr", facets_snp_data[[1]], sep="")
   names(facets_snp_data) <- c("chrom", "start", "end", "value")
   return(facets_snp_data)
 }
@@ -229,4 +251,36 @@ chromsomeToAbsoluteBPConversion <- function(input, chromosomeSizes){
     input[row.index, ]$end <- absoluteRow$end
   }
   return(input)
+}
+
+#
+# From a dataframe, create a TSV file (bed file)
+#
+createBedFile <- function(objectToWrite, filename){
+  write.table(objectToWrite, sep = "\t", quote = FALSE, col.names = FALSE, row.names = FALSE, file = filename)
+}
+
+
+#
+# Get FACETS xx file
+#
+getFacetsXX <- function(tumorId, normalId, xxPrefix = "facetsG5XX_", dir = "output/"){
+  xx <- readRDS(paste0(dir, xxPrefix, tumorId, "_", normalId, ".rds"))
+  return(xx)
+}
+
+#
+# Get FACETS oo file
+#
+getFacetsOO <- function(tumorId, normalId, ooPrefix = "facetsG5OO_", dir = "output/"){
+  oo <- readRDS(paste0(dir, ooPrefix, tumorId, "_", normalId, ".rds"))
+  return(oo)
+}
+
+#
+# Get FACETS fit file
+#
+getFacetsFit <- function(tumorId, normalId, fitPrefix = "facetsG5Fit_", dir = "output/"){
+  fit <- readRDS(paste0(dir, fitPrefix, tumorId, "_", normalId, ".rds"))
+  return(fit)
 }
