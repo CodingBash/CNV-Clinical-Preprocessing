@@ -27,6 +27,14 @@ if (length(args) == 1){
   tumorId <- as.numeric(args[4])
 }
 
+#
+# Sets the directory to tcga_core_analysis in bnb
+#
+cd_tcga_core_analysis <- function(subdir = ""){
+  setwd(paste0("~/code/tcga_core_analysis/", subdir))  
+}
+
+cd_tcga_core_analysis(subdir = "scripts/")
 source("helperFunctions.R")
 source("coreGenerationLibrary.R")
 source("facetsAnalysisLibrary.R")
@@ -34,13 +42,15 @@ source("facetsAnalysisLibrary.R")
 #
 # Calculating CORES of non matching FACET pairs
 #
-chromosomeSizes <- readRDS("./resources/chromosomeSizes.rds")
-fitFiles <- getAllFitFilesForTumor(tumorId, dir = "./", bedFormat = FALSE)
+cd_tcga_core_analysis(subdir = "resources/")
+chromosomeSizes <- readRDS("./chromosomeSizes.rds")
+fitFiles <- getAllFitFilesForTumor(tumorId, dir = "./prev_run_4/", bedFormat = FALSE)
 events = c("A")
 inputCORESegments <- subsetAllSegmentsByEvent(fitFiles, events, chromosomeSizes, rescaleInput = TRUE, ampCall = 0.2, delCall = -0.235)
 inputCOREBoundaries <- generateInputCOREBoundaries(chromosomeSizes)
 print("Prepared all inputs - now running CORE")
 
+cd_tcga_core_analysis(subdir = "output/")
 #
 # Run CORE
 #
@@ -58,7 +68,7 @@ print(paste("Saved CORE obj to", paste0(outputObj, "_t", tumorId, ".rds"), sep =
 # Get CORE table
 #
 COREtable <- retrieveCORETable(outputCOREobj, chromosomeSizes, rescaleOutput = TRUE)
-write.csv(CORETable, paste0(outputCsv, "_t", tumorId, ".csv"))
+write.csv(COREtable, paste0(outputCsv, "_t", tumorId, ".csv"))
 print(paste("Saved coreTable as", paste0(outputCsv, "_t", tumorId, ".csv"), sep = " "))
 
 print("script complete")

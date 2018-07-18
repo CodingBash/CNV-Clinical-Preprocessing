@@ -10,11 +10,12 @@
 library(gtrellis)
 library(circlize)
 library(ComplexHeatmap)
+library(RColorBrewer)
 
 #
 # Visualizes CN profile from segment/SNP data using GTRELLIS visualization library
 #
-visualizeCNProfile <- function(facets_segment_data, facets_snp_data, categories, save = FALSE, saveDir = "", saveMeta = "", ymin = -6, ymax = 2){
+visualizeCNProfile <- function(facets_segment_data, facets_snp_data, Acores, Dcores, categories, save = FALSE, saveDir = "", saveMeta = "", ymin = -6, ymax = 2){
   if(save == TRUE){
     pdf(paste(saveDir, "cnprofile_", saveMeta, "_", sample, ".pdf", sep = ""), width = 44, height = 16)
   }
@@ -24,11 +25,11 @@ visualizeCNProfile <- function(facets_segment_data, facets_snp_data, categories,
   #
   # Set GTRELLIS layout
   #
-  track_height <- c(1,8,1)
-  track_axis <- c(FALSE, TRUE, FALSE)
+  track_height <- if(!missing(Acores) || !missing(Dcores)) c(1,8,2,1) else c(1,8,1) 
+  track_axis <-  if(!missing(Acores) || !missing(Dcores)) c(FALSE, TRUE, FALSE, FALSE) else c(FALSE, TRUE, FALSE)
   track_ylim <- range(seq(ymin, ymax))
   nrow <- 3
-  n_track <- 3
+  n_track <- if(!missing(Acores) || !missing(Dcores)) 4 else 3
   byrow <- FALSE
   species <- "hg19"
   legend <- lgd
@@ -74,6 +75,16 @@ visualizeCNProfile <- function(facets_segment_data, facets_snp_data, categories,
     }
   }
   
+  if(!missing(Acores) || !missing(Dcores)) {
+    if(!missing(Acores) && !missing(Dcores)) {
+      add_segments_track(Acores, 0, gp = gpar(col = "orange", lwd = 20))
+      add_segments_track(Dcores, 0, gp = gpar(col = "red", lwd = 20), track = current_track())
+    } else if(!missing(Acores)){
+      add_segments_track(Acores, 0, gp = gpar(col = "orange", lwd = 20))
+    } else {
+      add_segments_track(Dcores, 0, gp = gpar(col = "red", lwd = 20))
+    }
+  }
   
   # Add cytobands to bottom of panel to GTRELLIS
   cytoband_df = circlize::read.cytoband(species = "hg19")$df
@@ -93,3 +104,5 @@ visualizeCNProfile <- function(facets_segment_data, facets_snp_data, categories,
     dev.off()
   }
 }
+
+

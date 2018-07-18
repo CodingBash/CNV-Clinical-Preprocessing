@@ -4,7 +4,6 @@ source("cnProfileVisualizationLibrary.R")
 source("facetsAnalysisLibrary.R")
 library(BSgenome.Hsapiens.UCSC.hg19)
 
-
 #
 # Visualize all segments per each tumor overlapped among eachother
 #
