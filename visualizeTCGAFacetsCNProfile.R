@@ -19,7 +19,7 @@ for(tumorId in seq(1, 7)){
     all_tumor_segments <- rbind(all_tumor_segments, bed)
     }, silent = TRUE)
   }
-  visualizeCNProfile(all_tumor_segments,  save = FALSE)
+  visualizeCNProfile(all_tumor_segments,  categories = c("chr14"), save = FALSE)
 }
 
 
@@ -90,9 +90,6 @@ for(tumorId in seq(1, 7)){
   result_df <- cbind(positions)
   result_df$value <- result
   result_bed <- result_df[,c(1,2,2,3)]
-  values <- as.vector(result_bed[[4]])
-  values <- values[!is.na(values), ]
-  
   # Visualize results
   visualizeCNProfile(facets_segment_data = fitFiles[[tumorId]],facets_snp_data = result_bed, save = FALSE, ymin = 0, ymax = 1.5)
   
