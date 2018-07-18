@@ -141,8 +141,13 @@ snpsToBedFormat <- function(facets_snp_data){
 # @param delCall - higher threshold to call deletions
 #
 # TODO: This method is also used in segmentClustering.R script. Perhaps move this function to a more general library?
-#
-selectSegmentsWithEvents <- function(events, samples, chromosomeSizes, dir, extension = "cnv.facets.v0.5.2.txt", inSampleFolder = FALSE, rescaleInput = FALSE, ampCall = 0.2, delCall = -0.235){
+# 
+# @DEPRECTATED use selectSegmentsWithEvents, which modularizes the loading of segments and the subsetting of all segments
+selectSegmentsWithEventsDEPRECATED <- function(events, samples, chromosomeSizes, dir, extension = "cnv.facets.v0.5.2.txt", inSampleFolder = FALSE, rescaleInput = FALSE, ampCall = 0.2, delCall = -0.235){
+  ###############################################
+  # DEPRECATED - user selectSegmentsWithEvents  #
+  ###############################################
+  
   totalSelectedSegments <- data.frame()
   
   loaded_segments <- list(NA)
@@ -188,6 +193,84 @@ selectSegmentsWithEvents <- function(events, samples, chromosomeSizes, dir, exte
 }
 
 #
+# Concatenates all segments in sample that follow a specific set of events 
+#
+# @param event - either "A" (amplification) or "D" (deletion) segments or "N" (neutral) segments are extracted
+# @param samples - names of samples to retrieve
+# @param chromosomeSizes - df of chromosomeSizes for rescaling (if necessary)
+# @param dir - directory of the input files
+# @param extension - extension of the input files
+# TODO: segment filename still too hardcoded. Allow caller to send file name themselves
+# @param rescaleInput - indicator if sample segments should be scaled (usually if it is not absolute scaled and is chromsome scaled instead). If TRUE, rescaling with chromosomeSizes is performed
+# @param inSampleFolder - ad-hoc solution when the sample file is contained in a folder with sample name
+# @param ampCall - lower threshold to call amplifications
+# @param delCall - higher threshold to call deletions
+#
+# TODO: This method is also used in segmentClustering.R script. Perhaps move this function to a more general library?
+#
+selectSegmentsWithEvents <- function(events, samples, chromosomeSizes, dir, extension = "cnv.facets.v0.5.2.txt", inSampleFolder = FALSE, rescaleInput = FALSE, ampCall = 0.2, delCall = -0.235){
+  # TODO: May have trouble supporting missing or default parameters
+  segmentList <- retrieveSegmentListFromSamples(samples, dir, extension, inSampleFolder)
+  selectedSegments <- subsetAllSegmentsByEvent(segmentList, events, chromosomeSizes, rescaleInput, ampCall, delCall)
+  return(selectedSegments)
+}
+
+#
+# From a list of samples, retrieve the segments in a key-value list (where K is the sample name, and V is the segment dataframe)
+#
+retrieveSegmentListFromSamples <- function(samples, dir, extension = "cnv.facets.v0.5.2.txt", inSampleFolder = FALSE){
+  segmentList <- list(NA)
+  for(sample in samples){
+    segments <- as.data.frame(read.table(paste(dir, if(inSampleFolder == TRUE) paste("Sample_", sample, "/analysis/structural_variants/", sep = "") else "",sample, "--NA12878.", extension, sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+    segmentList[[sample]] <- segments
+  }
+  return(segmentList)
+}
+
+#
+# From a list of segments, subset the segments to only include amplfication, deletion, and/or neutral events based on user specifications
+#
+subsetAllSegmentsByEvent <- function(segmentList, events, chromosomeSizes, rescaleInput = FALSE, ampCall = 0.2, delCall = -0.235){
+  totalSelectedSegments <- data.frame()
+  for(segmentName in names(segmentList)){
+    segments <- segmentList[[segmentName]]
+    selected_segments <- data.frame()
+    # Retrieve amplification events from sample if asked
+    if("A" %in% events){
+      selected_segments <- rbind(selected_segments, segments[segments[[5]] > ampCall,])  
+    }
+    
+    # Retrieve deletion events from sample if asked
+    if ("D" %in% events){
+      selected_segments <- rbind(selected_segments, segments[segments[[5]] < delCall,])
+    }
+    
+    # Retrieve nuetral events from sample if asked
+    if("N" %in% events){
+      selected_segments <- rbind(selected_segments, segments[segments[[5]] >= delCall & segments[[5]] <= ampCall,]) # TODO: This is an untested line of code
+    }
+    
+    # If any segments from sample selected, let's preprocess the dataframe and add to total list
+    if(nrow(selected_segments) != 0){
+      # Filters to only chrom, start, end, cnlr
+      selected_segments <- selected_segments[,c(1, 10, 11, 5)] # TODO: Just added CNLR, may have issues in CORE script
+      
+      names(selected_segments) <- c("chrom", "start", "end", "cnlr")
+      
+      if(rescaleInput == TRUE){
+        selected_segments <- chromsomeToAbsoluteBPConversion(selected_segments, chromosomeSizes)
+      }
+      
+      totalSelectedSegments <- rbind(totalSelectedSegments, selected_segments)
+    }
+  }
+  
+  returnme <-  cbind(totalSelectedSegments)
+  returnme <- returnme[returnme$chrom != "X" & returnme$chrom != "Y",] # REMOVE X and Y chromosome
+  returnme$chrom <- as.numeric(returnme$chrom)
+  return(returnme)
+}
+#
 # Given a genome (i.e. hg19), generate the chromosome sizes
 #
 generateChromosomeSizes <- function(genome){
@@ -200,7 +283,7 @@ generateChromosomeSizes <- function(genome){
     chrom_vec[chrom_vec.index] <- paste("chr", i, sep = "")  
     chrom_vec.index <- chrom_vec.index + 1
   }
-  chromosomeSizes <- data.frame()
+  chromosomeSizes <- data.frame(stringsAsFactors = FALSE)
   
   for(chrom_i in chrom_vec){
     df = data.frame(chrom = chrom_i, size = seqlengths(genome)[chrom_i])

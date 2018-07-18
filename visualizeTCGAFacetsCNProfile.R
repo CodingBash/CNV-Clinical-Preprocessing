@@ -1,8 +1,8 @@
 setwd("~/Git-Projects/Git-Research-Projects/drug-response-prediction")
 source("helperFunctions.R")
 source("cnProfileVisualizationLibrary.R")
-
-
+library(BSgenome.Hsapiens.UCSC.hg19)
+library(dplyr)
 
 # TODO: May just pass back file
 retrieveFacetsSegmentsFromObject <- function(tumorId, normalId, fitPrefix = "facetsG5Fit_", dir = "output/"){
@@ -42,6 +42,16 @@ getAllXXFilesForTumor <- function(tumorId){
   return(xxList)
 }
 
+getAllFitFilesForTumor <- function(tumorId){
+  fitList <- list()
+  cd_facets()
+  for(normal.id in seq(1,7)){
+    fit <- getFacetsFit(tumorId, normal.id, fitPrefix = "facetsG5Fit_", dir = "output/prev_run_1/")
+    segments <- segmentsToBedFormat(fit$cncf)
+    fitList[[normal.id]] <- segments
+  }
+  return(fitList)
+}
 
 # Calculate SD
 # TODO: Completed VERY fast, relook at this
@@ -73,17 +83,39 @@ for(tumorId in seq(1, 7)){
 # - Not good to go SNP based due to inherent measurement variation. scratching
 for(tumorId in seq(1, 7)){
   cd_facets()
-  xxFiles <- getAllXXFilesForTumor(tumorId)
+  fitFiles <- getAllFitFilesForTumor(tumorId)
   
-  apply_func <- function(index){
-    col_vec <- sapply(xxFiles, function(x) x[index, 4])
-    return(sd(col_vec))
+  nonmatching_segments <- data.frame()
+  for(normalId in seq(1, 7)){
+    if(tumorId == normalId){
+      next
+    }
+    nonmatching_segments <- rbind(nonmatching_segments, fitFiles[[normalId]])
   }
-  results <- lapply(seq(1, nrow(xxFiles[[tumorId]])), apply_func)
-  result_df <- cbind(xxFiles[[tumorId]])
-  result_df$value <- results
   
+  sizes <- generateChromosomeSizes(BSgenome.Hsapiens.UCSC.hg19)
+  sizes <- data.frame(lapply(sizes, as.character), stringsAsFactors=FALSE)
+  
+  sizes[sizes$chrom == "chrX", ]$chrom <- "chr23"
+  sizes[sizes$chrom == "chrY", ]$chrom <- "chr24"
+  positions <- data.frame()
+  for(sizes.i in seq(1, nrow(sizes))){
+    positions <- rbind(positions, data.frame(chrom = sizes[sizes.i, 1], position = seq(1, sizes[sizes.i, 2], by=2500000)))
+  }
+  
+  calculatedVariation <- function(index){
+    return(sd(nonmatching_segments[nonmatching_segments$chrom == positions[index, ]$chrom & nonmatching_segments$start <= positions[index, ]$position &  nonmatching_segments$end >= positions[index, ]$position, 4]))
+  }
+  
+  result <- lapply(seq(1, nrow(positions)), calculatedVariation)
+  result_df <- cbind(positions)
+  result_df$value <- result
+  result_bed <- result_df[,c(1,2,2,3)]
+  values <- as.vector(result_bed[[4]])
+  values <- values[!is.na(values), ]
   # TODO: Next, organize code and apply MSE solution.
+  visualizeCNProfile(facets_segment_data = fitFiles[[tumorId]],facets_snp_data = result_bed, save = FALSE, ymin = 0, ymax = 1.5)
+  # TODO: get mean, visualize better, add segments to visualization, MSE
 }
 
-visualizeCNProfile(facets_snp_data = result_df, save = FALSE, ymin = 0, ymax = 1.5)
+visualizeCNProfile(facets_snp_data = result_bed, save = FALSE, ymin = 0, ymax = 1.5)
