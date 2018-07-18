@@ -17,7 +17,7 @@ library(RColorBrewer)
 #
 visualizeCNProfile <- function(facets_segment_data, facets_snp_data, Acores, Dcores, categories, save = FALSE, saveDir = "", saveMeta = "", ymin = -6, ymax = 2){
   if(save == TRUE){
-    pdf(paste(saveDir, "cnprofile_", saveMeta, "_", sample, ".pdf", sep = ""), width = 44, height = 16)
+    pdf(paste(saveDir, "cnprofile_", saveMeta, ".pdf", sep = ""), width = 44, height = 16)
   }
   # Add legend
   lgd <- Legend(at = c("duplication", "nuetral", "deletion"), title = "Class", type = "lines", legend_gp = gpar(col = c("orange", "blue", "red")))
@@ -63,7 +63,7 @@ visualizeCNProfile <- function(facets_segment_data, facets_snp_data, Acores, Dco
   
   if(!missing(facets_segment_data)){
     # Add segment track
-    add_segments_track(facets_segment_data, facets_segment_data$value, gp = gpar(col = ifelse(facets_segment_data$value > 0.2, "orange", ifelse(facets_segment_data$value > -0.23, "blue", "red")), lwd = 4))
+    add_segments_track(facets_segment_data, facets_segment_data$value, gp = gpar(col = ifelse(facets_segment_data$value > 0.2, "orange", ifelse(facets_segment_data$value > -0.23, "blue", "red")), lwd = 2))
   }
   # If SNPs were provided
   if(!missing(facets_snp_data)){
@@ -77,12 +77,12 @@ visualizeCNProfile <- function(facets_segment_data, facets_snp_data, Acores, Dco
   
   if(!missing(Acores) || !missing(Dcores)) {
     if(!missing(Acores) && !missing(Dcores)) {
-      add_segments_track(Acores, 0, gp = gpar(col = "orange", lwd = 20))
-      add_segments_track(Dcores, 0, gp = gpar(col = "red", lwd = 20), track = current_track())
+      add_segments_track(Acores, 0, gp = gpar(col = "orange", lwd = 15))
+      add_segments_track(Dcores, -2, gp = gpar(col = "red", lwd = 15), track = current_track())
     } else if(!missing(Acores)){
-      add_segments_track(Acores, 0, gp = gpar(col = "orange", lwd = 20))
+      add_segments_track(Acores, 0, gp = gpar(col = "orange", lwd = 15))
     } else {
-      add_segments_track(Dcores, 0, gp = gpar(col = "red", lwd = 20))
+      add_segments_track(Dcores, -2, gp = gpar(col = "red", lwd = 15))
     }
   }
   
