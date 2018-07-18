@@ -232,6 +232,7 @@ retrieveSegmentListFromSamples <- function(samples, dir, extension = "cnv.facets
 #
 subsetAllSegmentsByEvent <- function(segmentList, events, chromosomeSizes, rescaleInput = FALSE, ampCall = 0.2, delCall = -0.235){
   totalSelectedSegments <- data.frame()
+  names(segmentList) <- as.character(seq_along(segmentList)) # Convert indices to character names so we can consistently iterate through any list by name
   for(segmentName in names(segmentList)){
     segments <- segmentList[[segmentName]]
     selected_segments <- data.frame()
@@ -341,29 +342,4 @@ chromsomeToAbsoluteBPConversion <- function(input, chromosomeSizes){
 #
 createBedFile <- function(objectToWrite, filename){
   write.table(objectToWrite, sep = "\t", quote = FALSE, col.names = FALSE, row.names = FALSE, file = filename)
-}
-
-
-#
-# Get FACETS xx file
-#
-getFacetsXX <- function(tumorId, normalId, xxPrefix = "facetsG5XX_", dir = "output/"){
-  xx <- readRDS(paste0(dir, xxPrefix, tumorId, "_", normalId, ".rds"))
-  return(xx)
-}
-
-#
-# Get FACETS oo file
-#
-getFacetsOO <- function(tumorId, normalId, ooPrefix = "facetsG5OO_", dir = "output/"){
-  oo <- readRDS(paste0(dir, ooPrefix, tumorId, "_", normalId, ".rds"))
-  return(oo)
-}
-
-#
-# Get FACETS fit file
-#
-getFacetsFit <- function(tumorId, normalId, fitPrefix = "facetsG5Fit_", dir = "output/"){
-  fit <- readRDS(paste0(dir, fitPrefix, tumorId, "_", normalId, ".rds"))
-  return(fit)
 }
