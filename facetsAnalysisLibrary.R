@@ -31,16 +31,18 @@ retrieveFacetsSegmentsFromObject <- function(tumorId, normalId, fitPrefix = "fac
 #
 # Get all SNP profiles as list for a specific tumor ID and all normal IDs (matching or nonmatching)
 #
-getAllXXFilesForTumor <- function(tumorId, xxPrefix = "facetsG5XX_", dir = "output/prev_run_1/", bedFormat = TRUE){
+getAllXXFilesForTumor <- function(tumorId, xxPrefix = "facetsG5XX_", dir = "output/prev_run_1/", bedFormat = TRUE, silent = FALSE){
   xxList <- list()
   for(normal.id in seq(1,7)){
-    xx <- getFacetsXX(tumorId, normal.id, xxPrefix = xxPrefix, dir = dir)
-    if(bedFormat == TRUE){
-      snps <- snpsToBedFormat(xx$jointseg)
-      xxList[[normal.id]] <- snps
-    } else {
-      xxList[[normal.id]] <- xx$jointseg
-    }
+    try({
+      xx <- getFacetsXX(tumorId, normal.id, xxPrefix = xxPrefix, dir = dir)
+      if(bedFormat == TRUE){
+        snps <- snpsToBedFormat(xx$jointseg)
+        xxList[[normal.id]] <- snps
+      } else {
+        xxList[[normal.id]] <- xx$jointseg
+      }
+    }, silent = silent)
   }
   return(xxList)
 }
@@ -48,16 +50,18 @@ getAllXXFilesForTumor <- function(tumorId, xxPrefix = "facetsG5XX_", dir = "outp
 #
 # Get all segment profiles as list for a specific tumor ID and all normal IDs (matching or nonmatching)
 #
-getAllFitFilesForTumor <- function(tumorId, fitPrefix = "facetsG5Fit_", dir = "output/prev_run_1/", bedFormat = TRUE){
+getAllFitFilesForTumor <- function(tumorId, fitPrefix = "facetsG5Fit_", dir = "output/prev_run_1/", bedFormat = TRUE, silent = FALSE){
   fitList <- list()
   for(normal.id in seq(1,7)){
+    try({
     fit <- getFacetsFit(tumorId, normal.id, fitPrefix = fitPrefix, dir = dir)
-    if(bedFormat == TRUE){
-      segments <- segmentsToBedFormat(fit$cncf)
-      fitList[[normal.id]] <- segments
-    } else {
-      fitList[[normal.id]] <- fit$cncf
-    }
+      if(bedFormat == TRUE){
+        segments <- segmentsToBedFormat(fit$cncf)
+        fitList[[normal.id]] <- segments
+      } else {
+        fitList[[normal.id]] <- fit$cncf
+      }
+    }, silent = silent)
   }
   return(fitList)
 }

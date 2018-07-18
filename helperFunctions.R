@@ -235,6 +235,9 @@ subsetAllSegmentsByEvent <- function(segmentList, events, chromosomeSizes, resca
   names(segmentList) <- as.character(seq_along(segmentList)) # Convert indices to character names so we can consistently iterate through any list by name
   for(segmentName in names(segmentList)){
     segments <- segmentList[[segmentName]]
+    if(is.null(segments)){
+      next
+    }
     selected_segments <- data.frame()
     # Retrieve amplification events from sample if asked
     if("A" %in% events){
