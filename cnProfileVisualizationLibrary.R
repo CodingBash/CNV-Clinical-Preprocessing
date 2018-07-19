@@ -15,7 +15,7 @@ library(RColorBrewer)
 #
 # Visualizes CN profile from segment/SNP data using GTRELLIS visualization library
 #
-visualizeCNProfile <- function(facets_segment_data, facets_snp_data, Acores, Dcores, categories, save = FALSE, saveDir = "", saveMeta = "", ymin = -6, ymax = 2, title = ""){
+visualizeCNProfile <- function(facets_segment_data, facets_snp_data, line_data, Acores, Dcores, categories, save = FALSE, saveDir = "", saveMeta = "", ymin = -6, ymax = 2, title = ""){
   if(save == TRUE){
     pdf(paste(saveDir, "cnprofile_", saveMeta, ".pdf", sep = ""), width = 44, height = 16)
   }
@@ -63,18 +63,32 @@ visualizeCNProfile <- function(facets_segment_data, facets_snp_data, Acores, Dco
     grid.text(chr)
   })
   
+  
+  #
+  # TODO: The logic in the following conditions may be incorrect.
+  # Below, I am attempting to overlap 3 different pieces of data (segment, SNP, lines)
+  # depending on what is and is not provided (since I need to use track = current_track()) if
+  # the track is already preoccupied by one of the other 3 pieces of data
+  #
   if(!missing(facets_segment_data)){
-    # Add segment track
     add_segments_track(facets_segment_data, facets_segment_data$value, gp = gpar(col = ifelse(facets_segment_data$value > 0.2, "orange", ifelse(facets_segment_data$value > -0.23, "blue", "red")), lwd = 2))
-  }
-  # If SNPs were provided
-  if(!missing(facets_snp_data)){
-    # Add SNP/bin track to GTRELLIS (overlayed over segment)
-    if(!missing(facets_segment_data)){
+    if(!missing(facets_snp_data)){
       add_points_track(facets_snp_data, facets_snp_data$value, track = current_track(), gp = gpar(fill = "gray"))  
+      if(!missing(line_data)){
+        add_lines_track(line_data, line_data[[4]], gp = gpar(col = "purple", lwd = 5), track = current_track())
+      }
     } else {
-      add_points_track(facets_snp_data, facets_snp_data$value, gp = gpar(fill = "gray"))  
+      if(!missing(line_data)){
+        add_lines_track(line_data, line_data[[4]], gp = gpar(col = "purple", lwd = 5), track = current_track())
+      }
     }
+  } else if(!missing(facets_snp_data)){
+    add_points_track(facets_snp_data, facets_snp_data$value, gp = gpar(fill = "gray"))  
+    if(!missing(line_data)){
+      add_lines_track(line_data, line_data[[4]], gp = gpar(col = "purple", lwd = 5), track = current_track())
+    }
+  } else if(!missing(line_data)){
+    add_lines_track(line_data, line_data[[4]], gp = gpar(col = "purple", lwd = 5))
   }
   
   if(!missing(Acores) || !missing(Dcores)) {

@@ -22,3 +22,11 @@ for(sample in sample_list){
     segtable_mclust_V <- retrieveSegtable(sample, dir = "segClusteringResults/prev_run_7_19_2018_1/")
     displayGMM(segtable = segtable_mclust_V, sample = sample, print = TRUE, save = FALSE)
 }
+
+for(sample in sample_list){
+    setwd("~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction")
+    segtable_mclust_V <- retrieveSegtable(sample, dir = "segClusteringResults/prev_run_7_19_2018_2/")
+    displayGMM(segtable = segtable_mclust_V, sample = sample, print = TRUE, save = FALSE)
+}
+
+
