@@ -15,7 +15,7 @@ library(RColorBrewer)
 #
 # Visualizes CN profile from segment/SNP data using GTRELLIS visualization library
 #
-visualizeCNProfile <- function(facets_segment_data, facets_snp_data, Acores, Dcores, categories, save = FALSE, saveDir = "", saveMeta = "", ymin = -6, ymax = 2){
+visualizeCNProfile <- function(facets_segment_data, facets_snp_data, Acores, Dcores, categories, save = FALSE, saveDir = "", saveMeta = "", ymin = -6, ymax = 2, title = ""){
   if(save == TRUE){
     pdf(paste(saveDir, "cnprofile_", saveMeta, ".pdf", sep = ""), width = 44, height = 16)
   }
@@ -34,7 +34,8 @@ visualizeCNProfile <- function(facets_segment_data, facets_snp_data, Acores, Dco
   species <- "hg19"
   legend <- lgd
   if(missing(categories)){
-    gtrellis_layout(track_height = track_height,
+    gtrellis_layout(title = title,
+                    track_height = track_height,
                     track_axis = track_axis, 
                     track_ylim = track_ylim, 
                     nrow = nrow, 
@@ -43,7 +44,8 @@ visualizeCNProfile <- function(facets_segment_data, facets_snp_data, Acores, Dco
                     species = species, 
                     legend = legend)
   } else {
-    gtrellis_layout(track_height = track_height,
+    gtrellis_layout(title = title,
+                    track_height = track_height,
                     track_axis = track_axis, 
                     track_ylim = track_ylim, 
                     nrow = nrow, 
