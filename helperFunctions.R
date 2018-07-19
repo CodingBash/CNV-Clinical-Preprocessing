@@ -17,6 +17,10 @@ cd_facets <- function(subdir = ""){
   setwd(paste0("~/Git-Projects/Git-Research-Projects/FACETS_nonmatching_test/", subdir))
 }
 
+cd_tcga <- function(subdir = ""){
+  setwd(paste0("~/Git-Projects/Git-Research-Projects/TCGA_CORE_Analysis/", subdir))
+}
+
 
 #
 # Sets the directory to the project workspace
