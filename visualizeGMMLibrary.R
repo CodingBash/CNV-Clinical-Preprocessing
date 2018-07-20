@@ -18,6 +18,14 @@ retrieveSegtable <- function(sample, dir = "segClusteringResults/"){
 }
 
 #
+# Retrieve the seginput from the CNprep::CNpreprocessing input
+#
+retrieveSeginput <- function(sample, dir = "segInput/"){
+  seginput <- read.table(paste(dir, sample, "_seginput.tsv", sep = ""), sep = "\t", header = TRUE)
+  return(seginput)
+}
+
+#
 # Display the GMM visualization using the CNprep::CNpreprocessing output segtable
 # TODO: Save location is hardcoded
 #
@@ -59,7 +67,7 @@ displayGMM <- function(segtable, sample, print = FALSE, save = FALSE){
 #   geom_density(data = hist_data, aes(x=value), col="black", stat = "density", position = "identity") + 
     scale_fill_manual(values=tail(colors, length(colors) - 1)) + 
     xlim(c(min,max)) +
-    labs(title = paste("Gaussian mixture model of segtable$segmedian for sample", sample))
+    labs(title = paste("Gaussian mixture model of segtable$mediandev for sample", sample))
   
   # Add the GMM component functions to the plot
   for(gaussian_comps.index in seq(1, nrow(gaussian_comps))){
@@ -79,3 +87,63 @@ displayGMM <- function(segtable, sample, print = FALSE, save = FALSE){
   }
 }
 
+#
+# Display the segtable histogram
+# TODO: Save location is hardcoded
+#
+displaySegtableHistogram <- function(segtable, sample, print = FALSE, save = FALSE){
+  #
+  # Set histogram values
+  #
+  interval <- 0.1 # Bin interval length
+  min <- -2.5 # Bin minimum value
+  max <- -min # Bin maximum value
+  tb <- seq(min, max, interval) # List of all bins
+  print(paste0("Display segtable histogram for tumor=", sample, " which contains the segment_count=", nrow(segtable)))  
+  plt <- ggplot(data = segtable, aes(segtable$mediandev)) + 
+    geom_histogram(breaks = tb,
+                   alpha = 0.6) + 
+    labs(title = "Gaussian mixture model of segtable$mediandev")
+  
+  #
+  # Print and/or save the plot
+  #
+  if(print == TRUE){
+    print(plt)
+  }
+  if(save == TRUE){
+    #ggsave(filename=paste("GMMs/mediandev/plots_", sample, ".pdf", sep = ""), plot=plt, width=16, height=9, units="in")
+    # TODO: saving
+  }
+}
+
+#
+# Display the seginput histogram
+# TODO: Save location is hardcoded
+#
+displaySeginputHistogram <- function(seginput, sample, print = FALSE, save = FALSE){
+  
+  #
+  # Set histogram values
+  #
+  interval <- 0.1 # Bin interval length
+  min <- -2.5 # Bin minimum value
+  max <- -min # Bin maximum value
+  tb <- seq(min, max, interval) # List of all bins
+  print(paste0("Display seginput histogram for tumor=", sample, " which contains the segment_count=", nrow(seginput)))  
+  plt <- ggplot(data = seginput, aes(seginput$seg.median)) + 
+    geom_histogram(breaks = tb,
+                   alpha = 0.6) + 
+    labs(title = "Gaussian mixture model of segtable$mediandev")
+  
+  #
+  # Print and/or save the plot
+  #
+  if(print == TRUE){
+    print(plt)
+  }
+  if(save == TRUE){
+    #ggsave(filename=paste("GMMs/mediandev/plots_", sample, ".pdf", sep = ""), plot=plt, width=16, height=9, units="in")
+    # TODO: Saving
+  }
+}

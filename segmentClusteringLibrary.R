@@ -35,7 +35,10 @@ retrieveNormInput <- function(normalSegments){
 #
 retrieveSegInput <- function(facets_segment_data, cytobands){
   seginput <- data.frame(stringsAsFactors = FALSE)
+  
+  # Iterate through each segment
   for(facets_segment_data.index in seq(1, nrow(facets_segment_data))){
+    # Get absolute position of segment
     abs_position <- chromsomeToAbsoluteBPConversionForSingleEntry(facets_segment_data[facets_segment_data.index,]$X.chrom., facets_segment_data[facets_segment_data.index,]$X.start., facets_segment_data[facets_segment_data.index,]$X.end., chromosomeSizes)
     
     probes.start = 0
