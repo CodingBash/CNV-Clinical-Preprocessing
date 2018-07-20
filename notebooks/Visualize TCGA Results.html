@@ -11751,6 +11751,17 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Visualize-FACETS-results-on-TCGA-dataset">Visualize FACETS results on TCGA dataset<a class="anchor-link" href="#Visualize-FACETS-results-on-TCGA-dataset">&#182;</a></h1><p>In this notebook, we will see the results of FACETS on the TCGA dataset, specifically to see how well FACETS performs on non-matching sequences.</p>
+<p>FACETS is an allele specific copy number analysis tool, therefore it performs analysis directly on SNPs. Although, FACETS requires that the tumor and normal sequence be from the same profile, so that the SNPs can be compared. However, our WES dataset does not provide matching normal sequences for each patient-derived tumor organoid. To see if FACETS is feasibly for calculating logR values, we will use the TCGA dataset to validate FACETS performance since the TCGA dataset provides matching normal sequences for multiple tumor patients.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Install-appropriate-source-libraries">Install appropriate source libraries<a class="anchor-link" href="#Install-appropriate-source-libraries">&#182;</a></h3>
 </div>
 </div>
@@ -13610,6 +13621,88 @@ EAlAACIBCPh/6h6uDiyr1+4AAAAASUVORK5CYII="
 
 </div>
 
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>tumorId <span class="o">&lt;-</span> <span class="m">7</span>
+
+<span class="kp">setwd</span><span class="p">(</span><span class="kp">paste0</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/FACETS_nonmatching_test/output&quot;</span><span class="p">))</span>
+raw_segments <span class="o">&lt;-</span> retrieveFacetsSegmentsFromObject<span class="p">(</span>tumorId<span class="p">,</span> tumorId<span class="p">,</span> fitPrefix <span class="o">=</span> <span class="s">&quot;facetsG5Fit_&quot;</span><span class="p">,</span> dir <span class="o">=</span> <span class="s">&quot;prev_run_4/&quot;</span><span class="p">)</span> <span class="c1"># Get matching tumor-normal pair </span>
+bed <span class="o">&lt;-</span> segmentsToBedFormat<span class="p">(</span>raw_segments<span class="p">)</span>
+
+<span class="kp">setwd</span><span class="p">(</span><span class="kp">paste0</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/FACETS_nonmatching_test/cores&quot;</span><span class="p">))</span>
+Acores <span class="o">&lt;-</span> read.table<span class="p">(</span><span class="kp">paste0</span><span class="p">(</span><span class="s">&quot;AcoresBP_t&quot;</span><span class="p">,</span> tumorId<span class="p">,</span> <span class="s">&quot;.bed&quot;</span><span class="p">),</span> header <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> sep <span class="o">=</span> <span class="s">&quot;\t&quot;</span><span class="p">)</span> 
+Dcores <span class="o">&lt;-</span> read.table<span class="p">(</span><span class="kp">paste0</span><span class="p">(</span><span class="s">&quot;DcoresBP_t&quot;</span><span class="p">,</span> tumorId<span class="p">,</span> <span class="s">&quot;.bed&quot;</span><span class="p">),</span> header <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span> sep <span class="o">=</span> <span class="s">&quot;\t&quot;</span><span class="p">)</span> 
+visualizeCNProfile<span class="p">(</span>title <span class="o">=</span> <span class="kp">paste0</span><span class="p">(</span><span class="s">&quot;Profile for tumorId = &quot;</span><span class="p">,</span> tumorId<span class="p">),</span> facets_segment_data <span class="o">=</span> bed<span class="p">,</span> Acores <span class="o">=</span> Acores<span class="p">,</span> Dcores <span class="o">=</span> Dcores<span class="p">,</span> save <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_text output_error">
+<pre>
+Error in retrieveFacetsSegmentsFromObject(tumorId, tumorId, fitPrefix = &#34;facetsG5Fit_&#34;, : could not find function &#34;retrieveFacetsSegmentsFromObject&#34;
+Traceback:
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="kn">library</span><span class="p">(</span>facets<span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_text output_error">
+<pre>
+Error in library(facets): there is no package called &#39;facets&#39;
+Traceback:
+
+1. library(facets)
+2. stop(txt, domain = NA)</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>
+</pre></div>
+
+</div>
 </div>
 </div>
 
