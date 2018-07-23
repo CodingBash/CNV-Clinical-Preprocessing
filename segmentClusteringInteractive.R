@@ -1,9 +1,9 @@
 #
 # Install if needed
 #
-source("https://bioconductor.org/biocLite.R")
-biocLite("Rsamtools")
-biocLite("BSgenome.Hsapiens.UCSC.hg19")
+#source("https://bioconductor.org/biocLite.R")
+#biocLite("Rsamtools")
+#biocLite("BSgenome.Hsapiens.UCSC.hg19")
 
 #
 # Load genome
@@ -31,6 +31,7 @@ cd_doc()
 normalSegments <- selectSegmentsWithEvents(events = c("A", "D", "N"), samples = normal_samples, chromosomeSizes = chromosomeSizes, 
                                               dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE, 
                                               rescaleInput = TRUE, ampCall = 0.2, delCall = -0.235)
+# TODO: Does cd_local need to be before this?
 tumor_samples <- load_samples(classes = c("T"), sampleList = "sampleList.csv") # TODO: THIS WAS ORIGINAL CLASS "N", RECOMPUTE RESUTS
 
 # Generate norminput argument

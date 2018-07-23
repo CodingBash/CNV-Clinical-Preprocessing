@@ -108,8 +108,8 @@ segmentsToBedFormatWithClusters <- function(facets_segment_data){
 # Simplifies FACETS segment cluster original format into BED format with
 # the columns: "chrom", "chrom.start", "chrom.end", "median cnlr"
 #
-segmentClustersToBedFormat <- function(facets_segment_clusters){
-  facets_segment_clusters <- facets_segment_clusters[,c(6,7,8,20)]
+segmentClustersToBedFormat <- function(facets_segment_clusters, value=20){
+  facets_segment_clusters <- facets_segment_clusters[,c(6,7,8,value)]
   facets_segment_clusters <- facets_segment_clusters[facets_segment_clusters$chrom != "X",]
   facets_segment_clusters$chrom <- paste("chr", facets_segment_clusters$chrom, sep = "")
   names(facets_segment_clusters) <- c("chrom", "start", "end", "value")
