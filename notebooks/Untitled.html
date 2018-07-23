@@ -11746,6 +11746,171 @@ div#notebook {
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Visualize-CNPrep-clusters">Visualize CNPrep clusters<a class="anchor-link" href="#Visualize-CNPrep-clusters">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Load-sources">Load sources<a class="anchor-link" href="#Load-sources">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction&quot;</span><span class="p">)</span>
+<span class="kn">source</span><span class="p">(</span><span class="s">&quot;cnProfileVisualizationLibrary.R&quot;</span><span class="p">)</span>
+<span class="kn">source</span><span class="p">(</span><span class="s">&quot;helperFunctions.R&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Set-the-directory-with-the-CNprep-results">Set the directory with the CNprep results<a class="anchor-link" href="#Set-the-directory-with-the-CNprep-results">&#182;</a></h3><p>Current set to see CNprep results with default parameters (mclust=E, minjoin=0.25, etc.)</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>segDir <span class="o">&lt;-</span> <span class="s">&quot;segClusteringResults/prev_run1/&quot;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Set-the-sample-to-view-CN-cluster-profile">Set the sample to view CN cluster profile<a class="anchor-link" href="#Set-the-sample-to-view-CN-cluster-profile">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="c1"># Set the sample that you want to view the CN profile for here.</span>
+loaded_samples <span class="o">&lt;-</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;hT1&quot;</span><span class="p">,</span> <span class="s">&quot;hT25&quot;</span><span class="p">,</span><span class="s">&quot;hT70&quot;</span><span class="p">,</span> <span class="s">&quot;hT72&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="View-CN-cluster-profile">View CN cluster profile<a class="anchor-link" href="#View-CN-cluster-profile">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="c1">#</span>
+<span class="c1"># Iterate through each sample and generate CN profile</span>
+<span class="c1">#</span>
+<span class="kr">for</span><span class="p">(</span>sample <span class="kr">in</span> loaded_samples<span class="p">){</span>
+    <span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction&quot;</span><span class="p">)</span>
+    facets_segment_clusters <span class="o">&lt;-</span> retrieveFacetsSegmentClusters<span class="p">(</span><span class="kp">sample</span><span class="p">,</span> dir <span class="o">=</span> segDir<span class="p">)</span>
+    facets_segment_clusters <span class="o">&lt;-</span> segmentClustersToBedFormat<span class="p">(</span>facets_segment_clusters<span class="p">)</span>
+      
+    <span class="c1">#</span>
+    <span class="c1"># Generate CN profile from input data</span>
+    <span class="c1">#</span>
+    visualizeCNProfile<span class="p">(</span>facets_segment_data <span class="o">=</span> facets_segment_clusters<span class="p">,</span> facets_snp_data <span class="o">=</span> facets_snp_data<span class="p">,</span> save <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Produce-Batch">Produce Batch<a class="anchor-link" href="#Produce-Batch">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="c1"># Load samples to generate CN profiles for</span>
+loaded_samples <span class="o">&lt;-</span> load_samples<span class="p">(</span>classes <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;T&quot;</span><span class="p">),</span> sampleList <span class="o">=</span> <span class="s">&quot;sampleList.csv&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="c1">#</span>
+<span class="c1"># Iterate through each sample and generate CN profile</span>
+<span class="c1">#</span>
+<span class="kr">for</span><span class="p">(</span>sample <span class="kr">in</span> loaded_samples<span class="p">){</span>
+    <span class="c1">#</span>
+    <span class="c1"># Retrieve and format input data</span>
+    <span class="c1">#</span>
+    <span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction&quot;</span><span class="p">)</span>
+    facets_segment_clusters <span class="o">&lt;-</span> retrieveFacetsSegmentClusters<span class="p">(</span><span class="kp">sample</span><span class="p">,</span> dir <span class="o">=</span> segDir<span class="p">)</span>
+    facets_segment_clusters <span class="o">&lt;-</span> segmentClustersToBedFormat<span class="p">(</span>facets_segment_clusters<span class="p">)</span>
+      
+    <span class="c1">#</span>
+    <span class="c1"># Generate CN profile from input data</span>
+    <span class="c1">#</span>
+    cd_local<span class="p">()</span>
+    visualizeCNProfile<span class="p">(</span>facets_segment_data <span class="o">=</span> facets_segment_clusters<span class="p">,</span> facets_snp_data <span class="o">=</span> facets_snp_data<span class="p">,</span> save <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
     </div>
   </div>
 </body>

@@ -29,7 +29,7 @@ retrieveSeginput <- function(sample, dir = "segInput/"){
 # Display the GMM visualization using the CNprep::CNpreprocessing output segtable
 # TODO: Save location is hardcoded
 #
-displayGMM <- function(segtable, sample, print = FALSE, save = FALSE){
+displayGMM <- function(segtable, column = "mediandev", sample, print = FALSE, save = FALSE){
   
   # Retrieve dataframe of GMM components (w/ mean and sigma)
   gaussian_comps <- unique(segtable[c("maxzmean", "maxzsigma")])
@@ -48,7 +48,7 @@ displayGMM <- function(segtable, sample, print = FALSE, save = FALSE){
   #
   cluster_list <- list()
   for(gaussian_comps.index in seq(1, nrow(gaussian_comps))){
-    cluster_medians <- list(segtable[gaussian_comps[gaussian_comps.index, ]$maxzmean == segtable$maxzmean & gaussian_comps[gaussian_comps.index, ]$maxzsigma == segtable$maxzsigma, ]$mediandev)
+    cluster_medians <- list(segtable[gaussian_comps[gaussian_comps.index, ]$maxzmean == segtable$maxzmean & gaussian_comps[gaussian_comps.index, ]$maxzsigma == segtable$maxzsigma, ][column])
     cluster_list[gaussian_comps.index] <- cluster_medians
   }
   
@@ -67,7 +67,7 @@ displayGMM <- function(segtable, sample, print = FALSE, save = FALSE){
 #   geom_density(data = hist_data, aes(x=value), col="black", stat = "density", position = "identity") + 
     scale_fill_manual(values=tail(colors, length(colors) - 1)) + 
     xlim(c(min,max)) +
-    labs(title = paste("Gaussian mixture model of segtable$mediandev for sample", sample))
+    labs(title = paste0("Gaussian mixture model of segtable$", column, " for sample ", sample))
   
   # Add the GMM component functions to the plot
   for(gaussian_comps.index in seq(1, nrow(gaussian_comps))){
@@ -91,7 +91,7 @@ displayGMM <- function(segtable, sample, print = FALSE, save = FALSE){
 # Display the segtable histogram
 # TODO: Save location is hardcoded
 #
-displaySegtableHistogram <- function(segtable, sample, print = FALSE, save = FALSE){
+displaySegtableHistogram <- function(segtable, sample, column = "seg.median", print = FALSE, save = FALSE){
   #
   # Set histogram values
   #
@@ -100,10 +100,10 @@ displaySegtableHistogram <- function(segtable, sample, print = FALSE, save = FAL
   max <- -min # Bin maximum value
   tb <- seq(min, max, interval) # List of all bins
   print(paste0("Display segtable histogram for tumor=", sample, " which contains the segment_count=", nrow(segtable)))  
-  plt <- ggplot(data = segtable, aes(segtable$mediandev)) + 
+  plt <- ggplot(data = segtable, aes(segtable[column])) + 
     geom_histogram(breaks = tb,
                    alpha = 0.6) + 
-    labs(title = paste("Gaussian mixture model of segtable$mediandev for sample", sample))
+    labs(title = paste0("Gaussian mixture model of segtable$", column, " for sample ", sample))
   
   #
   # Print and/or save the plot
