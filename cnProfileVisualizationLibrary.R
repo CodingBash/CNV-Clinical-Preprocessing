@@ -14,8 +14,10 @@ library(RColorBrewer)
 
 #
 # Visualizes CN profile from segment/SNP data using GTRELLIS visualization library
+# TODO: Have documentation on each parameter
+# TODO: Allow user to send in legend info (legend is hardcoded as of now)
 #
-visualizeCNProfile <- function(facets_segment_data, facets_snp_data, line_data, Acores, Dcores, categories, save = FALSE, saveDir = "", saveMeta = "", ymin = -6, ymax = 2, title = ""){
+visualizeCNProfile <- function(facets_segment_data, facets_snp_data, line_data, Acores, Dcores, categories, save = FALSE, saveDir = "", saveMeta = "", ymin = -6, ymax = 2, title = "", color_id){
   if(save == TRUE){
     pdf(paste(saveDir, "cnprofile_", saveMeta, ".pdf", sep = ""), width = 44, height = 16)
   }
@@ -57,12 +59,25 @@ visualizeCNProfile <- function(facets_segment_data, facets_snp_data, line_data, 
   }
   
   # Add top chromosome labels
-  add_track(panel_fun = function(gr) {
+  add_track(panel_fun = function(color_id) {
     chr = get_cell_meta_data("name")  
     grid.rect(gp = gpar(fill = "#EEEEEE"))
     grid.text(chr)
   })
   
+  colors <- c("blue", "red", "orange", "green", "purple", "black", "gray")
+  determineSegmentColors <- function(facets_segment_data, color_id){
+    # TODO: Build determineColor functions
+    if(missing(color_id)){
+      col = ifelse(facets_segment_data$value > 0.2, "orange", ifelse(facets_segment_data$value > -0.23, "blue", "red"))
+    } else {
+      col = unlist(lapply(seq_along(rownames(facets_segment_data)), function(index){
+        color_val <- color_id[[rownames(facets_segment_data)[[index]]]] 
+        return(colors[[color_val]])
+      }))
+    }
+    return(col)
+  }
   
   #
   # TODO: The logic in the following conditions may be incorrect.
@@ -71,7 +86,8 @@ visualizeCNProfile <- function(facets_segment_data, facets_snp_data, line_data, 
   # the track is already preoccupied by one of the other 3 pieces of data
   #
   if(!missing(facets_segment_data)){
-    add_segments_track(facets_segment_data, facets_segment_data$value, gp = gpar(col = ifelse(facets_segment_data$value > 0.2, "orange", ifelse(facets_segment_data$value > -0.23, "blue", "red")), lwd = 2))
+    #add_segments_track(facets_segment_data, facets_segment_data$value, gp = gpar(col = ifelse(facets_segment_data$value > 0.2, "orange", ifelse(facets_segment_data$value > -0.23, "blue", "red")), lwd = 2))
+    add_segments_track(facets_segment_data, facets_segment_data$value, gp = gpar(col = determineSegmentColors(facets_segment_data, color_id), lwd = 2))
     if(!missing(facets_snp_data)){
       add_points_track(facets_snp_data, facets_snp_data$value, track = current_track(), gp = gpar(fill = "gray"))  
       if(!missing(line_data)){

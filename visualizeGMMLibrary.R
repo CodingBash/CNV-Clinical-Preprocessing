@@ -103,7 +103,7 @@ displaySegtableHistogram <- function(segtable, sample, print = FALSE, save = FAL
   plt <- ggplot(data = segtable, aes(segtable$mediandev)) + 
     geom_histogram(breaks = tb,
                    alpha = 0.6) + 
-    labs(title = "Gaussian mixture model of segtable$mediandev")
+    labs(title = paste("Gaussian mixture model of segtable$mediandev for sample", sample))
   
   #
   # Print and/or save the plot
@@ -134,7 +134,7 @@ displaySeginputHistogram <- function(seginput, sample, print = FALSE, save = FAL
   plt <- ggplot(data = seginput, aes(seginput$seg.median)) + 
     geom_histogram(breaks = tb,
                    alpha = 0.6) + 
-    labs(title = "Gaussian mixture model of segtable$mediandev")
+    labs(title = paste("Gaussian mixture model of segtable$mediandev for sample", sample))
   
   #
   # Print and/or save the plot

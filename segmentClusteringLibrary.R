@@ -33,9 +33,8 @@ retrieveNormInput <- function(normalSegments){
 #
 # Retrieve the seginput argument for CNprep::CNpreprocessing()
 #
-retrieveSegInput <- function(facets_segment_data, cytobands){
+retrieveSegInput <- function(facets_segment_data, sample, chromosomeSizes, cytobands){
   seginput <- data.frame(stringsAsFactors = FALSE)
-  
   # Iterate through each segment
   for(facets_segment_data.index in seq(1, nrow(facets_segment_data))){
     # Get absolute position of segment
@@ -55,7 +54,6 @@ retrieveSegInput <- function(facets_segment_data, cytobands){
     cytoband.my.start <- findCytolocation(cytobands = cytobands, chrom = facets_segment_data[facets_segment_data.index,]$X.chrom., chrom.position = facets_segment_data[facets_segment_data.index,]$X.start.)
     cytoband.my.end <- findCytolocation(cytobands = cytobands, chrom = facets_segment_data[facets_segment_data.index,]$X.chrom., chrom.position = facets_segment_data[facets_segment_data.index,]$X.end.)
     
-    
     seginput.entry <- data.frame(ID = sample, start = probes.start, end = probes.end, 
                                  num.probes = facets_segment_data[facets_segment_data.index,]$X.num.mark., seg.median = facets_segment_data[facets_segment_data.index,]$X.cnlr.median., 
                                  chrom = facets_segment_data[facets_segment_data.index,]$X.chrom., chrom.pos.start = facets_segment_data[facets_segment_data.index,]$X.start., 
@@ -72,7 +70,7 @@ retrieveSegInput <- function(facets_segment_data, cytobands){
 #
 # Retrieve the ratinput argument for CNprep::CNpreprocessing()
 #
-retrieveRatInput <- function(facets_snp_data){
+retrieveRatInput <- function(facets_snp_data, sample){
   ratinput <- data.frame(facets_snp_data$X.cnlr.)
   names(ratinput) <- c(sample)
   return(ratinput)

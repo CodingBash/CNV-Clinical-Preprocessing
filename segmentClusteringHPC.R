@@ -32,11 +32,11 @@ for(tumor_samples.i in 1:length(tumor_samples)) {
   facets_snp_data <- retrieveFacetsSnps(sample, dir = "./resources/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/")
   
   # Generate seginput argument
-  seginput <- retrieveSegInput(facets_segment_data, cytobands)
+  seginput <- retrieveSegInput(facets_segment_data, sample, cytobands)
   print(paste("Retrieved segment input for sample", sample))
   
   # Generate ratinput argument
-  ratinput <- retrieveRatInput(facets_snp_data)
+  ratinput <- retrieveRatInput(facets_snp_data, sample)
   print(paste("Retrieved ratio input for sample", sample))
   
   # Run CNprep:CNpreprocessing

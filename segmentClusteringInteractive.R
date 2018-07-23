@@ -1,9 +1,9 @@
 #
 # Install if needed
 #
-source("https://bioconductor.org/biocLite.R")
-biocLite("Rsamtools")
-biocLite("BSgenome.Hsapiens.UCSC.hg19")
+#source("https://bioconductor.org/biocLite.R")
+#biocLite("Rsamtools")
+#biocLite("BSgenome.Hsapiens.UCSC.hg19")
 
 #
 # Load genome
