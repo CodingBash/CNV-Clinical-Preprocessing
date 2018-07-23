@@ -24,7 +24,7 @@ generateBaseAxis <- function(chromosomeSizes){
 }
 
 
-visualizeClusterAssignment <- function(sample, base_axis, segDir = "segClusteringResults/prev_run_7_19_2018_2/", save = FALSE, saveDir = "./clusterAssignmentVisualization/"){
+visualizeClusterAssignment <- function(sample, base_axis, categories, segDir = "segClusteringResults/prev_run_7_19_2018_2/", save = FALSE, saveDir = "./clusterAssignmentVisualization/"){
   #
   # Retrieve and format input data
   #
@@ -59,6 +59,6 @@ visualizeClusterAssignment <- function(sample, base_axis, segDir = "segClusterin
   #
   # Generate CN profile from input data
   #
-  visualizeCNProfile(facets_segment_data = facets_segment_clusters_bed, color_id = component_indices, save = save, saveDir = saveDir, saveMeta = paste0("clusterassignment_", sample), title=paste0("CNprep Cluster Assignment for sample=", sample))  
+  visualizeCNProfile(facets_segment_data = facets_segment_clusters_bed, categories = categories, color_id = component_indices, save = save, saveDir = saveDir, saveMeta = paste0("clusterassignment_", sample), title=paste0("CNprep Cluster Assignment for sample=", sample))  
 }
 

@@ -21,5 +21,5 @@ chromosomeSizes <- readRDS("./chromosomeSizes.rds")
 base_axis <- generateBaseAxis(chromosomeSizes)
 
 for(sample in loaded_samples){
-  visualizeClusterAssignmnet(sample, save = FALSE, saveDir = "./clusterAssignmentVisualization/")
+  visualizeClusterAssignment(sample, save = FALSE, saveDir = "./clusterAssignmentVisualization/")
 }

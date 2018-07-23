@@ -20,7 +20,7 @@ for(sample in loaded_samples){
     #
     # Generate CN profile from input data
     #
-    visualizeCNProfile(facets_segment_data = facets_segment_clusters, save = FALSE, title=paste0("CNprep Clusters for sample", sample))
+    visualizeCNProfile(facets_segment_data = facets_segment_clusters, save = FALSE, title=paste0("CNprep Clusters for sample ", sample))
 }
 
 
@@ -41,7 +41,7 @@ for(sample in loaded_samples){
     #
     # Generate CN profile from input data
     #
-    visualizeCNProfile(facets_segment_data = facets_segment_clusters, save = FALSE, title=paste0("CNprep Clusters for sample", sample))
+    visualizeCNProfile(facets_segment_data = facets_segment_clusters, save = FALSE, title=paste0("CNprep Clusters for sample ", sample))
 }
 
 

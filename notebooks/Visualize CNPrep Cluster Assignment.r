@@ -31,4 +31,6 @@ for(sample in loaded_samples){
   visualizeClusterAssignment(sample, segDir = segDir, save = FALSE, saveDir = "./clusterAssignmentVisualization/")
 }
 
+visualizeClusterAssignment(sample = "hT1", categories = c("chr17"), base_axis = base_axis, segDir = segDir, save = FALSE, saveDir = "./clusterAssignmentVisualization/")
+
 

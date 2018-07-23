@@ -50,6 +50,13 @@ sample <- "hT1"
 segtable <- retrieveSegtable(sample , dir = "segClusteringResults/prev_run_7_19_2018_2/")
 displayGMM(segtable = segtable, sample = sample, column = "seg.median", print = TRUE, save = FALSE)
 displayGMM(segtable = segtable, sample = sample, column = "mediandev", print = TRUE, save = FALSE)
+
+
+setwd("~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction")
+sample <- "hT1"
+segtable <- retrieveSegtable(sample , dir = "segClusteringResults/prev_run_7_19_2018_2/")
+displayGMMScaled(segtable = segtable, sample = sample, column = "seg.median", print = TRUE, save = FALSE)
+displayGMMScaled(segtable = segtable, sample = sample, column = "mediandev", print = TRUE, save = FALSE)
 displaySegtableHistogram(segtable = segtable, column="seg.median", sample = sample, print = TRUE, save = FALSE)
 displaySegtableHistogram(segtable = segtable, column="mediandev", sample = sample, print = TRUE, save = FALSE)
 
