@@ -5,8 +5,8 @@
 #
 # Sets the directory to the project workspace
 #
-cd_local <- function() {
-  setwd("~/Git-Projects/Git-Research-Projects/drug-response-prediction") # TODO: cd not working in notebook - home directory different
+cd_local <- function(subdir="") {
+  setwd(paste0("~/Git-Projects/Git-Research-Projects/drug-response-prediction/", subdir)) # TODO: cd not working in notebook - home directory different
 }
 
 #
