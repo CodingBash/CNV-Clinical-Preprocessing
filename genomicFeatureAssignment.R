@@ -4,10 +4,13 @@
 setwd("~/Git-Projects/Git-Research-Projects/drug-response-prediction")
 source("helperFunctions.R")
 library(GenomicRanges)
+library(ggplot2) 
+library(reshape) 
 
 #
 # Load sample to retrieve feature set for
 #
+training_set <- data.frame(stringsAsFactors = FALSE)
 samples <- load_samples(classes = c("T"))
 for(sample in samples){
   
@@ -58,4 +61,24 @@ for(sample in samples){
   # Convert back to Granges object - this is our final feature object
   featureSet <- makeGRangesFromDataFrame(coreDf, keep.extra.columns = TRUE)
   print(featureSet)
+  
+  sampleTrainingSet <- data.frame(cnlr = coreDf[,7])
+  sampleTrainingSet$coreId <- rownames(coreDf)
+  sampleTrainingSet$sampleId <- sample
+  
+  training_set <- rbind(training_set, sampleTrainingSet)
+ 
 }
+
+carsdf$model = rownames(mtcars) 
+cars_melt = melt(carsdf, id.vars = "model") 
+
+ggplot(data = training_set, aes(x = coreId, y = sampleId)) + 
+  geom_tile(aes(fill = cnlr), color = "white", size = 1) + 
+  scale_fill_gradient2(low = "blue", mid="white", high = "tomato") + 
+  xlab("core ID") + 
+  theme_grey(base_size = 10) + 
+  ggtitle("Heatmap (ggplot)") + 
+  theme(axis.ticks = element_blank(), 
+        panel.background = element_blank(), 
+        plot.title = element_text(size = 12, colour = "gray50")) 
