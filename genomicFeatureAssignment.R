@@ -11,7 +11,7 @@ library(reshape)
 # Load sample to retrieve feature set for
 #
 training_set <- data.frame(stringsAsFactors = FALSE)
-samples <- load_samples(classes = c("T"))
+samples <- load_samples(classes = c("T", "M"))
 for(sample in samples){
   
   #
@@ -69,9 +69,6 @@ for(sample in samples){
   training_set <- rbind(training_set, sampleTrainingSet)
  
 }
-
-carsdf$model = rownames(mtcars) 
-cars_melt = melt(carsdf, id.vars = "model") 
 
 ggplot(data = training_set, aes(x = coreId, y = sampleId)) + 
   geom_tile(aes(fill = cnlr), color = "white", size = 1) + 
