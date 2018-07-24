@@ -6,6 +6,8 @@ source("helperFunctions.R")
 library(GenomicRanges)
 library(ggplot2) 
 library(reshape) 
+library(reshape2)
+library(cluster)
 
 #
 # Load sample to retrieve feature set for
@@ -70,6 +72,7 @@ for(sample in samples){
  
 }
 
+training_set <- training_set[-which(is.na(training_set$cnlr)),]
 ggplot(data = training_set, aes(x = coreId, y = sampleId)) + 
   geom_tile(aes(fill = cnlr), color = "white", size = 1) + 
   scale_fill_gradient2(low = "blue", mid="white", high = "tomato") + 
@@ -79,3 +82,29 @@ ggplot(data = training_set, aes(x = coreId, y = sampleId)) +
   theme(axis.ticks = element_blank(), 
         panel.background = element_blank(), 
         plot.title = element_text(size = 12, colour = "gray50")) 
+
+# Unmelt training set for correlation analysis
+training_set_matrix <- dcast(data = training_set,formula = sampleId~coreId,fun.aggregate = sum,value.var = "cnlr")
+rownames <- training_set_matrix$sampleId
+training_set_matrix <- training_set_matrix[,-c(1)]
+training_set_matrix <- t(training_set_matrix)
+colnames(training_set_matrix) <- rownames
+corRaw <- cor(training_set_matrix)
+
+library(spatstat) # "im" function 
+plot(im(corRaw[nrow(corRaw):1,]), main="Correlation Matrix Map")
+
+dissimilarity <- 1 - corRaw
+distance.sample <- as.dist(dissimilarity)
+distance.core <- as.dist(t(dissimilarity))
+
+hc.sample <- hclust(distance.sample)
+hc.core <- hclust(distance.core)
+
+# draw heatmap for first cluster
+plot(hc.sample)
+color.palette  <- colorRampPalette(c("blue", "white", "tomato"))(n=600)
+heatmap.2(t(training_set_matrix),  trace="none", dendrogram="row", density.info = 'none', scale='none', col = color.palette)
+
+plot(hclust(distance), 
+     main="Dissimilarity = 1 - Correlation", xlab="")
