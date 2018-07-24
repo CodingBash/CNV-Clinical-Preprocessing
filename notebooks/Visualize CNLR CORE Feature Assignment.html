@@ -11756,6 +11756,15 @@ div#notebook {
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Load-sources">Load sources<a class="anchor-link" href="#Load-sources">&#182;</a></h3>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[1]:</div>
@@ -11913,15 +11922,22 @@ The following objects are masked from &#39;package:IRanges&#39;:
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Load-sample-to-retrieve-feature-set-for">Load sample to retrieve feature set for<a class="anchor-link" href="#Load-sample-to-retrieve-feature-set-for">&#182;</a></h3><p>Our training set will be samples from all cancer classes</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="c1">#</span>
-<span class="c1"># Load sample to retrieve feature set for</span>
-<span class="c1">#</span>
-samples <span class="o">&lt;-</span> load_samples<span class="p">(</span>classes <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;T&quot;</span><span class="p">,</span> <span class="s">&quot;M&quot;</span><span class="p">,</span> <span class="s">&quot;F&quot;</span><span class="p">))</span>
+<div class=" highlight hl-r"><pre><span></span>samples <span class="o">&lt;-</span> load_samples<span class="p">(</span>classes <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;T&quot;</span><span class="p">,</span> <span class="s">&quot;M&quot;</span><span class="p">,</span> <span class="s">&quot;F&quot;</span><span class="p">))</span>
 </pre></div>
 
 </div>
@@ -11929,15 +11945,22 @@ samples <span class="o">&lt;-</span> load_samples<span class="p">(</span>classes
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Load-the-CNLR-CORE-features">Load the CNLR CORE features<a class="anchor-link" href="#Load-the-CNLR-CORE-features">&#182;</a></h3><p>We will now load the regions of the CORES for amplifications and deletions</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="c1">#</span>
-<span class="c1"># Retrieve CORE features</span>
-<span class="c1">#</span>
-<span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction/hT_results/finalCores/prev_run_7_3_2018&quot;</span><span class="p">)</span>
+<div class=" highlight hl-r"><pre><span></span><span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction/hT_results/finalCores/prev_run_7_3_2018&quot;</span><span class="p">)</span>
 Acores <span class="o">&lt;-</span> retrieveCores<span class="p">(</span><span class="s">&quot;AfinalCoresBP_subtractFraction.bed&quot;</span><span class="p">)</span> <span class="c1"># BED file of amplification recurrent regions</span>
 Dcores <span class="o">&lt;-</span> retrieveCores<span class="p">(</span><span class="s">&quot;DfinalCoresBP_subtractFraction.bed&quot;</span><span class="p">)</span> <span class="c1"># BED file of deletion recurrent regions</span>
 </pre></div>
@@ -11946,6 +11969,16 @@ Dcores <span class="o">&lt;-</span> retrieveCores<span class="p">(</span><span c
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Generate-training-set">Generate training set<a class="anchor-link" href="#Generate-training-set">&#182;</a></h3><p>With the sample list and COREs, we will now populate each feature for each sample</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -11958,13 +11991,23 @@ Dcores <span class="o">&lt;-</span> retrieveCores<span class="p">(</span><span c
 <span class="c1"># Retrieve training set</span>
 <span class="c1">#</span>
 <span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents&quot;</span><span class="p">)</span>
-training_set <span class="o">&lt;-</span> retrieveTrainingSet<span class="p">(,</span> Acores<span class="p">,</span> Dcores<span class="p">,</span> binDir <span class="o">=</span> <span class="s">&quot;CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/&quot;</span><span class="p">)</span>
+training_set <span class="o">&lt;-</span> retrieveTrainingSet<span class="p">(</span>samples<span class="p">,</span> Acores<span class="p">,</span> Dcores<span class="p">,</span> binDir <span class="o">=</span> <span class="s">&quot;CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/&quot;</span><span class="p">)</span>
 </pre></div>
 
 </div>
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Visualize-training-set-as-heatmap">Visualize training set as heatmap<a class="anchor-link" href="#Visualize-training-set-as-heatmap">&#182;</a></h3><p>Without any ordering or clustering, we will view the heatmap for the training set.</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -12469,6 +12512,17 @@ QmCC"
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Visualize-clustered-training-set-as-dendroheatmap">Visualize clustered training set as dendroheatmap<a class="anchor-link" href="#Visualize-clustered-training-set-as-dendroheatmap">&#182;</a></h3><p>Hierarchical clustering with the distance as 1 - pcorr(X) will be performed. This will provide a sense of which samples are similar to eachother.</p>
+<p>Below, we have the dendroheatmap and the dendrogram plotted</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
