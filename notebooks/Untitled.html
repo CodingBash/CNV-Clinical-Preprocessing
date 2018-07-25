@@ -11746,22 +11746,93 @@ div#notebook {
   <div tabindex="-1" id="notebook" class="border-box-sizing">
     <div class="container" id="notebook-container">
 
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Visualize-CNLR-CORE-Feature-Assignment">Visualize CNLR CORE Feature Assignment<a class="anchor-link" href="#Visualize-CNLR-CORE-Feature-Assignment">&#182;</a></h1>
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction&quot;</span><span class="p">)</span>
-<span class="kn">source</span><span class="p">(</span><span class="s">&quot;genomicFeatureAssignment.R&quot;</span><span class="p">)</span>
+<span class="kn">source</span><span class="p">(</span><span class="s">&quot;helperFunctions.R&quot;</span><span class="p">)</span>
+<span class="kn">library</span><span class="p">(</span>repr<span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>all_model_specs <span class="o">&lt;-</span> <span class="kt">data.frame</span><span class="p">(</span>stringsAsFactors <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+cnprep_run_1 <span class="o">&lt;-</span> <span class="kt">data.frame</span><span class="p">(</span>dir<span class="o">=</span><span class="s">&quot;prev_run1&quot;</span><span class="p">,</span> model<span class="o">=</span><span class="s">&quot;E&quot;</span><span class="p">,</span> minjoin<span class="o">=</span><span class="m">0.25</span><span class="p">,</span> ntrial <span class="o">=</span> <span class="m">10</span><span class="p">,</span> stringsAsFactors <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+cnprep_run_2 <span class="o">&lt;-</span> <span class="kt">data.frame</span><span class="p">(</span>dir<span class="o">=</span><span class="s">&quot;prev_run3&quot;</span><span class="p">,</span> model<span class="o">=</span><span class="s">&quot;V&quot;</span><span class="p">,</span> minjoin<span class="o">=</span><span class="m">0.25</span><span class="p">,</span> ntrial <span class="o">=</span> <span class="m">10</span><span class="p">,</span> stringsAsFactors <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+cnprep_run_3 <span class="o">&lt;-</span> <span class="kt">data.frame</span><span class="p">(</span>dir<span class="o">=</span><span class="s">&quot;prev_run_7_19_2018_1&quot;</span><span class="p">,</span> model<span class="o">=</span><span class="s">&quot;E&quot;</span><span class="p">,</span> minjoin<span class="o">=</span><span class="m">0.50</span><span class="p">,</span> ntrial <span class="o">=</span> <span class="m">40</span><span class="p">,</span> stringsAsFactors <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+cnprep_run_4 <span class="o">&lt;-</span> <span class="kt">data.frame</span><span class="p">(</span>dir<span class="o">=</span><span class="s">&quot;prev_run_7_19_2018_2&quot;</span><span class="p">,</span> model<span class="o">=</span><span class="s">&quot;E&quot;</span><span class="p">,</span> minjoin<span class="o">=</span><span class="m">1.00</span><span class="p">,</span> ntrial <span class="o">=</span> <span class="m">40</span><span class="p">,</span> stringsAsFactors <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+cnprep_run_5 <span class="o">&lt;-</span> <span class="kt">data.frame</span><span class="p">(</span>dir<span class="o">=</span><span class="s">&quot;prev_run_7_19_2018_3&quot;</span><span class="p">,</span> model<span class="o">=</span><span class="s">&quot;V&quot;</span><span class="p">,</span> minjoin<span class="o">=</span><span class="m">1.00</span><span class="p">,</span> ntrial <span class="o">=</span> <span class="m">10</span><span class="p">,</span> stringsAsFactors <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+all_model_specs <span class="o">&lt;-</span> <span class="kp">rbind</span><span class="p">(</span>cnprep_run_1<span class="p">,</span> cnprep_run_2<span class="p">,</span> cnprep_run_3<span class="p">,</span> cnprep_run_4<span class="p">,</span> cnprep_run_5<span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span>displayCNResults <span class="o">&lt;-</span> <span class="kr">function</span><span class="p">(</span>organoidId<span class="p">,</span> bin_start<span class="p">,</span> bin_end<span class="p">,</span> model_specs<span class="p">,</span> values<span class="p">,</span> cols<span class="p">,</span> hl<span class="p">){</span>
+  par<span class="p">(</span>mfrow<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="kp">nrow</span><span class="p">(</span>model_specs<span class="p">),</span><span class="m">1</span><span class="p">))</span> 
+  par<span class="p">(</span>mar<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">))</span>
+  
+  <span class="c1">#</span>
+  <span class="c1"># Calculate plot range</span>
+  <span class="c1">#</span>
+  all_segtables <span class="o">&lt;-</span> <span class="kp">lapply</span><span class="p">(</span><span class="kp">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="kp">nrow</span><span class="p">(</span>model_specs<span class="p">)),</span> <span class="kr">function</span><span class="p">(</span>model_specs.index<span class="p">){</span>
+    <span class="kr">return</span><span class="p">(</span>retrieveSegtable<span class="p">(</span>organoidId<span class="p">,</span> dir <span class="o">=</span> <span class="kp">paste0</span><span class="p">(</span><span class="s">&quot;segClusteringResults/&quot;</span><span class="p">,</span> model_specs<span class="p">[</span>model_specs.index<span class="p">,</span> <span class="p">]</span><span class="o">$</span><span class="kp">dir</span><span class="p">,</span> <span class="s">&quot;/&quot;</span><span class="p">)))</span>
+  <span class="p">})</span>
+  
+  binded_segtables <span class="o">&lt;-</span> <span class="kp">do.call</span><span class="p">(</span><span class="kp">rbind</span><span class="p">,</span> all_segtables<span class="p">)</span>
+  
+  ymargin <span class="o">&lt;-</span> <span class="m">0.1</span>
+  yvalues <span class="o">&lt;-</span> <span class="kp">sapply</span><span class="p">(</span>values<span class="p">,</span> <span class="kr">function</span><span class="p">(</span>value<span class="p">){</span>binded_segtables<span class="p">[[</span>value<span class="p">]]})</span>
+  xrange <span class="o">&lt;-</span> <span class="kp">range</span><span class="p">(</span>binded_segtables<span class="o">$</span>start<span class="p">,</span>binded_segtables<span class="o">$</span>end<span class="p">)</span>
+  yrange <span class="o">&lt;-</span> <span class="kp">range</span><span class="p">(</span>yvalues <span class="o">-</span> ymargin<span class="p">,</span> yvalues <span class="o">+</span> ymargin<span class="p">)</span>
+    
+  <span class="kr">for</span><span class="p">(</span>model_specs.index <span class="kr">in</span> <span class="kp">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="kp">nrow</span><span class="p">(</span>model_specs<span class="p">))){</span>
+    segtable <span class="o">&lt;-</span> retrieveSegtable<span class="p">(</span>organoidId<span class="p">,</span> dir <span class="o">=</span> <span class="kp">paste0</span><span class="p">(</span><span class="s">&quot;segClusteringResults/&quot;</span><span class="p">,</span> model_specs<span class="p">[</span>model_specs.index<span class="p">,</span> <span class="p">]</span><span class="o">$</span><span class="kp">dir</span><span class="p">,</span> <span class="s">&quot;/&quot;</span><span class="p">))</span>
+    plot<span class="p">(</span>xrange<span class="p">,</span> yrange<span class="p">,</span> type<span class="o">=</span><span class="s">&quot;n&quot;</span><span class="p">,</span> xlab <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">,</span> ylab <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+    <span class="kr">for</span><span class="p">(</span>value.i <span class="kr">in</span> <span class="kp">seq_along</span><span class="p">(</span>values<span class="p">)){</span>
+      segments<span class="p">(</span>x0 <span class="o">=</span> segtable<span class="o">$</span>start<span class="p">,</span> x1 <span class="o">=</span> segtable<span class="o">$</span>end<span class="p">,</span> y0 <span class="o">=</span> segtable<span class="p">[[</span>values<span class="p">[[</span>value.i<span class="p">]]]],</span> y1 <span class="o">=</span> segtable<span class="p">[[</span>values<span class="p">[[</span>value.i<span class="p">]]]],</span>
+               col <span class="o">=</span> cols<span class="p">[[</span>value.i<span class="p">]],</span> lty <span class="o">=</span> par<span class="p">(</span><span class="s">&quot;lty&quot;</span><span class="p">),</span> lwd <span class="o">=</span> par<span class="p">(</span><span class="s">&quot;lwd&quot;</span><span class="p">))</span>
+    <span class="p">}</span>
+    <span class="kr">if</span><span class="p">(</span>hl <span class="o">==</span> <span class="kc">TRUE</span><span class="p">){</span>
+      abline<span class="p">(</span>h<span class="o">=</span><span class="m">0</span><span class="p">)</span>
+      abline<span class="p">(</span>h<span class="o">=</span><span class="m">0.5</span><span class="p">,</span> col <span class="o">=</span> <span class="s">&quot;#4F4F4F&quot;</span><span class="p">)</span>
+      abline<span class="p">(</span>h<span class="o">=</span><span class="m">-0.5</span><span class="p">,</span> col <span class="o">=</span> <span class="s">&quot;#4F4F4F&quot;</span><span class="p">)</span>
+      abline<span class="p">(</span>h<span class="o">=</span><span class="m">1</span><span class="p">,</span> col <span class="o">=</span> <span class="s">&quot;#BABABA&quot;</span><span class="p">)</span>
+      abline<span class="p">(</span>h<span class="o">=</span><span class="m">-1</span><span class="p">,</span> col <span class="o">=</span> <span class="s">&quot;#BABABA&quot;</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="kp">options</span><span class="p">(</span>repr.plot.width<span class="o">=</span><span class="m">15</span><span class="p">,</span> repr.plot.height<span class="o">=</span><span class="m">7</span><span class="p">)</span>
+displayCNResults<span class="p">(</span>organoidId<span class="o">=</span> <span class="s">&quot;hT30&quot;</span><span class="p">,</span> model_specs <span class="o">=</span> <span class="kp">rbind</span><span class="p">(</span>cnprep_run_4<span class="p">,</span>cnprep_run_2 <span class="p">),</span> values <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;maxzmean&quot;</span><span class="p">,</span> <span class="s">&quot;mediandev&quot;</span><span class="p">),</span> cols <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;blue&quot;</span><span class="p">,</span> <span class="s">&quot;red&quot;</span><span class="p">),</span> hl <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -11773,139 +11844,131 @@ div#notebook {
 
 
 <div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>Warning message:
-&#34;package &#39;reshape&#39; was built under R version 3.4.4&#34;
-Attaching package: &#39;reshape&#39;
-
-The following objects are masked from &#39;package:S4Vectors&#39;:
-
-    expand, rename
-
-Warning message:
-&#34;package &#39;reshape2&#39; was built under R version 3.4.4&#34;
-Attaching package: &#39;reshape2&#39;
-
-The following objects are masked from &#39;package:reshape&#39;:
-
-    colsplit, melt, recast
-
-Loading required package: ade4
-Warning message:
-&#34;package &#39;ade4&#39; was built under R version 3.4.4&#34;
-Attaching package: &#39;ade4&#39;
-
-The following object is masked from &#39;package:GenomicRanges&#39;:
-
-    score
-
-The following object is masked from &#39;package:IRanges&#39;:
-
-    score
-
-The following object is masked from &#39;package:BiocGenerics&#39;:
-
-    score
-
-Loading required package: RColorBrewer
-Loading required package: gplots
-Warning message:
-&#34;package &#39;gplots&#39; was built under R version 3.4.4&#34;
-Attaching package: &#39;gplots&#39;
-
-The following object is masked from &#39;package:IRanges&#39;:
-
-    space
-
-The following object is masked from &#39;package:S4Vectors&#39;:
-
-    space
-
-The following object is masked from &#39;package:stats&#39;:
-
-    lowess
-
-Loading required package: scatterplot3d
-Warning message:
-&#34;package &#39;scatterplot3d&#39; was built under R version 3.4.4&#34;Warning message:
-&#34;package &#39;cluster&#39; was built under R version 3.4.4&#34;Warning message:
-&#34;package &#39;spatstat&#39; was built under R version 3.4.4&#34;Loading required package: spatstat.data
-Warning message:
-&#34;package &#39;spatstat.data&#39; was built under R version 3.4.4&#34;Loading required package: nlme
-
-Attaching package: &#39;nlme&#39;
-
-The following object is masked from &#39;package:IRanges&#39;:
-
-    collapse
-
-Loading required package: rpart
-
-spatstat 1.56-0       (nickname: &#39;Bondi Tram&#39;) 
-For an introduction to spatstat, type &#39;beginner&#39; 
 
 
-Attaching package: &#39;spatstat&#39;
-
-The following object is masked from &#39;package:cluster&#39;:
-
-    volume
-
-The following object is masked from &#39;package:gplots&#39;:
-
-    col2hex
-
-The following object is masked from &#39;package:ade4&#39;:
-
-    disc
-
-The following object is masked from &#39;package:GenomicRanges&#39;:
-
-    shift
-
-The following objects are masked from &#39;package:IRanges&#39;:
-
-    reflect, shift
-
-</pre>
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABwgAAANICAMAAADkWkvLAAAAPFBMVEUAAAAAAP9NTU1PT09o
+aGh8fHyMjIyampqnp6eysrK6urq9vb3Hx8fQ0NDZ2dnh4eHp6enw8PD/AAD///8oCLqCAAAA
+CXBIWXMAABJ0AAASdAHeZh94AAAX6UlEQVR4nO3d62LS2hqG0WkWp26sQHv/97oFqguXbSdQ
+cph5x/hhU9QQ+AqPhATL640KADTow67dHMJb/wIAjE8IAYgmhABEE0IAogkhANGEEIBoQghA
+NCEEIJoQAhBNCAGIJoQARBNCAKIJIQDRhBCAaEIIQDQhBCCaEAIQTQgBiCaEAESbZQhfXsbe
+AgBaMcsQAsC1hBCAaEIIQDQhBCCaEAIQTQgBiCaEAEQTQgCiCSEA0YQwgU/aAfiQEAIQTQgB
+iCaEAEQTQgCiCSEA0WohPKxLWT6/XfRp64QQgAZVQnjoytHqfJEQAjA3lRBuyvZnDbfd8nSR
+EAIwN5UQducv+26xF0IAZqgSwl/tOyyX74WwXOppCwGgR5UQLsrh7fvF0itCAOanEsJtWb99
+vy9LIQRgdmqnT2x+1++5svdTCAFoUPWE+t3q1yX7tRACMDc+WQaAaEIIQDQhBCCaEAIQTQgB
+iCaEAEQTQgCiCSEA0YQQgGhCCEA0IQQgmhACEE0IAYgmhABEE0IAogkhANGEEIBoQghANCEE
+IJoQAhBNCAGIJoQARBNCAKIJIQDRhBCAaEIIQDQhBCCaEAIQTQgBiCaEAEQTQgCiCSEA0YQQ
+gGhCCEA0IYQpexl7A2D+hBCAaEIIQDQhBCCaEAIQTQgBiCaEAEQTQgCiCSEA0YQQgGhCCEA0
+IQQgmhACU+MTVhmUEAIQTQgBiCaEAEQTQgCiCSEA0YQQgGhCCEA0IQQgmhACEE0IAYgmhAD8
+6eVs7M0YihACEE0IAYhWCWH5011rAoDpqoRw+3kIL3/vfwDQoEohd93yq0kFYILCDon5WPU9
+wl3ZfHFNADBd9YNltmX3tTUBwHQ5ahSAaEIIt/OuCsyIEAIQTQgBiCaEAEQTQgCiCSEA0YQQ
+gGhCCEA0IWROfG4icDMhBCCaEAIQTQgBeM/LO8bepl4IIQDRhBCAaEIIQDQhBCCaEALM1HtH
+u8z+yJc7CCEA0YQQgGiTCeG3d9y/rg+u4Avb17ScGz7UkIe7R3NmdynzVj/En0+d7z2vDmjE
+++E2kwkhAIxBCAGIJoQAyRxPKoQAZBNCAKIJIQDRckKYt9sbgCvkhBAA3vG4EP4DAA16WAi9
+IgSgQXaNAhBNCAGIJoQARBNCAKIJIQDRhBCAaEIIMBt9/9cR7/5XFR/pcTseSwgBiCaEAEQT
+QgCiCSHATLXzLt24hBCAaEIIQDQhBCCaEAIQTQgBiCaEAEQTQgCiCSEA0YQQgGhCCEA0IQQg
+mhACEE0IAYgmhPSt0f+zGkghhNCrly8Ye9shgxACEK0awh9Pq3K02vy4c00AMF2VEB4W5V/L
++9YEANNVCeGmdN93p6X9c1c2d60JJspbdMBrNYRd2f2+ZFe6u9Z0t/ufkTyXAXClSgjL5e+X
+v/5wAYDGfR7CUV8RPtxXDmQf1Nh3FPA1HsZNqb9H+Lw/LXmPMIqaAzFqp08sL148Lg53rQn+
+JarA1NTPI9ycziPsVk/OIwRgfnyyDMCs2JlyKyEEIJoQ0g//KAUaIYQARBPCBF6WAXxo7iG0
+aw6AT809hADwKSGEqbI/Y8pMZ0aEEIBoQghANCEEIJoQAhBNCAGIJoQARBNCAKIJIQDRhBCA
+aEIIQDQhBCCaEAIQTQgBiCaEAEQTQgCiCSEA0YQQgGhCCEA0IQQgmhDC9V5+GXtDgMcRQgCi
+PS6E/wBAgx4WQq8IAb7m5cvGvgVNsms0hEcT/fKjxH+187MghABEE8IQ32409vb24OYXK7fe
+Zy3elQ+6jY926w6MN8Nu5Od332h37dg/UhfauRFCCMHuLM57HnoNY9+YK7fl0bdg5h5yn/dC
+COEDU3iAMrp7n6yvf9b3EzY6IYTbeWaDGRFCAKIJIQDRhBCAaEIIQDQhBCCaEAIQTQgBiCaE
+AEQTQgCiCSEA0YQQgGhCCEA0IQQgmhACEE0IAYgmhABEE0IAogkhANGEEIBoQghAtEoIy5/u
+WhMATFclhFshBGDWartGd93yq2sCgOmqvke4K5svrgkApqt+sMy27L62JgCYrq8dNXr5/uH/
+AKBBXwrhl/4CAIzPeYQARLs2hJ+fOvHpmgBguoQQgGhCCEA0IQQgmhACEE0IAYjm9AkAogkh
+ANGEEIBoQghANCEEIJoQAhBNCAGIJoQARBNCAKIJIQDRhBCAaEIIQLQ2QvhyocergYpvY28A
+BPh2sy9eYRshBICeCCEA0YQQgGhCCEA0IQQgmhACEE0IAZiSl//q+wqFEIAp+yuMjy6lEAIQ
+TQgBiCaEAEQTQgCiCSEA0YQQgGhCCEA0IQQgmhACEE0IAYgmhABEE0IAogkhANGEEIBoQghA
+NCEEIJoQAhBNCAGIJoQARBNCAKIJIQDRhBCAaEIIQDQhBCCaEAIQTQgBiCaEAEQTQgCi1UJ4
+WJeyfH676NPWCSHz9zL2BgCPVwnhoStHq/NFQgjA3FRCuCnbnzXcdsvTRUIIwNxUQtidv+y7
+xV4IAZihSgh/te+wXAohADNUCeGiHN6+XyyFEID5qYRwW9Zv3+/LUggBmJ3a6ROb3/V7LkII
+wOxUT6jfrX5dsl//9YfLpR62DgB65pNlAIgmhABEuzaE9T2fQghAg4QQgGhCCEA0IQQgmhAC
+EE0IAYjm9AkAogkhANGEEIBoQghANCEEIJoQAhBNCAGIJoQARBNCAKIJIQDRhBCAaEIIQDQh
+BCCaEAIQTQgBiCaEAEQTQgCiCSEA0YQQgGhCCEA0IQQgmhACEE0IAYgmhABEE0IAogkhANGE
+EIBoQghANCEEIJoQAhBNCAGIJoQARBNCAKIJIQDRhBCAaEIIQDQhBCCaEAIwZS99X4EQAhBN
+CAGIJoQARBNCAKIJIQDRhBCAaEIIQDQhBCCaEAIQTQgBiCaEAES7MoTbriy2d64JAKarFsLd
+qnTb16dytLxvTQAwXZUQ7k4F3JT14XW/Kp++JhRCABpUCeG6bF5fN6U7Lh/K4q41AcB0VUJY
+Tl/K6uKbm9cEANN1VQi/n/eJnl8Y3rwmAJiu6q7R9eHtgsNpN+kdawKA6aqE8ND93h9aPn9B
+KIQAtKh6HuHmV/66d14PFgBo3M2F7IkXlA0zvHaZXbvMrn9CyNUMr11m1y6z699/7uPPT514
+/PXREsNrl9m1y+z6J4RczfDaZXbtMrv+CSFXM7x2mV27zK5/QsjVDK9dZtcus+ufEHI1w2uX
+2bXL7PonhFzN8Npldu0yu/45fYKrGV67zK5dZtc/IeRqhtcus2uX2fVPCLma4bXL7Npldv0T
+Qq5meO0yu3aZXf/cxwBEE0IAogkhANGEEIBoQghANCEEIJoQAhBNCAGIJoQARBNCAKIJIQDR
+hBCAaEIIQDQhBCCaEAIQTQgBiCaEAEQbNISbrnSbw5DXyB22i99juphYdZFp+PH2mDa7xuzW
+paz3p0WzG9qQIVyWo8WA18gdNqcxdcdH2cXEqotMw6E7P6bNrjHPHncjGjCEP0q3e9115cdw
+V8ntdmX987G4Les/JlZdZCJW5fSYNrvWdD/ncViVjdmNYcAQbsrzz1+/l6fhrpLbrc4/Esen
+04uJVReZhu/lHEKza8z3YwJfD6UzuzEMGMJVOe7/3pXVcFfJ3Y5PpxcTqy4yCfuyPIfQ7Bqz
+Lrtfi2Y3vAFDWMrlFybtUJZ/TKy6yCQsy/48DbNrzKK8PnWntyXMbgRCyHu2x50vHpCteSrf
+X4WwSaWsTgfLvJrdGISQd+y7414XD8jGnHaWCWGTyvEAmMP6+L6f2Q1PCPnboVsev3hANmZx
+PPheCJtUTu8R7o/nRJjd8Aa8KzvTa8XyfIbSxcSqi4xvfTqY8DwNs2tMuWFgZvdwA96V50Od
+9g51mrr9Ynn+fIuLiVUXGV/5zeyac3HaktkNb8AQPp3+vfp8Ol2G6Xouy7eli4lVFxnfZQjN
+rjHneeyPDz6zG96AIfRxCE3Y/+6gT7ho0nmHmdk1Zl8Wh+PBMt/NbgxD7mVenP6xuqz/QUa0
+/vdVxeXEqotMxNs7R2bXmKcbBmZ2jzZkCA+nj0wf8Aq5w8XutcuJVReZiLcQml1rnpdXD8zs
+Hs1xRwBEE0IAogkhANFuDmEBgAY9LoS3/gUAGJ8QAhBNCAGIJoQARBNCAKIJIQDRhBCAaEII
+QDQhBCCaEAIQTQgBiCaEAEQTQgCiCSEA0YQQgGhCCEA0IQQgmhACEE0IAYgmhABEm2UIX17G
+3gIAWjHLEALAtYQQgGhCCEA0IQQgmhACEE0IAYgmhABEE0IAoglhAh8wAPAhIQQgmhACEE0I
+AYgmhABEE0IAogkhANFqITysS1k+v130aeuEEIAGVUJ46MrR6nyREAIwN5UQbsr2Zw233fJ0
+kRACMDeVEHbnL/tusRdCAGaoEsJf7Tssl++FsFzqaQsBoEeVEC7K4e37xdIrQgDmpxLCbVm/
+fb8vSyEEYHZqp09sftfvubL3UwgBaFD1hPrd6tcl+7UQAjA3PlkGgGhCCEA0IQQgmhACEE0I
+AYgmhABEE0IAogkhANGEEIBoQghANCEEIJoQAhBNCAGIJoQARBNCAKIJIQDRhBCAaEIIQDQh
+BCCaEAIQTQgBiCaEAEQTQgCiCSEA0YQQgGhCCEA0IQQgmhACEE0IAYgmhABEE0IAogkhANGE
+EIBoQghANCGEKXsZewNg/oQQgGhCCEA0IQQgmhACEE0IAYgmhABEE0IAogkhANGEEIBoQghA
+NCEEIJoQAlPjE1YZlBACEE0IAYgmhABEE0IAogkhANGEEIBoQghANCEEIJoQAhBNCAGIJoQA
+/OnlbOzNGIoQAhBNCAGIVglh+dNdawKA6aqEcPt5CC9/738A0KBKIXfd8qtJBWCCwg6J+Vj1
+PcJd2XxxTQAwXfWDZbZl97U1AcB0OWoUgGhCCLfzrgrMiBACEE0IAYgmhABEE0IAogkhANGE
+EIBoQsic+Lgo4GZCCEA0IQQgmhACEE0IAXjPyzvG3qZeCCEA0YQQgGhCCEA0IQQgmhACzNR7
+R7vM/siXOwghANGEEIBokwnht3fcv64PruAL29e0nBve95C//edr/3JmdynzVj/En0+d7z2v
+DuhhN+pRK/rIZEIIAGMQQgCiCSFAMseTCiEA2YQQgGg5Icx7tQ/AFXJCCADvEEIAoj0uhP8A
+QIMeFkKvCAFokF2jAEQTQgCiCSEA0YQQgGhCCEA0IQQgmhACzEbf/3XEu/9VxUd63I7HEkIA
+ogkhANGEEGCm2tk5OS4hBCCaEAIQTQgBiCaEAEQTQgCiCSEA0YQQgGhCCEA0IQQgmhACEE0I
+AYgmhABEE0IAogkhANGEkL41+n9WAymEkL59+8PYWzO4ly8Ye9shgxACEK0awh9Pq3K02vy4
+c00AMF2VEB4W5V/L+9YEANNVCeGmdN93p6X9c1c2d61pBN5l4RreogNeqyHsyu73JbvS3bWm
+u737jOQYg0AOLwF6VAlhufz98tcfLgDQuM9DOOorwom54WXJV419UwGC1N8jfN6flpp6j5Cv
+UnMgRu30ieXFi8fF4a41wb9EFZia+nmEm9N5hN3qyXmEAMyPT5YBmBU7U24lhABEE0L64R+l
+QCOEMIEaAXxICAGINvcQ2jUHwKfmHkIA+JQQwlTZnzFlpjMjQghANCEEIJoQAhBNCAGIJoQA
+RBNCAKIJIQDRhBCAaEIIQDQhBCCaEAIQTQgBiCaEAEQTQgCiCSEA0YQQgGhCCEA0IQQgmhAC
+EE0I4Xovv4y9IcDjCCEA0R4Xwn8AoEEPC6FXhJP27UZjb+9EuX8+5EfpIV6+bOxbcGHK2/Yn
+u0ZDNPxoogl+lGiXEAIQTQhJ4cVKO27dgdGrse+M+ZjufS6EpLj57atP3vCazdut/ffivpXd
+cgf37LMb/NndcefVDTn9oU33XhBC+MAnz/a3PKePehsYzS0/I35cRiaEAEQTQgCiCSEA0YQQ
+gGhCCEA0IQQgmhACEE0IAYgmhABEE0IAogkhANGEEIBoQghANCEEIJoQAhBNCAGIJoQARBNC
+AKIJIQDRhBCAaEIIQLRKCMuf7loTAExXJYRbIQRg1mq7Rnfd8qtrAoDpqr5HuCubL64JAKar
+frDMtuy+tiYAmK6vHTV6+f7h/wCgQV8K4Zf+AgCMz3mEAES7NoSfnzrx6ZoAYLqEEIBoQghA
+NCEEIJoQAhBNCAGI5vQJAKIJIQDRhBCAaEIIQDQhBCCaEAIQTQgBiCaEAEQTQgCiCSEA0YQQ
+gGhCCEC0NkL4cqHHqwEgTxsh/Hahx6sBYHTfbvbFK2wjhADQEyEEIJoQAhBNCAGIJoQARBNC
+AKbk5b/6vkIhBGDK/grjo0sphABEE0IAogkhANGEEIBoQghANCEEIJoQAhBNCAGIJoQARBNC
+AKIJIQDRhBCAaEIIQDQhBCCaEAIQTQgBiCaEAEQTQgCiCSEA0YQQgGhCCEA0IQQgmhACEE0I
+AYgmhABEE0IAogkhANGEEIBotRAe1qUsn98u+rR1Qsj8vYy9AcDjVUJ46MrR6nyREAIwN5UQ
+bsr2Zw233fJ0kRACMDeVEHbnL/tusRdCAGaoEsJf7Tssl0IIwAxVQrgoh7fvF0shBGB+KiHc
+lvXb9/uyFEIAZqd2+sTmd/2eixACMDvVE+p3q1+X7Nd//eFyqYetA4Ce+WQZAKIJIQDRrg1h
+fc+nEALQICEEIJoQAhBNCAGIJoQARBNCAKI5fQKAaEIIQDQhBCCaEAIQTQgBiCaEAEQTQgCi
+CSEA0YQQgGhCCEA0IQQgmhACEE0IAYgmhABEE0IAogkhANGEEIBoQghANCEEIJoQAhBNCAGI
+JoQARBNCAKIJIQDRhBCAaEIIQDQhBCCaEAIQTQgBiCaEAEQTQgCiCSEA0YQQgGhCCEA0IQQg
+mhACEE0IAYgmhABM2UvfVyCEAEQTQgCiCSEA0YQQgGhCCEA0IQQgmhACEE0IAYgmhABEE0IA
+ogkhANGuDOG2K4vtnWsCgOmqhXC3Kt329akcLe9bEwBMVyWEu1MBN2V9eN2vyqevCYUQgAZV
+Qrgum9fXTemOy4eyuGtNADBdlRCW05eyuvjm5jUBwHRdFcLv532i5xeGN68JAKarumt0fXi7
+4HDaTXrHmgBguiohPHS/94eWz18QCiEALaqeR7j5lb/undeDBQAad3Mhe+IFZcMMr11m1y6z
+658QcjXDa5fZtcvs+vef+/jzUycef320xPDaZXbtMrv+CSFXM7x2mV27zK5/QsjVDK9dZtcu
+s+ufEHI1w2uX2bXL7PonhFzN8Npldu0yu/4JIVczvHaZXbvMrn9On+Bqhtcus2uX2fVPCLma
+4bXL7Npldv0TQq5meO0yu3aZXf+EkKsZXrvMrl1m1z/3MQDRhBCAaEIIQDQhBCCaEAIQTQgB
+iCaEAEQTQgCiCSEA0YQQgGhCCEA0IQQgmhACEE0IAYgmhABEE0IAogkhANEGDeGmK93mMOQ1
+coft4veYLiZWXWQafrw9ps2uMbt1Kev9adHshjZkCJflaDHgNXKHzWlM3fFRdjGx6iLTcOjO
+j2mza8yzx92IBgzhj9LtXndd+THcVXK7XVn/fCxuy/qPiVUXmYhVOT2mza413c95HFZlY3Zj
+GDCEm/L889fv5Wm4q+R2q/OPxPHp9GJi1UWm4Xs5h9DsGvP9mMDXQ+nMbgwDhnBVjvu/d2U1
+3FVyt+PT6cXEqotMwr4szyE0u8asy+7XotkNb8AQlnL5hUk7lOUfE6suMgnLsj9Pw+wasyiv
+T93pbQmzG4EQ8p7tceeLB2Rrnsr3VyFsUimr08Eyr2Y3BiHkHfvuuNfFA7Ixp51lQtikcjwA
+5rA+vu9ndsMTQv526JbHLx6QjVkcD74XwiaV03uE++M5EWY3vAHvys70WrE8n6F0MbHqIuNb
+nw4mPE/D7BpTbhiY2T3cgHfl+VCnvUOdpm6/WJ4/3+JiYtVFxld+M7vmXJy2ZHbDGzCET6d/
+rz6fTpdhup7L8m3pYmLVRcZ3GUKza8x5Hvvjg8/shjdgCH0cQhP2vzvoEy6adN5hZnaN2ZfF
+4XiwzHezG8OQe5kXp3+sLut/kBGt/31VcTmx6iIT8fbOkdk15umGgZndow0ZwsPpI9MHvELu
+cLF77XJi1UUm4i2EZtea5+XVAzO7R3PcEQDRhBCAaEIIQDQhBCDa/wEbRReAU3DyyQAAAABJ
+RU5ErkJggg=="
+>
 </div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="c1">#</span>
-<span class="c1"># Load sample to retrieve feature set for</span>
-<span class="c1">#</span>
-samples <span class="o">&lt;-</span> load_samples<span class="p">(</span>classes <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;T&quot;</span><span class="p">,</span> <span class="s">&quot;M&quot;</span><span class="p">,</span> <span class="s">&quot;F&quot;</span><span class="p">))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="c1">#</span>
-<span class="c1"># Retrieve CORE features</span>
-<span class="c1">#</span>
-<span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction&quot;&quot;hT_results/finalCores/prev_run_7_3_2018)</span>
-<span class="s">cd_local(&quot;</span>hT_results<span class="o">/</span>finalCores<span class="o">/</span>prev_run_7_3_2018<span class="s">&quot;)</span>
-<span class="s">Acores &lt;- retrieveCores(&quot;</span>AfinalCoresBP_subtractFraction.bed<span class="s">&quot;) # BED file of amplification recurrent regions</span>
-<span class="s">Dcores &lt;- retrieveCores(&quot;</span>DfinalCoresBP_subtractFraction.bed<span class="s">&quot;</span><span class="err">) # BED file of deletion recurrent regions</span>
-</pre></div>
 
 </div>
+
 </div>
 </div>
 
@@ -11915,15 +11978,7 @@ samples <span class="o">&lt;-</span> load_samples<span class="p">(</span>classes
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="c1">#</span>
-<span class="c1"># Retrieve training set</span>
-<span class="c1">#</span>
-cd_doc<span class="p">()</span>
-training_set <span class="o">&lt;-</span> retrieveTrainingSet<span class="p">(</span>samples<span class="p">,</span> Acores<span class="p">,</span> Dcores<span class="p">,</span> binDir <span class="o">=</span> <span class="s">&quot;CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/&quot;</span><span class="p">)</span>
-
-visualizeUnclusteredHeatmap<span class="p">(</span>training_set<span class="p">)</span>
-hc <span class="o">&lt;-</span> clusterTrainingSet<span class="p">(</span>training_set<span class="p">,</span> visualize <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
-plot<span class="p">(</span>hc<span class="p">)</span>
+<div class=" highlight hl-r"><pre><span></span>
 </pre></div>
 
 </div>

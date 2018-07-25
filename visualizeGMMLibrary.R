@@ -10,22 +10,6 @@ library(ggplot2)
 library(reshape2)
 
 #
-# Retrieve the segtable from the CNprep::CNpreprocessing output
-#
-retrieveSegtable <- function(sample, dir = "segClusteringResults/"){
-  segtable <- read.table(paste(dir, sample, "_segtable.tsv", sep = ""), sep = "\t", header = TRUE)
-  return(segtable)
-}
-
-#
-# Retrieve the seginput from the CNprep::CNpreprocessing input
-#
-retrieveSeginput <- function(sample, dir = "segInput/"){
-  seginput <- read.table(paste(dir, sample, "_seginput.tsv", sep = ""), sep = "\t", header = TRUE)
-  return(seginput)
-}
-
-#
 # Display the GMM visualization using the CNprep::CNpreprocessing output segtable
 # TODO: Save location is hardcoded
 #
