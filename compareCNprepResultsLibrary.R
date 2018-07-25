@@ -43,8 +43,9 @@ displayCNprepResults <- function(organoidId, bin_start, bin_end, model_specs, cl
   #
   # Set plot parameters
   #
-  par(mfrow=c(nrow(model_specs),1)) 
-  par(mar=c(2,2,1.25,1))
+  layout(matrix(seq(1, nrow(model_specs) * 2), nrow(model_specs), 2, byrow = TRUE), 
+         widths=c(4,1))
+  par(mar=c(2,2,1.25,0))
   
   #
   # Retrieve list of all CNprep segtables (accounting for bin range)
@@ -78,9 +79,10 @@ displayCNprepResults <- function(organoidId, bin_start, bin_end, model_specs, cl
     values <- c(values, supplementary_values)
   }
   ymargin <- 0.1
+  yplot <- 0.5
   yvalues <- sapply(values, function(value){binded_segtables[[value]]})
   xrange <- range(binded_segtables$start,binded_segtables$end)
-  yrange <- range(yvalues - ymargin, yvalues + ymargin)
+  yrange <- range(yvalues - ymargin, yvalues + ymargin + 0.5)
     
   #
   # Iterate through each CNprep segtable
@@ -98,6 +100,8 @@ displayCNprepResults <- function(organoidId, bin_start, bin_end, model_specs, cl
     as.list(model_spec)
     title <- paste0("dir=", model_spec$dir, " model=", model_spec$model, " minjoin=", model_spec$minjoin, " ntrial=", model_spec$ntrial)
     plot(xrange, yrange, main = title, type="n", xlab = "", ylab = "")
+    legend_values <- c()
+    legend_col <- c()
     
     #
     # Display supplementary value segments
@@ -107,6 +111,9 @@ displayCNprepResults <- function(organoidId, bin_start, bin_end, model_specs, cl
         segments(x0 = segtable$start, x1 = segtable$end, y0 = segtable[[supplementary_values[[supplementary_value.index]]]], y1 = segtable[[supplementary_values[[supplementary_value.index]]]],
                  col = supplementary_cols[[supplementary_value.index]], lty = par("lty"), lwd = par("lwd"))
       }
+      
+      legend_values <- c(legend_values, supplementary_values)
+      legend_col <- c(legend_col, head(supplementary_cols, length(supplementary_values)))
     }
     
     #
@@ -118,6 +125,8 @@ displayCNprepResults <- function(organoidId, bin_start, bin_end, model_specs, cl
           segments(x0 = clusters[[cluster.index]]$start, x1 = clusters[[cluster.index]]$end, y0 = clusters[[cluster.index]][[cluster_value]], y1 = clusters[[cluster.index]][[cluster_value]],
                    col = cluster_cols[[cluster.index]], lty = par("lty"), lwd = par("lwd"))
         }
+        legend_values <- c(legend_values, paste0(cluster_value,"#", unlist(lapply(names(clusters), function(cluster){ return(substr(cluster, 1, 5))}))))
+        legend_col <- c(legend_col, head(cluster_cols, length(names(clusters))))
     }
     
     #
@@ -130,5 +139,12 @@ displayCNprepResults <- function(organoidId, bin_start, bin_end, model_specs, cl
       abline(h=1, col = "#BABABA")
       abline(h=-1, col = "#BABABA")
     }
+    
+    #
+    # Set legend
+    #
+    plot.new()
+    legend("left", legend=legend_values,
+           col = legend_col, seg.len = 0.5, lty=1, cex=1, pt.cex = 1, xpd = TRUE, y.intersp=1, x.intersp=.1)
   }
 }
