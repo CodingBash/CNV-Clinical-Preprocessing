@@ -1,7 +1,3 @@
-setwd("~/Git-Projects/Git-Research-Projects/drug-response-prediction")
-source("helperFunctions.R")
-library(RColorBrewer)
-
 #
 # Create dataframe of available CNprep runs
 #
@@ -23,6 +19,14 @@ cnprep_run[[13]] <- data.frame(dir="prev_run_7_19_2018_3", model="V", minjoin=1.
 all_model_specs <- do.call(rbind, cnprep_run)
 
 #
+# Retrieve the segtable from the CNprep::CNpreprocessing output
+#
+retrieveSegtable <- function(sample, dir = "segClusteringResults/"){
+  segtable <- read.table(paste(dir, sample, "_segtable.tsv", sep = ""), sep = "\t", header = TRUE)
+  return(segtable)
+}
+
+#
 # Method to display and compare CNprep results
 #
 # @param("organoidId") - string of the organoid sample
@@ -36,7 +40,6 @@ all_model_specs <- do.call(rbind, cnprep_run)
 # @param("hl") - boolean declaring if plot horizontal lines should appear
 #
 displayCNprepResults <- function(organoidId, bin_start, bin_end, model_specs, cluster_value = "maxzmean", supplementary_values, cluster_cols, supplementary_cols, hl = TRUE){
-
   #
   # Set plot parameters
   #
@@ -47,6 +50,7 @@ displayCNprepResults <- function(organoidId, bin_start, bin_end, model_specs, cl
   # Retrieve list of all CNprep segtables (accounting for bin range)
   #
   all_segtables <- lapply(seq(1, nrow(model_specs)), function(model_specs.index, bin_start, bin_end){
+    
     segtable <- retrieveSegtable(organoidId, dir = paste0("segClusteringResults/", model_specs[model_specs.index, ]$dir, "/"))
     if(!missing(bin_start) & !missing(bin_end)){
       segtable <- segtable[segtable$start >= bin_start & segtable$end <= bin_end,]  
@@ -56,7 +60,7 @@ displayCNprepResults <- function(organoidId, bin_start, bin_end, model_specs, cl
       segtable <- segtable[segtable$end <= bin_end,]  
     }
     return(segtable)
-  })
+  }, bin_start, bin_end)
   
   #
   # Generate dataframe with all CNprep segtables
@@ -128,7 +132,3 @@ displayCNprepResults <- function(organoidId, bin_start, bin_end, model_specs, cl
     }
   }
 }
-
-cluster_cols <- brewer.pal(n = 7, name="Dark2")
-supplementary_cols <- brewer.pal(n = 7, name="Set2")
-displayCNprepResults(organoidId= "hT1", model_specs = all_model_specs[c(1,3,4), ], cluster_value = "maxzmean", cluster_cols = cluster_cols, supplementary_cols =  supplementary_cols, hl = TRUE)
