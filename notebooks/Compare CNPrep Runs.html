@@ -11768,13 +11768,13 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[160]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="c1">#</span>
 <span class="c1"># Load sources</span>
 <span class="c1">#</span>
-<span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction/&quot;</span><span class="p">)</span> <span class="c1"># Set working directory to where the scripts are located at</span>
+<span class="kp">setwd</span><span class="p">(</span><span class="s">&quot;~/Documents/Git-Projects/Git-Research-Projects/compare-cnprep-results/&quot;</span><span class="p">)</span> <span class="c1"># Set working directory to where the scripts are located at</span>
 <span class="kn">source</span><span class="p">(</span><span class="s">&quot;compareCNprepResultsLibrary.R&quot;</span><span class="p">)</span> <span class="c1"># Import visualization library</span>
 <span class="kn">library</span><span class="p">(</span>RColorBrewer<span class="p">)</span> <span class="c1"># Import brewer for coloring</span>
 <span class="kn">library</span><span class="p">(</span>repr<span class="p">)</span>
@@ -11796,7 +11796,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[161]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>cluster_cols <span class="o">&lt;-</span> brewer.pal<span class="p">(</span>n <span class="o">=</span> <span class="m">7</span><span class="p">,</span> name<span class="o">=</span><span class="s">&quot;Dark2&quot;</span><span class="p">)</span> <span class="c1"># Set colors for clusters. Let n &gt; 5</span>
@@ -11819,44 +11819,13 @@ supplementary_cols <span class="o">&lt;-</span> brewer.pal<span class="p">(</spa
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[166]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="kp">options</span><span class="p">(</span>repr.plot.width<span class="o">=</span><span class="m">15</span><span class="p">,</span> repr.plot.height<span class="o">=</span><span class="m">7</span><span class="p">)</span>
 </pre></div>
 
 </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[171]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span>View<span class="p">(</span>all_model_specs<span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_text output_error">
-<pre>
-Error in View(all_model_specs): &#39;View()&#39; not yet supported in the Jupyter R kernel
-Traceback:
-
-1. View(all_model_specs)
-2. stop(sQuote(&#34;View()&#34;), &#34; not yet supported in the Jupyter R kernel&#34;)</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -11872,7 +11841,7 @@ Traceback:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[172]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="kp">print</span><span class="p">(</span>all_model_specs<span class="p">)</span>
@@ -11922,7 +11891,7 @@ Traceback:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[167]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>displayCNprepResults<span class="p">(</span>organoidId<span class="o">=</span> <span class="s">&quot;hT1&quot;</span><span class="p">,</span> model_specs <span class="o">=</span> all_model_specs<span class="p">[</span><span class="kt">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">12</span><span class="p">),</span> <span class="p">],</span> cluster_value <span class="o">=</span> <span class="s">&quot;maxzmean&quot;</span><span class="p">,</span> cluster_cols <span class="o">=</span> cluster_cols<span class="p">)</span> <span class="c1"># Display</span>
@@ -12177,7 +12146,7 @@ Vrl8rgAAAABJRU5ErkJggg=="
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[168]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>displayCNprepResults<span class="p">(</span>organoidId<span class="o">=</span> <span class="s">&quot;hT1&quot;</span><span class="p">,</span> model_specs <span class="o">=</span> all_model_specs<span class="p">[</span><span class="kt">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">12</span><span class="p">),</span> <span class="p">],</span> cluster_value <span class="o">=</span> <span class="s">&quot;maxzmean&quot;</span><span class="p">,</span> supplementary_values <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;mediandev&quot;</span><span class="p">),</span> cluster_cols <span class="o">=</span> cluster_cols<span class="p">,</span> supplementary_cols <span class="o">=</span>  supplementary_cols<span class="p">)</span>
@@ -12447,7 +12416,7 @@ hADctP8HoKu8+ZmhtO4AAAAASUVORK5CYII="
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[169]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>displayCNprepResults<span class="p">(</span>organoidId<span class="o">=</span> <span class="s">&quot;hT1&quot;</span><span class="p">,</span> bin_start <span class="o">=</span> <span class="m">20000</span><span class="p">,</span> bin_end <span class="o">=</span> <span class="m">40000</span><span class="p">,</span> model_specs <span class="o">=</span> all_model_specs<span class="p">[</span><span class="kt">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">12</span><span class="p">),</span> <span class="p">],</span> cluster_value <span class="o">=</span> <span class="s">&quot;maxzmean&quot;</span><span class="p">,</span> supplementary_values <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;mediandev&quot;</span><span class="p">),</span> cluster_cols <span class="o">=</span> cluster_cols<span class="p">,</span> supplementary_cols <span class="o">=</span>  supplementary_cols<span class="p">)</span>
@@ -12710,7 +12679,7 @@ cpSlz3GItfmZ6VkY6uXwOABw0xQhADdNEQJw0/4frEKPODLyfEMAAAAASUVORK5CYII="
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[170]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span>displayCNprepResults<span class="p">(</span>organoidId<span class="o">=</span> <span class="s">&quot;hT1&quot;</span><span class="p">,</span> bin_start <span class="o">=</span> <span class="m">20000</span><span class="p">,</span> bin_end <span class="o">=</span> <span class="m">40000</span><span class="p">,</span> model_specs <span class="o">=</span> all_model_specs<span class="p">[</span><span class="kt">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">12</span><span class="p">),</span> <span class="p">],</span> cluster_value <span class="o">=</span> <span class="s">&quot;maxzmean&quot;</span><span class="p">,</span> supplementary_values <span class="o">=</span> <span class="kt">c</span><span class="p">(</span><span class="s">&quot;mediandev&quot;</span><span class="p">),</span> cluster_cols <span class="o">=</span> cluster_cols<span class="p">,</span> supplementary_cols <span class="o">=</span>  supplementary_cols<span class="p">,</span> hl <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>

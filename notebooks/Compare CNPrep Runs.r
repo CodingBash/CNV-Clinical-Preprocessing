@@ -2,7 +2,7 @@
 #
 # Load sources
 #
-setwd("~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction/") # Set working directory to where the scripts are located at
+setwd("~/Documents/Git-Projects/Git-Research-Projects/compare-cnprep-results/") # Set working directory to where the scripts are located at
 source("compareCNprepResultsLibrary.R") # Import visualization library
 library(RColorBrewer) # Import brewer for coloring
 library(repr)
@@ -12,8 +12,6 @@ supplementary_cols <- brewer.pal(n = 7, name="Set2") # Set colors for suppl. Let
 
 options(repr.plot.width=15, repr.plot.height=7)
 
-
-View(all_model_specs)
 
 print(all_model_specs)
 
