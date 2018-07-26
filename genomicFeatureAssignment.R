@@ -21,7 +21,8 @@ retrieveCores <- function(dir){
 }
 
 retrieveTrainingSet <- function(loaded_samples, Acores, Dcores, binDir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", removeNAs = TRUE){
-  training_set <- data.frame(stringsAsFactors = FALSE)  
+  melted_training_set <- data.frame(stringsAsFactors = FALSE)  
+  matrix_training_set <- data.frame(stringsAsFactors = FALSE)
   for(sample in samples){
     #
     # Retrieve necessary data for feature value calculation (bins with cnlr and COREs)
@@ -66,12 +67,35 @@ retrieveTrainingSet <- function(loaded_samples, Acores, Dcores, binDir = "CSHL/P
     sampleTrainingSet$coreId <- rownames(coreDf)
     sampleTrainingSet$sampleId <- sample
     
-    training_set <- rbind(training_set, sampleTrainingSet)
+    melted_training_set <- rbind(melted_training_set, sampleTrainingSet)
+    
+    matrix_training_entry <- t(as.data.frame(coreDf[,7]))
+    rownames(matrix_training_entry) <- c(sample)
+    colnames(matrix_training_entry) <- rownames(coreDf)
+    colnames(matrix_training_entry) <- rownames(coreDf)
+    matrix_training_set <- rbind(matrix_training_set, matrix_training_entry) 
   }
   if(removeNAs == TRUE){
-    training_set <- training_set[-which(is.na(training_set$cnlr)),]
+    melted_training_set <- melted_training_set[-which(is.na(melted_training_set$cnlr)),]
+    matrix_training_set <- matrix_training_set[sapply(matrix_training_set, function(x) !any(is.na(x)))] 
   }
-  return(training_set)
+  return(list(melted=melted_training_set, matrix=matrix_training_set))
+}
+
+attachLabelsToSet <- function(matrix_training_set, labelData){
+  sampleList <- rownames(matrix_training_set)
+  labelLists <- lapply(names(labelData), function(label){
+    aucList <- unlist(sapply(sampleList, function(sample, label){
+      labelMatrix <- labelData[[label]]  
+      auc <- c(labelMatrix[labelMatrix$SampleId == sample, ]$AUC, NA)[1]
+      return(auc)
+    }, label))
+    return(aucList)
+  })
+  names(labelLists) <- names(labelData)
+  labelDataframe <- do.call(cbind.data.frame, labelLists)
+  labeled_matrix_training_set <- cbind(labelDataframe, matrix_training_set)
+  return(labeled_matrix_training_set)
 }
 
 visualizeUnclusteredHeatmap <- function(training_set){
