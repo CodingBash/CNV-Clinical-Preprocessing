@@ -8,7 +8,7 @@ source("genomicFeatureAssignment.R")
 # Load sample to retrieve feature set for
 # TODO: There seems to be a scope conflict - samples is getting overwritten
 #
-samples <- load_samples(classes = c("F"))
+samples <- load_samples(classes = c("T","F", "M"))
 
 #
 # Retrieve CORE features
@@ -31,3 +31,6 @@ training_set$matrix <- attachLabelsToSet(matrix_training_set = training_set$matr
 visualizeUnclusteredHeatmap(training_set$melted)
 hc <- clusterTrainingSet(training_set$melted, visualize = TRUE)
 plot(hc)
+
+cd_local("mlOutput")
+write.csv(training_set$matrix, file ="coreTrainingSet_7_26_2018_1.csv")
