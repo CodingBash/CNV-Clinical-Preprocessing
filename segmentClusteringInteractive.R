@@ -25,18 +25,22 @@ source("segmentClusteringLibrary.R")
 #
 cd_local()
 normal_samples <- load_samples(classes = c("N"), sampleList = "sampleList.csv")
+normal_samples <- normal_samples[-2] # Remove reference organoid
+
 cytobands <- retrieveCytobands(dir = "cytoBand.txt")
 chromosomeSizes <- generateChromosomeSizes(genome = BSgenome.Hsapiens.UCSC.hg19)
-cd_doc()
+
+setwd("~/Git-Projects/Git-Research-Projects/FACETS_write_files/")
 normalSegments <- selectSegmentsWithEvents(events = c("A", "D", "N"), samples = normal_samples, chromosomeSizes = chromosomeSizes, 
-                                              dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE, 
-                                              rescaleInput = TRUE, ampCall = 0.2, delCall = -0.235)
+                                           dir = "output/", sample_subdir="/", reference = "hN31", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE, 
+                                           rescaleInput = TRUE, ampCall = 0.2, delCall = -0.235)
+cd_doc()
 # TODO: Does cd_local need to be before this?
-tumor_samples <- load_samples(classes = c("T"), sampleList = "sampleList.csv") # TODO: THIS WAS ORIGINAL CLASS "N", RECOMPUTE RESUTS
+tumor_samples <- load_samples(classes = c("N", "T"), sampleList = "sampleList.csv") # TODO: THIS WAS ORIGINAL CLASS "N", RECOMPUTE RESUTS
 
 # Generate norminput argument
 norminput <- retrieveNormInput(normalSegments)
-
+norminput <- filterNormInput(norminput, length_threshold=10000000)
 
 for(tumor_samples.i in seq(1, length(tumor_samples))){
   sample <- tumor_samples[tumor_samples.i]
@@ -46,27 +50,30 @@ for(tumor_samples.i in seq(1, length(tumor_samples))){
   #
   # Retrieve sample data
   #
-  cd_doc()
-  facets_segment_data <- retrieveFacetsSegments(sample, dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/")
-  facets_snp_data <- retrieveFacetsSnps(sample, dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/")
+  setwd("~/Git-Projects/Git-Research-Projects/FACETS_write_files/")
+  facets_segment_data <- retrieveFacetsSegments(sample, sample_subdir = "/", reference = "hN31", dir = "output/")
+  facets_snp_data <- retrieveFacetsSnps(sample, sample_subdir = "/", reference = "hN31", dir = "output/")
   
   # Generate seginput argument
-  seginput <- retrieveSegInput(facets_segment_data, cytobands)
+  seginput <- retrieveSegInput(facets_segment_data, sample, chromosomeSizes, cytobands)
   print(paste("Retrieved segment input for sample", sample))
   
   # Generate ratinput argument
-  ratinput <- retrieveRatInput(facets_snp_data)
+  ratinput <- retrieveRatInput(facets_snp_data, sample)
   print(paste("Retrieved ratio input for sample", sample))
   
   # Run CNprep:CNpreprocessing
-  segtable <- runCNpreprocessing(seginput = seginput, ratinput = ratinput, norminput = norminput, modelNames = "E")
-  print(paste("Produced segtable for sample", sample))
-  
-  #
-  # Write results out
-  #
-  cd_local()
-  #write.table(segtable, paste("segClusteringResultsPar/", sample, "_segtable.tsv", sep = ""), row.names = F, sep = "\t", quote = FALSE)
-  print(head(segtable))
-  print(paste("Wrote output for sample", sample))
+  try({
+    segtable <- runCNpreprocessing(seginput = seginput, ratinput = ratinput, norminput = norminput, modelNames = "E")
+    print(paste("Produced segtable for sample", sample))
+    
+    #
+    # Write results out
+    #
+    cd_local()
+    #write.table(segtable, paste("segClusteringResultsPar/", sample, "_segtable.tsv", sep = ""), row.names = F, sep = "\t", quote = FALSE)
+    print(head(segtable))
+    print(paste("Wrote output for sample", sample))
+  }, silent=TRUE)
+  print("test")
 }

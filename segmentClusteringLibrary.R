@@ -13,6 +13,7 @@ retrieveCytobands <- function(dir = "cytoBand.txt"){
 # With the chromosome and chromosome location, retrieve the cytoband location
 #
 findCytolocation <- function(cytobands, chrom, chrom.position){
+  chrom = if(chrom == 23) "X" else if (chrom == 24 ) "Y" else chrom
   row <- cytobands[cytobands$chrom == paste("chr", chrom, sep = "") & cytobands$start <= chrom.position & cytobands$end >= chrom.position, ]
   returnme <- data.frame(row)$cytoloc
   return(returnme)
@@ -28,6 +29,19 @@ retrieveNormInput <- function(normalSegments){
     norminput <- rbind(norminput, norminput.entry)
   }
   return(norminput)
+}
+
+#
+# Filter norminput from artifacts
+#
+filterNormInput <- function(norminput, length_threshold=10000000){
+  # Determine cutoff
+  oNI <- norminput[order(norminput$length), ]
+  #plot(oNI$length, oNI$segmedian, ylim = c(-2.25, 2.25), xlim = c(0, 300000000))
+  #dev.off()
+  nNI <- norminput[norminput$length > length_threshold & abs(norminput$segmedian) < 0.5,]
+  #plot(nNI$length, nNI$segmedian, ylim = c(-2.25, 2.25), xlim = c(0, 300000000))
+  return(nNI)
 }
 
 #

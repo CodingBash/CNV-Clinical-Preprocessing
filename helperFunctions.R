@@ -59,8 +59,8 @@ load_samples <- function(classes = c("N"), sampleList = "sampleList.csv") {
 #
 # Retrieve a sample's FACETS segmented data from specified directory
 #
-retrieveFacetsSegments <- function(sample, dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/"){
-  facets_segment_data <- as.data.frame(read.table(paste(dir, "Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+retrieveFacetsSegments <- function(sample, sample_subdir = "/analysis/structural_variants/", reference = "NA12878", dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/"){
+  facets_segment_data <- as.data.frame(read.table(paste(dir, "Sample_", sample, sample_subdir , sample, "--", reference, ".cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
   return(facets_segment_data)
 }
 
@@ -75,8 +75,8 @@ retrieveFacetsSegmentClusters <- function(sample, dir = "segClusteringResults/")
 #
 # Retrieve a sample's FACETS SNP data from specified directory
 #
-retrieveFacetsSnps <- function(sample, dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/"){
-  facets_snp_data <- as.data.frame(read.table(paste(dir, "Sample_", sample, "/analysis/structural_variants/", sample, "--NA12878.procSample-jseg.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+retrieveFacetsSnps <- function(sample, sample_subdir = "/analysis/structural_variants/", reference = "NA12878", dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/"){
+  facets_snp_data <- as.data.frame(read.table(paste(dir, "Sample_", sample, sample_subdir, sample, "--", reference, ".procSample-jseg.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
   return(facets_snp_data)
 }
 
@@ -212,9 +212,9 @@ selectSegmentsWithEventsDEPRECATED <- function(events, samples, chromosomeSizes,
 #
 # TODO: This method is also used in segmentClustering.R script. Perhaps move this function to a more general library?
 #
-selectSegmentsWithEvents <- function(events, samples, chromosomeSizes, dir, extension = "cnv.facets.v0.5.2.txt", inSampleFolder = FALSE, rescaleInput = FALSE, ampCall = 0.2, delCall = -0.235){
+selectSegmentsWithEvents <- function(events, samples, chromosomeSizes, dir, sample_subdir = "/analysis/structural_variants/", reference = "NA12878", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = FALSE, rescaleInput = FALSE, ampCall = 0.2, delCall = -0.235){
   # TODO: May have trouble supporting missing or default parameters
-  segmentList <- retrieveSegmentListFromSamples(samples, dir, extension, inSampleFolder)
+  segmentList <- retrieveSegmentListFromSamples(samples, dir, sample_subdir, reference, extension, inSampleFolder)
   selectedSegments <- subsetAllSegmentsByEvent(segmentList, events, chromosomeSizes, rescaleInput, ampCall, delCall)
   return(selectedSegments)
 }
@@ -222,10 +222,10 @@ selectSegmentsWithEvents <- function(events, samples, chromosomeSizes, dir, exte
 #
 # From a list of samples, retrieve the segments in a key-value list (where K is the sample name, and V is the segment dataframe)
 #
-retrieveSegmentListFromSamples <- function(samples, dir, extension = "cnv.facets.v0.5.2.txt", inSampleFolder = FALSE){
+retrieveSegmentListFromSamples <- function(samples, dir, sample_subdir = "/analysis/structural_variants/", reference = "NA12878", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = FALSE){
   segmentList <- list(NA)
   for(sample in samples){
-    segments <- as.data.frame(read.table(paste(dir, if(inSampleFolder == TRUE) paste("Sample_", sample, "/analysis/structural_variants/", sep = "") else "",sample, "--NA12878.", extension, sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+    segments <- as.data.frame(read.table(paste(dir, if(inSampleFolder == TRUE) paste("Sample_", sample, sample_subdir, sep = "") else "",sample, "--", reference, ".", extension, sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
     segmentList[[sample]] <- segments
   }
   return(segmentList)
@@ -239,7 +239,7 @@ subsetAllSegmentsByEvent <- function(segmentList, events, chromosomeSizes, resca
   names(segmentList) <- as.character(seq_along(segmentList)) # Convert indices to character names so we can consistently iterate through any list by name
   for(segmentName in names(segmentList)){
     segments <- segmentList[[segmentName]]
-    if(is.null(segments)){
+    if(is.null(segments) | is.na(segments)){
       next
     }
     selected_segments <- data.frame()
