@@ -23,6 +23,7 @@ import scipy
 
 from sklearn.linear_model import Lasso
 from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 import math
 
@@ -50,6 +51,28 @@ for label in labels:
     model_data = training_set.copy().drop([training_set.columns[0], training_set.columns[1]], axis = 1)
     model_labels = training_set.iloc[:,1]
     lasso = LinearRegression()
+    lasso.fit(model_data, model_labels)
+    model_test_data = testing_set.copy().drop([training_set.columns[0], training_set.columns[1]], axis = 1)
+    model_test_labels = testing_set.iloc[:,1]
+    predictions = lasso.predict(model_test_data)
+    mse = mean_squared_error(model_test_labels, predictions)
+    rmse = np.sqrt(mse)
+    print(rmse)
+    r = scipy.stats.pearsonr(model_test_labels, predictions)
+    t = scipy.stats.spearmanr(model_test_labels, predictions)
+    print("Pearson: " + str(r))
+    print("Spearman: " + str(t))
+    plt.plot(model_test_labels, predictions, 'bo')
+    plt.show()
+
+for label in labels:
+    # Remove uneeded labels
+    selected_training_set = labeled_matrix_training_set.iloc[:, list([0]) + list([label]) + list(range(6,labeled_matrix_training_set.shape[1]))].copy()
+    selected_training_set = selected_training_set[np.isfinite(selected_training_set.iloc[:,1])]
+    training_set, testing_set = split_train_test(selected_training_set)
+    model_data = training_set.copy().drop([training_set.columns[0], training_set.columns[1]], axis = 1)
+    model_labels = training_set.iloc[:,1]
+    lasso = RandomForestRegressor(n_estimators=500, max_leaf_nodes=16, n_jobs=-1)
     lasso.fit(model_data, model_labels)
     model_test_data = testing_set.copy().drop([training_set.columns[0], training_set.columns[1]], axis = 1)
     model_test_labels = testing_set.iloc[:,1]
