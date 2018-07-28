@@ -29,6 +29,10 @@ cd_doc <- function() {
   setwd("~") # TODO: cd not working in notebook - home directory different
 }
 
+cd_slicing_core <- function() {
+  setwd("~/code/slicing_cores")  
+}
+
 cd_core <- function() {
   setwd("~/code/hN_core_artifacts")  
 }
@@ -306,19 +310,24 @@ chromsomeToAbsoluteBPConversionForSingleEntry <- function(chrom, start, end, chr
     next # TODO: This is to resolve the NA row. Where did it come from?
   } 
   total_bp <- 0
-  if(chrom_r %in% seq(2,22)){
+  if(chrom_r == 1){
+    # DO NOTHING since chrom 1 is already in correct unit
+  } else if(chrom_r %in% seq(2,22)){
     for(i in seq(1, as.numeric(chrom_r) - 1)){
       total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
     }  
-  } else if (chrom_r == "X") {
+  } else if (chrom_r == "X" | chrom_r == 23) {
     for(i in seq(1, 22)){
       total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
     }  
-  }  else if (chrom_r == "Y") {
+  }  else if (chrom_r == "Y" | chrom_r == 24) {
     for(i in seq(1, 22)){
       total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
     }  
     total_bp <- total_bp + chromosomeSizes["chrX", ]$size
+  } else {
+    print(paste0("WARNING: Could not convert for chromosome: ", chrom_r))
+    return()
   }
   abs_start <- start + total_bp
   abs_end <- end + total_bp
@@ -368,13 +377,21 @@ absoluteToChromosomeBPConversion <- function(outputCores, chromosomeSizes){
 chromsomeToAbsoluteBPConversion <- function(input, chromosomeSizes){
   for(row.index in seq(1, nrow(input))){
     # Rescale row
-    absoluteRow <- chromsomeToAbsoluteBPConversionForSingleEntry(chrom = input[row.index, ]$chrom, start = input[row.index, ]$start, end = input[row.index, ]$end, chromosomeSizes = chromosomeSizes)
+    chrom <- input[row.index, ][[1]]
+    if(is.character(chrom) == TRUE){
+      if(substr(chrom, 1, 3) == "chr"){
+        chrom <- substr(chrom, 4, nchar(chrom))  
+      } else if (!(chrom %in% c("X", "Y"))){
+        chrom <- as.numeric(chrom)  
+      }
+    }
+    absoluteRow <- chromsomeToAbsoluteBPConversionForSingleEntry(chrom = chrom, start = input[row.index, ][[2]], end = input[row.index, ][[3]], chromosomeSizes = chromosomeSizes)
     
     #
     # Update start and end maploc with new absolute location
     #
-    input[row.index, ]$start <- absoluteRow$start
-    input[row.index, ]$end <- absoluteRow$end
+    input[row.index, ][[2]] <- absoluteRow$start
+    input[row.index, ][[3]] <- absoluteRow$end
   }
   return(input)
 }
@@ -400,4 +417,24 @@ retrieveSegtable <- function(sample, dir = "segClusteringResults/"){
 retrieveSeginput <- function(sample, dir = "segInput/"){
   seginput <- read.table(paste(dir, sample, "_seginput.tsv", sep = ""), sep = "\t", header = TRUE)
   return(seginput)
+}
+
+#
+# Retrieve slicing regions
+#
+loadSlicingRegions <- function(dir, samples, events, silent = FALSE){
+  slicingRegions <- data.frame(stringsAsFactors = FALSE)
+  for(sample in samples){
+    for(event in events){
+      try({
+        slicingInput <- read.table(paste0(dir, sample, "_slicingGenome", event, ".bed"), header = FALSE, sep = "\t", stringsAsFactors = FALSE)
+        slicingRegions <- rbind(slicingRegions, slicingInput)
+      }, silent = TRUE)
+    }
+  }
+  slicingRegions[[1]] <- as.numeric(substr(slicingRegions[[1]], 4, nchar(slicingRegions[[1]]))) # Convert from 'char#' to #
+  
+  slicingRegions <- chromsomeToAbsoluteBPConversion(slicingRegions, chromosomeSizes)
+  names(slicingRegions) <- c("chrom", "start", "end", "value")
+  return(slicingRegions)
 }
