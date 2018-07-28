@@ -306,19 +306,24 @@ chromsomeToAbsoluteBPConversionForSingleEntry <- function(chrom, start, end, chr
     next # TODO: This is to resolve the NA row. Where did it come from?
   } 
   total_bp <- 0
-  if(chrom_r %in% seq(2,22)){
+  if(chrom_r == 1){
+    # Do nothing - chrom 1 already in absolute position
+  } else if(chrom_r %in% seq(2,22)){
     for(i in seq(1, as.numeric(chrom_r) - 1)){
       total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
     }  
-  } else if (chrom_r == "X") {
+  } else if (chrom_r == "X" || chrom_r == 23) {
     for(i in seq(1, 22)){
       total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
     }  
-  }  else if (chrom_r == "Y") {
+  }  else if (chrom_r == "Y" || chrom_r == 24) {
     for(i in seq(1, 22)){
       total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
     }  
     total_bp <- total_bp + chromosomeSizes["chrX", ]$size
+  } else {
+    print(paste0("WARNING: Unable to calculate total_bp for: ", chrom_r))
+    return()
   }
   abs_start <- start + total_bp
   abs_end <- end + total_bp

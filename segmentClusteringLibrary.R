@@ -1,4 +1,5 @@
 library(CNprep)
+source("helperFunctions.R")
 
 #
 # Retrieve information of cytobands (downloaded for genome hg19)
