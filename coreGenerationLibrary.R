@@ -1,36 +1,5 @@
 library(CORE)
 
-#
-# Take a input of multiple segments (strictly from CORE) with the chromosomeSizes, and convert
-# segment maploc from absolute.location to chrom.location in bp units
-# 
-# TODO: Several duplicate code from vice-versa conversion function. Modularize
-# TODO: Allow any bed-file type input instead of just CORE output, then move to helperFunction.R script
-#
-absoluteToChromosomeBPConversion <- function(outputCores, chromosomeSizes){
-  for(row.index in seq(1, nrow(outputCores))){
-    chrom_r <- as.numeric(outputCores[row.index, ]$chrom)
-    total_bp <- 0
-    if(chrom_r %in% seq(2,22)){
-      for(i in seq(1, as.numeric(chrom_r) - 1)){
-        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
-      }  
-    } else if (chrom_r == "X") {
-      for(i in seq(1, 22)){
-        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
-      }  
-    }  else if (chrom_r == "Y") {
-      for(i in seq(1, 22)){
-        total_bp <- total_bp + chromosomeSizes[paste("chr", i, sep = ""), ]$size
-      }  
-      total_bp <- total_bp + chromosomeSizes["chrX", ]$size
-    }
-    outputCores[row.index, ]$start <- outputCores[row.index, ]$start - total_bp
-    outputCores[row.index, ]$end <- outputCores[row.index, ]$end - total_bp
-  }
-  return(outputCores)
-}
-
 # 
 # Generate BP unit chromosomal boundaries based on chromosomeSizes df
 # Similar logic to chromsomeToAbsoluteBPConversion function
