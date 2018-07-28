@@ -87,16 +87,18 @@ visualizeCNProfile <- function(facets_segment_data, facets_snp_data, line_data, 
   #
   if(!missing(facets_segment_data)){
     #add_segments_track(facets_segment_data, facets_segment_data$value, gp = gpar(col = ifelse(facets_segment_data$value > 0.2, "orange", ifelse(facets_segment_data$value > -0.23, "blue", "red")), lwd = 2))
-    add_segments_track(facets_segment_data, facets_segment_data$value, gp = gpar(col = determineSegmentColors(facets_segment_data, color_id), lwd = 2))
     if(!missing(facets_snp_data)){
-      add_points_track(facets_snp_data, facets_snp_data$value, track = current_track(), gp = gpar(fill = "gray"))  
+      add_points_track(facets_snp_data, facets_snp_data$value, gp = gpar(fill = "gray"))  
       if(!missing(line_data)){
         add_lines_track(line_data, line_data[[4]], gp = gpar(col = "purple", lwd = 5), track = current_track())
       }
+      add_segments_track(facets_segment_data, facets_segment_data$value, gp = gpar(col = determineSegmentColors(facets_segment_data, color_id), lwd = 2), track = current_track())
     } else {
       if(!missing(line_data)){
         add_lines_track(line_data, line_data[[4]], gp = gpar(col = "purple", lwd = 5), track = current_track())
+        add_segments_track(facets_segment_data, facets_segment_data$value, gp = gpar(col = determineSegmentColors(facets_segment_data, color_id), lwd = 2), track = current_track())
       }
+      add_segments_track(facets_segment_data, facets_segment_data$value, gp = gpar(col = determineSegmentColors(facets_segment_data, color_id), lwd = 2))
     }
   } else if(!missing(facets_snp_data)){
     add_points_track(facets_snp_data, facets_snp_data$value, gp = gpar(fill = "gray"))  
