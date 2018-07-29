@@ -18,16 +18,22 @@ source("helperFunctions.R")
 
 events <- c("D") # "A" - amplification, "D" - deletion
 
+sample_dir <- "output/FACETS_Reference_hN31_7_28_18_2/"
+
 #
 # Get CORE input
 #
 cd_local()
 samples <- load_samples(classes = c("T"), sampleList = "sampleList.csv")
 chromosomeSizes <- generateChromosomeSizes(genome = BSgenome.Hsapiens.UCSC.hg19)
-cd_doc()
-inputCORESegments <- selectSegmentsWithEvents(events = events, samples = samples, chromosomeSizes = chromosomeSizes, 
-                                              dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE, 
+setwd("~/Git-Projects/Git-Research-Projects/FACETS_write_files/")
+#inputCORESegments <- selectSegmentsWithEvents(events = events, samples = samples, chromosomeSizes = chromosomeSizes, 
+#                                             dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE, 
+#                                             rescaleInput = TRUE, ampCall = 0.2, delCall = -0.235)
+inputCORESegments <- selectSegmentsWithEvents(events = events, samples = samples, chromosomeSizes = chromosomeSizes,
+                                              dir = sample_dir, sample_subdir="/", reference=reference, extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE,
                                               rescaleInput = TRUE, ampCall = 0.2, delCall = -0.235)
+
 inputCOREBoundaries <- generateInputCOREBoundaries(chromosomeSizes)
 
 #

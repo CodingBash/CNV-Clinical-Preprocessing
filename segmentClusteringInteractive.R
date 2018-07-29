@@ -21,6 +21,8 @@ source("segmentClusteringLibrary.R")
 # TODO: Do not include segments with lower than 5K bp (see paper)
 
 reference <- "hN31"
+res_dir <- "output/FACETS_Reference_hN31_7_28_18_1/"
+
 #
 # Load input
 #
@@ -33,7 +35,7 @@ chromosomeSizes <- generateChromosomeSizes(genome = BSgenome.Hsapiens.UCSC.hg19)
 
 setwd("~/Git-Projects/Git-Research-Projects/FACETS_write_files/")
 normalSegments <- selectSegmentsWithEvents(events = c("A", "D", "N"), samples = normal_samples, chromosomeSizes = chromosomeSizes, 
-                                           dir = "output/", sample_subdir="/", reference = reference, extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE, 
+                                           dir = res_dir, sample_subdir="/", reference = reference, extension = "cnv.facets.v0.5.2.txt", inSampleFolder = TRUE, 
                                            rescaleInput = TRUE, ampCall = 0.2, delCall = -0.235)
 cd_doc()
 # TODO: Does cd_local need to be before this?
@@ -53,8 +55,8 @@ for(tumor_samples.i in seq(1, length(tumor_samples))){
   # Retrieve sample data
   #
   setwd("~/Git-Projects/Git-Research-Projects/FACETS_write_files/")
-  facets_segment_data <- retrieveFacetsSegments(sample, sample_subdir = "/", reference = reference, dir = "output/")
-  facets_snp_data <- retrieveFacetsSnps(sample, sample_subdir = "/", reference = reference, dir = "output/")
+  facets_segment_data <- retrieveFacetsSegments(sample, sample_subdir = "/", reference = reference, dir = res_dir)
+  facets_snp_data <- retrieveFacetsSnps(sample, sample_subdir = "/", reference = reference, dir = res_dir)
   
   # Generate seginput argument
   seginput <- retrieveSegInput(facets_segment_data, sample, chromosomeSizes, cytobands)
