@@ -90,11 +90,11 @@ facets_snp_data_raw <- retrieveFacetsSnps(sample, dir = "CSHL/Project_TUV_12995_
 facets_snp_data <- snpsToBedFormat(facets_snp_data_raw)
 visualizeCNProfile(facets_segment_data = facets_segment_data, facets_snp_data = facets_snp_data)
 
-sample <- "hT1"
+sample <- "hT104"
 setwd("~/Documents/Git-Projects/Git-Research-Projects/FACETS_write_files")
-facets_segment_data_raw <- retrieveFacetsSegments(sample, sample_subdir = "/", reference = "hN31", dir = "output/")
+facets_segment_data_raw <- retrieveFacetsSegments(sample, sample_subdir = "/", reference = "hN31", dir = "output/FACETS_Reference_hN31_7_28_18_2/")
 facets_segment_data <- segmentsToBedFormat(facets_segment_data_raw)
-facets_snp_data_raw <- retrieveFacetsSnps(sample, sample_subdir = "/", reference = "hN31", dir = "output/")
+facets_snp_data_raw <- retrieveFacetsSnps(sample, sample_subdir = "/", reference = "hN31", dir = "output/FACETS_Reference_hN31_7_28_18_2/")
 facets_snp_data <- snpsToBedFormat(facets_snp_data_raw)
 visualizeCNProfile(facets_segment_data = facets_segment_data, facets_snp_data = facets_snp_data)
 
@@ -103,3 +103,19 @@ setwd("~/Documents/Git-Projects/Git-Research-Projects/FACETS_write_files")
 facets_segment_data_raw <- retrieveFacetsSegments(sample, sample_subdir = "/", reference = "hN31", dir = "output/")
 facets_segment_data <- segmentsToBedFormat(facets_segment_data_raw)
 print(facets_segment_data)
+
+sample <- "hT104"
+setwd("~/Documents/Git-Projects/Git-Research-Projects/FACETS_write_files")
+facets_segment_data_raw <- retrieveFacetsSegments(sample, sample_subdir = "/", reference = "hN31", dir = "output/FACETS_Reference_hN31_7_28_18_2/")
+facets_segment_data <- segmentsToBedFormat(facets_segment_data_raw)
+facets_snp_data_raw <- retrieveFacetsSnps(sample, sample_subdir = "/", reference = "hN31", dir = "output/FACETS_Reference_hN31_7_28_18_2/")
+facets_snp_data <- snpsToBedFormat(facets_snp_data_raw)
+visualizeCNProfile(facets_segment_data = facets_segment_data, facets_snp_data = facets_snp_data)
+
+sample <- "hT104"
+setwd("~/Documents")
+facets_segment_data_raw <- retrieveFacetsSegments(sample, dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/")
+facets_segment_data <- segmentsToBedFormat(facets_segment_data_raw)
+facets_snp_data_raw <- retrieveFacetsSnps(sample, dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/")
+facets_snp_data <- snpsToBedFormat(facets_snp_data_raw)
+visualizeCNProfile(facets_segment_data = facets_segment_data, facets_snp_data = facets_snp_data)
