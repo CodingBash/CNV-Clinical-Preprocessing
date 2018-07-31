@@ -14,16 +14,20 @@ source("helperFunctions.R")
 #
 p_threshold <- 0.002
 
+rdsFile <- "./hT_output/prev_run_7_30_2018_1/ADnewCOREobjBP.rds"
+tableFile <- "./hT_output/prev_run_7_30_2018_1/ADcoreTableBP.csv"
+outputBed <- "./hT_output/prev_run_7_30_2018_1/selectedCores/ADselectedCoresBP.bed"
+
 #
 # Get core information
 #
-cd_local()
-Aobj <- readRDS("./hN_results/coresResults/AnewCOREobj.rds") # Retrieve CORE object
-coreTable <- read.table("AcoreTableBP.csv", header = TRUE, sep = ",") # Retrieve CORE table CSV (since the table's scale is chromosome-based instead of absolute)
+setwd("~/Git-Projects/Git-Research-Projects/hN_core_artifacts")
+Aobj <- readRDS(rdsFile) # Retrieve CORE object
+coreTable <- read.table(tableFile, header = TRUE, sep = ",") # Retrieve CORE table CSV (since the table's scale is chromosome-based instead of absolute)
 
 #
 # Subset core information using p_threshold then write to file
 #
 coreTable <- coreTable[which(Aobj$p<p_threshold),] # Filter cores based on p-value threshold
 coreTable <- coreTable[,c(2,3,4)] # Now convert to BED format
-write.table(coreTable, sep = "\t", quote = FALSE, col.names = FALSE, row.names = FALSE, file = "AcoresBP.bed") # Write to bed file
+write.table(coreTable, sep = "\t", quote = FALSE, col.names = FALSE, row.names = FALSE, file = outputBed) # Write to bed file
