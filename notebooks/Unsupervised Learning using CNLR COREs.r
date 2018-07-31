@@ -17,8 +17,16 @@ samples <- load_samples(classes = c("T","F", "M"), sampleList = "sampleList.csv"
 setwd("~/Documents/Git-Projects/Git-Research-Projects/hN_core_artifacts")
 ADcores <- retrieveCores("./hT_output/prev_run_7_30_2018_1/selectedCores/ADselectedCoresBP.bed") # BED file of amplification recurrent regions
 
+head(ADcores)
+
 setwd("~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction")
 aucData <- readRDS("./resources/listSampleTESAUC.RDS")
+
+head(aucData$Gemcitabine)
+head(aucData$Paclitaxel)
+head(aucData$`SN-38`)
+head(aucData$`5-FU`)
+head(aucData$Oxaliplatin)
 
 #
 # Retrieve training set
@@ -35,6 +43,22 @@ hc <- clusterTrainingSet(training_set$melted, visualize = TRUE)
 
 options(repr.plot.width=15, repr.plot.height=7)
 plot(hc)
+
+options(repr.plot.width=15, repr.plot.height=15)
+
+
+for(label.i in seq(6)){
+    labelData <- aucData[[label.i]]
+    test_set <- cbind(training_set$melted)
+    
+    test_set$sampleId <- sapply(test_set$sampleId, 
+                                function(sample){
+                                    return(paste0(sample, "-", label.i, "-", labelData[labelData$SampleId == sample, ]$AUC))
+                                })
+    clusterTrainingSet(test_set, visualize = TRUE)
+}
+
+
 
 #setwd("~/Documents/Git-Projects/Git-Research-Projects/drug-response-prediction/mlOutput")
 #write.csv(training_set$matrix, file ="coreTrainingSet_7_31_2018_1.csv")
