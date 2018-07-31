@@ -1,4 +1,13 @@
-# -*- coding: utf-8 -*-
+
+# coding: utf-8
+
+# # Supervised Learning of Drug Response using CORES from Copy Number Log Ratio
+
+# ### Import Python source code
+
+# In[1]:
+
+
 """
 Created on Thu Jul 26 12:21:38 2018
 
@@ -27,6 +36,12 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 import math
 
+
+
+# ### Define method to split training and testing set
+
+# In[2]:
+
 # TODO: Manipulate test_ratio
 def split_train_test(training_set, test_ratio = 0.33):
     row_count = training_set.shape[0]
@@ -37,11 +52,20 @@ def split_train_test(training_set, test_ratio = 0.33):
     return training_set.iloc[train_indices], training_set.iloc[test_indices]
     
     
-labeled_matrix_training_set = pd.read_csv("mlOutput/coreTrainingSet_7_31_2018_1.csv")
+
+
+# ### Load training set matrix
+
+# In[4]:
+
+labeled_matrix_training_set = pd.read_csv("../mlOutput/coreTrainingSet_7_31_2018_1.csv")
 labeled_matrix_training_set.columns.values[0] = "sampleId"
-
-
 labels = list(range(1,6))
+
+
+# ### Visualize ML results using Linear Regression
+
+# In[5]:
 
 for label in labels:
     # Remove uneeded labels
@@ -65,6 +89,11 @@ for label in labels:
     plt.plot(model_test_labels, predictions, 'bo')
     plt.show()
 
+
+# ### Visualize ML results using Random Forest Regressor
+
+# In[6]:
+
 for label in labels:
     # Remove uneeded labels
     selected_training_set = labeled_matrix_training_set.iloc[:, list([0]) + list([label]) + list(range(6,labeled_matrix_training_set.shape[1]))].copy()
@@ -86,3 +115,4 @@ for label in labels:
     print("Spearman: " + str(t))
     plt.plot(model_test_labels, predictions, 'bo')
     plt.show()
+
