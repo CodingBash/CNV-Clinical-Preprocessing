@@ -67,6 +67,11 @@ labels = list(range(0,5))
 pprint(labeled_matrix_training_set.copy().head())
 
 
+# ### Preprocess/Transform input training matrix
+# 
+# * Impute NaN values using the median of the column
+# * Standardize all values
+
 # In[18]:
 
 from sklearn.pipeline import Pipeline
@@ -91,6 +96,8 @@ print(final_training_set)
 final_training_set = pd.DataFrame(data=final_training_set, columns = labeled_matrix_training_set.columns[1:])
 print(final_training_set.copy().head())
 
+
+# ## Visualize ML Results
 
 # In[30]:
 
