@@ -92,9 +92,19 @@ final_training_set = pd.DataFrame(data=final_training_set, columns = labeled_mat
 print(final_training_set.copy().head())
 
 
+# In[30]:
+
+def abline(slope, intercept):
+    """Plot a line from slope and intercept"""
+    axes = plt.gca()
+    x_vals = np.array(axes.get_xlim())
+    y_vals = intercept + slope * x_vals
+    plt.plot(x_vals, y_vals, '--')
+
+
 # ### Visualize ML results using Linear Regression
 
-# In[23]:
+# In[33]:
 
 for label in labels:
     # Remove uneeded labels
@@ -116,12 +126,13 @@ for label in labels:
     print("Pearson: " + str(r))
     print("Spearman: " + str(t))
     plt.plot(model_test_labels, predictions, 'bo')
+    abline(1,0)
     plt.show()
 
 
 # ### Visualize ML results using Random Forest Regressor
 
-# In[24]:
+# In[32]:
 
 for label in labels:
     # Remove uneeded labels
@@ -143,5 +154,6 @@ for label in labels:
     print("Pearson: " + str(r))
     print("Spearman: " + str(t))
     plt.plot(model_test_labels, predictions, 'bo')
+    abline(1,0)
     plt.show()
 
