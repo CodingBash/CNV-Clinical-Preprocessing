@@ -17,6 +17,7 @@ Created on Thu Jul 26 12:21:38 2018
 from __future__ import division, print_function, unicode_literals
 import numpy as np
 import os
+from IPython.display import display, HTML
 
 from pprint import pprint
 np.random.seed(42)
@@ -50,26 +51,54 @@ def split_train_test(training_set, test_ratio = 0.33):
     test_indices = shuffled_indices[:test_set_size]
     train_indices = shuffled_indices[test_set_size:]
     return training_set.iloc[train_indices], training_set.iloc[test_indices]
-    
-    
 
 
 # ### Load training set matrix
 
-# In[4]:
+# In[8]:
 
 labeled_matrix_training_set = pd.read_csv("../mlOutput/coreTrainingSet_7_31_2018_1.csv")
 labeled_matrix_training_set.columns.values[0] = "sampleId"
-labels = list(range(1,6))
+labels = list(range(0,5))
+
+
+# In[4]:
+
+pprint(labeled_matrix_training_set.copy().head())
+
+
+# In[18]:
+
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import Imputer
+
+preprocessing_pipeline = Pipeline([
+    ('imputer', Imputer(strategy="median")) # TODO: Temporary fix for scaling
+    ,('std_scaler', StandardScaler())
+])
+
+processed_training_set = preprocessing_pipeline.fit_transform(labeled_matrix_training_set.copy().drop(["sampleId"], axis=1))
+
+
+# In[19]:
+
+print(final_training_set)
+
+
+# In[21]:
+
+final_training_set = pd.DataFrame(data=final_training_set, columns = labeled_matrix_training_set.columns[1:])
+print(final_training_set.copy().head())
 
 
 # ### Visualize ML results using Linear Regression
 
-# In[5]:
+# In[23]:
 
 for label in labels:
     # Remove uneeded labels
-    selected_training_set = labeled_matrix_training_set.iloc[:, list([0]) + list([label]) + list(range(6,labeled_matrix_training_set.shape[1]))].copy()
+    selected_training_set = final_training_set.iloc[:, list([label]) + list(range(5,final_training_set.shape[1]))].copy()
     selected_training_set = selected_training_set[np.isfinite(selected_training_set.iloc[:,1])]
     training_set, testing_set = split_train_test(selected_training_set)
     model_data = training_set.copy().drop([training_set.columns[0], training_set.columns[1]], axis = 1)
@@ -92,11 +121,11 @@ for label in labels:
 
 # ### Visualize ML results using Random Forest Regressor
 
-# In[6]:
+# In[24]:
 
 for label in labels:
     # Remove uneeded labels
-    selected_training_set = labeled_matrix_training_set.iloc[:, list([0]) + list([label]) + list(range(6,labeled_matrix_training_set.shape[1]))].copy()
+    selected_training_set = final_training_set.iloc[:, list([label]) + list(range(5,final_training_set.shape[1]))].copy()
     selected_training_set = selected_training_set[np.isfinite(selected_training_set.iloc[:,1])]
     training_set, testing_set = split_train_test(selected_training_set)
     model_data = training_set.copy().drop([training_set.columns[0], training_set.columns[1]], axis = 1)
