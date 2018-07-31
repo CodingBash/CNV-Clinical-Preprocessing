@@ -13,9 +13,8 @@ samples <- load_samples(classes = c("T","F", "M"))
 #
 # Retrieve CORE features
 #
-cd_local("hT_results/finalCores/prev_run_7_3_2018")
-Acores <- retrieveCores("AfinalCoresBP_subtractFraction.bed") # BED file of amplification recurrent regions
-Dcores <- retrieveCores("DfinalCoresBP_subtractFraction.bed") # BED file of deletion recurrent regions
+setwd("~/Git-Projects/Git-Research-Projects/hN_core_artifacts")
+ADcores <- retrieveCores("./hT_output/prev_run_7_30_2018_1/selectedCores/ADselectedCoresBP.bed") # BED file of amplification recurrent regions
 
 cd_local("resources")
 aucData <- readRDS("listSampleTESAUC.RDS")
@@ -24,8 +23,8 @@ aucData <- readRDS("listSampleTESAUC.RDS")
 #
 # Retrieve training set
 #
-cd_doc()
-training_set <- retrieveTrainingSet(samples, Acores, Dcores, binDir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/")
+setwd("~/Git-Projects/Git-Research-Projects/FACETS_write_files")
+training_set <- retrieveTrainingSet(loaded_samples = samples, ADcores = ADcores, sample_subdir = "/", reference = "hN31", dir = "output/FACETS_Reference_hN31_7_28_18_2/")
 training_set$matrix <- attachLabelsToSet(matrix_training_set = training_set$matrix, labelData = aucData)
 
 visualizeUnclusteredHeatmap(training_set$melted)
@@ -33,4 +32,4 @@ hc <- clusterTrainingSet(training_set$melted, visualize = TRUE)
 plot(hc)
 
 cd_local("mlOutput")
-write.csv(training_set$matrix, file ="coreTrainingSet_7_26_2018_1.csv")
+write.csv(training_set$matrix, file ="coreTrainingSet_7_31_2018_1.csv")

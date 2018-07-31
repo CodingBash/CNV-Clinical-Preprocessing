@@ -20,33 +20,44 @@ retrieveCores <- function(dir){
   return(read.table(dir, header = FALSE, sep = "\t", stringsAsFactors = FALSE))
 }
 
-retrieveTrainingSet <- function(loaded_samples, Acores, Dcores, binDir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", removeNAs = TRUE){
+retrieveTrainingSet <- function(loaded_samples, Acores, Dcores, ADcores, sample_subdir = "/analysis/structural_variants/", reference = "NA12878", dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/", removeNAs = TRUE){
   melted_training_set <- data.frame(stringsAsFactors = FALSE)  
   matrix_training_set <- data.frame(stringsAsFactors = FALSE)
   for(sample in samples){
     #
     # Retrieve necessary data for feature value calculation (bins with cnlr and COREs)
     #
-    facets_snp_data <- retrieveFacetsSnps(sample, dir = binDir)
+    facets_snp_data <- retrieveFacetsSnps(sample, sample_subdir = sample_subdir, reference = reference, dir = dir)
     snp_bed <- snpsToBedFormat(facets_snp_data)
     
     #
     # Preprocess COREs
     #
-    seqnames_A <- table(Acores[[1]])
-    gr_A <- GRanges(
-      seqnames = Rle(names(seqnames_A), as.vector(seqnames_A)),
-      ranges = IRanges(Acores[[2]], Acores[[3]], names = row.names(Acores)),
-      event=rep("A", nrow(Acores))
-    )
-    seqnames_D <- table(Dcores[[1]])
-    gr_D <- GRanges(
-      seqnames = Rle(names(seqnames_D), as.vector(seqnames_D)),
-      ranges = IRanges(Dcores[[2]], Dcores[[3]], names = row.names(Dcores)),
-      event=rep("D", nrow(Dcores))
-    )
-    # TODO: Do operations on GRanges object to simplify, if need be (i.e. reduction)
-    gr <- c(gr_A, gr_D)
+    gr <- NA
+    if(missing(ADcores)){
+      seqnames_A <- table(Acores[[1]])
+      gr_A <- GRanges(
+        seqnames = Rle(names(seqnames_A), as.vector(seqnames_A)),
+        ranges = IRanges(Acores[[2]], Acores[[3]], names = row.names(Acores)),
+        event=rep("A", nrow(Acores))
+      )
+      seqnames_D <- table(Dcores[[1]])
+      gr_D <- GRanges(
+        seqnames = Rle(names(seqnames_D), as.vector(seqnames_D)),
+        ranges = IRanges(Dcores[[2]], Dcores[[3]], names = row.names(Dcores)),
+        event=rep("D", nrow(Dcores))
+      )
+      # TODO: Do operations on GRanges object to simplify, if need be (i.e. reduction)
+      gr <- c(gr_A, gr_D)
+    } else {
+      seqnames_AD <- table(ADcores[[1]])
+      gr_AD <- GRanges(
+        seqnames = Rle(names(seqnames_AD), as.vector(seqnames_AD)),
+        ranges = IRanges(ADcores[[2]], ADcores[[3]], names = row.names(ADcores)),
+        event=rep("AD", nrow(ADcores))
+      )
+      gr <- gr_AD
+    }
     coreDf <- as.data.frame(gr, row.names = seq_along(gr$event))
     coreDf$cnlr <- NA
     

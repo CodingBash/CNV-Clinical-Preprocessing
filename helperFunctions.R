@@ -80,6 +80,7 @@ retrieveFacetsSegmentClusters <- function(sample, dir = "segClusteringResults/")
 # Retrieve a sample's FACETS SNP data from specified directory
 #
 retrieveFacetsSnps <- function(sample, sample_subdir = "/analysis/structural_variants/", reference = "NA12878", dir = "CSHL/Project_TUV_12995_B01_SOM_Targeted.2018-03-02/"){
+  print(paste("Retrieving FACETS SNPs file:",paste(dir, "Sample_", sample, sample_subdir, sample, "--", reference, ".procSample-jseg.cnv.facets.v0.5.2.txt", sep = "")))
   facets_snp_data <- as.data.frame(read.table(paste(dir, "Sample_", sample, sample_subdir, sample, "--", reference, ".procSample-jseg.cnv.facets.v0.5.2.txt", sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
   return(facets_snp_data)
 }
