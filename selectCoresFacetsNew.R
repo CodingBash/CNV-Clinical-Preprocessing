@@ -15,10 +15,11 @@ source("helperFunctions.R")
 p_threshold <- 0.002
 
 event <- "D"
-dir <- "prev_run_7_13_2018"
-rdsFile <- paste0("./hT_output/", dir, "/", event, "newCOREobjBP.rds")
-tableFile <- paste0("./hT_output/", dir, "/", event, "coreTableBP.csv")
-outputBed <- paste0("./hT_output/", dir, "/selectedCores/", event, "selectedCoresBP.bed")
+output <- "output"
+dir <- "prev_run_7_12_2018"
+rdsFile <- paste0("./", output, "/", dir, "/", event, "newCOREobjBP.rds")
+tableFile <- paste0("./", output, "/", dir, "/", event, "coreTableBP.csv")
+outputBed <- paste0("./", output, "/", dir, "/selectedCores/", event, "selectedCoresBP.bed")
 
 #
 # Get core information
