@@ -259,7 +259,7 @@ for label in labels:
 
 # ### Bootstrap Regression Model
 
-# In[255]:
+# In[256]:
 
 for label in labels:
     X_nonNA, y_nonNA = remove_NAs(X, y, label)
@@ -267,7 +267,7 @@ for label in labels:
     all_y_test_np = np.array([])
     all_y_prediction = np.array([])
     for i in range(1,10):
-        X_TRAIN, X_TEST, Y_TRAIN, Y_TEST = train_test_split(X_nonNA, y_nonNA, test_size=0.10)
+        X_TRAIN, X_TEST, Y_TRAIN, Y_TEST = train_test_split(X_nonNA, y_nonNA, test_size=0.20)
 
         Ypipeline, XYpipeline = retrieve_pipelines("ridge_model", Ridge(alpha = 0.80))
 
