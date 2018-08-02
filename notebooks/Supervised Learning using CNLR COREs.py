@@ -127,7 +127,7 @@ def abline(slope, intercept):
     plt.plot(x_vals, y_vals, '--')
 
 
-# In[230]:
+# In[237]:
 
 def retrieve_pipelines(model_name, ml_model):
     Ypipeline = Pipeline([
@@ -145,7 +145,6 @@ def retrieve_pipelines(model_name, ml_model):
 
 def imputer_inverse_transform(pre_data, post_data):
     na_indices = np.where(np.isnan(pre_data))[0]
-    pprint(na_indices)
     post_data[na_indices] = float('NaN')
     return post_data
     
@@ -231,7 +230,7 @@ for label in labels:
 
 # ### Visualize ML results using Random Forest Regressor
 
-# In[232]:
+# In[248]:
 
 for label in labels:
     X_nonNA, y_nonNA = remove_NAs(X, y, label)
@@ -256,6 +255,58 @@ for label in labels:
     #print("CV STD: " + str(scores.std()))
              
     visualize(y_test_np, y_prediction)
+
+
+# ### Bootstrap Regression Model
+
+# In[255]:
+
+for label in labels:
+    X_nonNA, y_nonNA = remove_NAs(X, y, label)
+    
+    all_y_test_np = np.array([])
+    all_y_prediction = np.array([])
+    for i in range(1,10):
+        X_TRAIN, X_TEST, Y_TRAIN, Y_TEST = train_test_split(X_nonNA, y_nonNA, test_size=0.10)
+
+        Ypipeline, XYpipeline = retrieve_pipelines("ridge_model", Ridge(alpha = 0.80))
+
+        y_test_np, y_prediction, _ = train_and_test(Ypipeline, XYpipeline, X_TRAIN, X_TEST, Y_TRAIN.values, Y_TEST.values)
+        all_y_test_np = np.append(all_y_test_np, y_test_np)
+        all_y_prediction = np.append(all_y_prediction, y_prediction)
+        
+    rmse, r, t = simple_score(all_y_test_np, all_y_prediction)
+    
+    print("RMSE: " + str(rmse))
+    print("Pearson: " + str(r))
+    print("Spearman: " + str(t))
+    visualize(all_y_test_np, all_y_prediction)
+
+
+# ### Bootstrap Random Forest Model
+
+# In[249]:
+
+for label in labels:
+    X_nonNA, y_nonNA = remove_NAs(X, y, label)
+    
+    all_y_test_np = np.array([])
+    all_y_prediction = np.array([])
+    for i in range(1,10):
+        X_TRAIN, X_TEST, Y_TRAIN, Y_TEST = train_test_split(X_nonNA, y_nonNA, test_size=0.10)
+
+        Ypipeline, XYpipeline = retrieve_pipelines("rfs_model", RandomForestRegressor(n_estimators=1000, max_leaf_nodes=8, n_jobs=4))
+
+        y_test_np, y_prediction, _ = train_and_test(Ypipeline, XYpipeline, X_TRAIN, X_TEST, Y_TRAIN.values, Y_TEST.values)
+        all_y_test_np = np.append(all_y_test_np, y_test_np)
+        all_y_prediction = np.append(all_y_prediction, y_prediction)
+        
+    rmse, r, t = simple_score(all_y_test_np, all_y_prediction)
+    
+    print("RMSE: " + str(rmse))
+    print("Pearson: " + str(r))
+    print("Spearman: " + str(t))
+    visualize(all_y_test_np, all_y_prediction)
 
 
 # In[ ]:
