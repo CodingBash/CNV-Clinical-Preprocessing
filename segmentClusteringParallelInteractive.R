@@ -20,8 +20,8 @@ source("segmentClusteringLibrary.R")
 
 # TODO: Do not include segments with lower than 5K bp (see paper)
 
-reference <- "hN31"
-res_dir <- "output/FACETS_Reference_hN31_7_28_18_2/"
+reference <- "hN30"
+res_dir <- "output/FACETS_Reference_hN30_8_2_18_1/"
 
 #
 # Load input
@@ -41,12 +41,13 @@ cd_doc()
 # TODO: Does cd_local need to be before this?
 tumor_samples <- load_samples(classes = c("T", "F", "M"), sampleList = "sampleList.csv") # TODO: THIS WAS ORIGINAL CLASS "N", RECOMPUTE RESUTS
 tumor_samples <- tumor_samples[tumor_samples != reference]
-tumor_samples <- tumor_samples[tumor_samples != "hF32"] # Error with this sample
-tumor_samples <- tumor_samples[tumor_samples != "hT73"] # Error with this sample
+tumor_samples <- tumor_samples[tumor_samples != "hF32"]
+tumor_samples <- tumor_samples[tumor_samples != "hF37"]
+tumor_samples <- tumor_samples[tumor_samples != "hT105"]
 
 # Generate norminput argument
 norminput <- retrieveNormInput(normalSegments)
-norminput <- filterNormInput(norminput, length_threshold=10000000)
+norminput <- filterNormInput(norminput, length_threshold=10000000) # TODO: Need to be statistically determined
 
 ratinput <- data.frame(stringsAsFactors = FALSE)
 seginput <- data.frame(stringsAsFactors = FALSE)

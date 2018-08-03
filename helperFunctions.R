@@ -230,8 +230,10 @@ selectSegmentsWithEvents <- function(events, samples, chromosomeSizes, dir, samp
 retrieveSegmentListFromSamples <- function(samples, dir, sample_subdir = "/analysis/structural_variants/", reference = "NA12878", extension = "cnv.facets.v0.5.2.txt", inSampleFolder = FALSE){
   segmentList <- list(NA)
   for(sample in samples){
-    segments <- as.data.frame(read.table(paste(dir, if(inSampleFolder == TRUE) paste("Sample_", sample, sample_subdir, sep = "") else "",sample, "--", reference, ".", extension, sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
-    segmentList[[sample]] <- segments
+    try({
+      segments <- as.data.frame(read.table(paste(dir, if(inSampleFolder == TRUE) paste("Sample_", sample, sample_subdir, sep = "") else "",sample, "--", reference, ".", extension, sep = ""), header = TRUE, sep="\t", stringsAsFactors=FALSE, quote=""))
+      segmentList[[sample]] <- segments
+    }, silent = TRUE)
   }
   return(segmentList)
 }
