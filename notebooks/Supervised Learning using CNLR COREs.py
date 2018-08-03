@@ -5,7 +5,7 @@
 
 # ### Import Python source code
 
-# In[33]:
+# In[257]:
 
 
 """
@@ -34,6 +34,7 @@ import scipy
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import Imputer
+from sklearn.preprocessing import MinMaxNormalizer
 
 from sklearn import decomposition
 
@@ -52,7 +53,7 @@ import math
 
 # ### Define method to split training and testing set
 
-# In[174]:
+# In[258]:
 
 # TODO: Manipulate test_ratio
 def split_train_test(training_set, test_ratio = 0.33):
@@ -66,36 +67,36 @@ def split_train_test(training_set, test_ratio = 0.33):
 
 # ### Load training set matrix
 
-# In[177]:
+# In[259]:
 
-labeled_matrix_training_set = pd.read_csv("../mlOutput/coreTrainingSet_7_31_2018_1.csv")
+labeled_matrix_training_set = pd.read_csv("../mlOutput/coreTrainingSet_8_3_2018_1.csv")
 #labeled_matrix_training_set.columns.values[0] = "sampleId"
 labeled_matrix_training_set = labeled_matrix_training_set.drop([labeled_matrix_training_set.columns[0]], axis = 1)
 labels = list(range(0,5))
 
 
-# In[178]:
+# In[260]:
 
 display(labeled_matrix_training_set.head(25))
 
 
-# In[179]:
+# In[261]:
 
 X = labeled_matrix_training_set.copy().drop(labeled_matrix_training_set.columns[labels], axis = 1)
 y = labeled_matrix_training_set.copy()[labeled_matrix_training_set.columns[labels]]
 
 
-# In[180]:
+# In[262]:
 
 display(X.head())
 
 
-# In[198]:
+# In[263]:
 
 display(y.head(15))
 
 
-# In[200]:
+# In[264]:
 
 from sklearn.model_selection import train_test_split
 
@@ -103,13 +104,13 @@ all_X_TRAIN, all_X_TEST, all_Y_TRAIN, all_Y_TEST = train_test_split(X, y, test_s
 # TODO: train_test must be split on amount of NAs as well!
 
 
-# In[201]:
+# In[265]:
 
 display(all_X_TRAIN.head())
 display(all_Y_TRAIN.head())
 
 
-# In[202]:
+# In[266]:
 
 display(all_X_TEST.head())
 display(all_Y_TEST.head())
@@ -117,7 +118,7 @@ display(all_Y_TEST.head())
 
 # ## Visualize ML Results
 
-# In[169]:
+# In[267]:
 
 def abline(slope, intercept):
     """Plot a line from slope and intercept"""
@@ -127,7 +128,7 @@ def abline(slope, intercept):
     plt.plot(x_vals, y_vals, '--')
 
 
-# In[237]:
+# In[268]:
 
 def retrieve_pipelines(model_name, ml_model):
     Ypipeline = Pipeline([
@@ -137,7 +138,7 @@ def retrieve_pipelines(model_name, ml_model):
 
     XYpipeline = Pipeline([
             ('imputer', Imputer(axis=0,strategy="median")),
-            ('standardizer', StandardScaler()),
+            #('standardizer', StandardScaler()),
             (model_name,  ml_model)
     ])
     
@@ -201,7 +202,7 @@ def cv_score(XYpipeline, X_TRAIN, this_y_train_tr):
 
 # ### Visualize ML results using Linear Regression
 
-# In[231]:
+# In[269]:
 
 for label in labels:
     X_nonNA, y_nonNA = remove_NAs(X, y, label)
@@ -230,7 +231,7 @@ for label in labels:
 
 # ### Visualize ML results using Random Forest Regressor
 
-# In[248]:
+# In[270]:
 
 for label in labels:
     X_nonNA, y_nonNA = remove_NAs(X, y, label)
@@ -259,7 +260,7 @@ for label in labels:
 
 # ### Bootstrap Regression Model
 
-# In[256]:
+# In[271]:
 
 for label in labels:
     X_nonNA, y_nonNA = remove_NAs(X, y, label)
