@@ -1,0 +1,400 @@
+[START commit][author=CodingBash][time=1533333892][message=Learning on slicing COREs][hash=c9be28840bcc786488b677200fb3a5e49c9c53a6]
+ 5 files changed, 52835 insertions(+), 33979 deletions(-)
+
+[START commit][author=CodingBash][time=1533317159][message=Produced CNprep input/output for hN30 pr_8_2_2018_3][hash=e8e45e25af5bc8c12beb7f8686dc043b1a0bb3db]
+ 2 files changed, 10 insertions(+), 7 deletions(-)
+
+[START commit][author=CodingBash][time=1533238134][message=CORE generation using CNprep bins - ML notebook bootstrapping][hash=4231e94fe0418b10f84a58130e78a2eb65430d4f]
+ 6 files changed, 1294 insertions(+), 1098 deletions(-)
+
+[START commit][author=CodingBash][time=1533226822][message=Added cells to bootstrap model to visualize results better][hash=255c895bc78c78e450065de07cc0a2fdacba7146]
+ 4 files changed, 15008 insertions(+), 11583 deletions(-)
+
+[START commit][author=CodingBash][time=1533225107][message=Updated and refactored ML code][hash=16ded74e4a26608109f682b5a662576af219cd77]
+ 4 files changed, 39440 insertions(+), 1140 deletions(-)
+
+[START commit][author=CodingBash][time=1533217804][message=ML refactoring - parallelized CNprep on interactive script][hash=4ebcb3868bbcabd0e91496221ea6a4a25cb0ed60]
+ 9 files changed, 1066 insertions(+), 3402 deletions(-)
+
+[START commit][author=CodingBash][time=1533141343][message=Rechecked ML script - fixed several issues][hash=961afacc9b460e33db8e107391b99d9f03d20a63]
+ 7 files changed, 3972 insertions(+), 3124 deletions(-)
+
+[START commit][author=CodingBash][time=1533074023][message=Progress on cross validation and data transformation][hash=259d8eae78db7acb8ee52e956a983ab15886e029]
+ 5 files changed, 2674 insertions(+), 1697 deletions(-)
+
+[START commit][author=CodingBash][time=1533065751][message=Added some documentation to ML notebook][hash=9cdaf8136c3d5f65036d1152c7f8b9c11c9bd5b3]
+ 4 files changed, 63 insertions(+)
+
+[START commit][author=CodingBash][time=1533065264][message=Plotted abline on prediction plot for CNLR COREs][hash=983ff39433c3c796fac7ddf392825491e3f17f88]
+ 4 files changed, 1702 insertions(+), 987 deletions(-)
+
+[START commit][author=CodingBash][time=1533064772][message=Transformed input data for CNLR COREs - much higher accuracy][hash=df1e728be814fefaab77310277faf899d61c347e]
+ 4 files changed, 1487 insertions(+), 1134 deletions(-)
+
+[START commit][author=CodingBash][time=1533060775][message=Added cell to have unsupervised cluster dendroheatmap w/ labels.][hash=3e656f8bd1e14d585ca49a5a1735485bdf5fe9ae]
+ 4 files changed, 5699 insertions(+), 13 deletions(-)
+
+[START commit][author=CodingBash][time=1533050743][message=Created notebook for unsupervised learning of CNLR CORES of FACETS ref=hN31][hash=ff888ec7a7f0d19c55660a37d8b847d5af714abd]
+ 6 files changed, 14775 insertions(+), 1374 deletions(-)
+
+[START commit][author=CodingBash][time=1533049748][message=New supervised learning results - results are poor so far][hash=c0063b81fa9cb1a7fe89578905938eec448f77b5]
+ 7 files changed, 15486 insertions(+), 170 deletions(-)
+
+[START commit][author=CodingBash][time=1533048950][message=Formed training set for FACETS ref=hN31 AD_COREs][hash=8671831a10995aff2ac5e9eee989b035ea79e0d8]
+ 3 files changed, 33 insertions(+), 22 deletions(-)
+
+[START commit][author=CodingBash][time=1533047620][message=Selected COREs for FACETS files hN31 CNLR CORES][hash=8dbaec41c19777a3e61ce06dc22168337b879cff]
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+[START commit][author=CodingBash][time=1532972479][message=Progress on adjusting bin mapping for slicing COREs - also some notebook visualization of CNprofile of hT104][hash=618c3dbe9e3fdd37a83c16534a2fe34e22a949c7]
+ 4 files changed, 1617 insertions(+), 508 deletions(-)
+
+[START commit][author=CodingBash][time=1532831917][message=For segment CORE and CNprep, pointed to new FACETS file dir][hash=ad4acd2f9553b1668d6e7a23a3fb0fdf2ed70c68]
+ 2 files changed, 14 insertions(+), 6 deletions(-)
+
+[START commit][author=CodingBash][time=1532817173][message=Created CORE files for slicing CORE analysis][hash=0426df5c43993bd5e34433abd72cc31b1356c849]
+ 4 files changed, 145 insertions(+), 8 deletions(-)
+
+[START commit][author=CodingBash][time=1532809732][message=Fixed FNF issue with target_sample containing reference][hash=8ee456c062d29cd952bbb9b154a7ef69224fa388]
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+[START commit][author=CodingBash][time=1532808357][message=Fixed absToChrom conversion (with chrom23 fix) and moved to helperFunctions to prevent CORE loading][hash=907828572a32fc17dcd8b80222389539c0273b4d]
+ 2 files changed, 38 insertions(+), 39 deletions(-)
+
+[START commit][author=CodingBash][time=1532805520][message=BP conversion bug fix for CNprep. Visualized both FACET CN profile][hash=5337c397b9b0863fcf7fce2cdc951df273531861]
+ 5 files changed, 255 insertions(+), 3 deletions(-)
+
+[START commit][author=CodingBash][time=1532740426][message=Fixed visualization bug (visualize segments track after SNP track) -Also in notebook, I am comparing the hT1 CN profile from both FACETs inputs with different reference (NA12878, hN31)][hash=2bfe13f93731ff63f69443f093923ecb53768166]
+ 4 files changed, 1690 insertions(+), 858 deletions(-)
+
+[START commit][author=CodingBash][time=1532728712][message=Updated segment clustering scripts to run on new FACETs files and to apply cutoff on norminput segments - reflective of cnprep clustering HPC directory][hash=371af76e0bc70e3577bea3d732be1d8395f0f436]
+ 3 files changed, 50 insertions(+), 29 deletions(-)
+
+[START commit][author=CodingBash][time=1532702866][message=Trying RandomForestRegressor][hash=50eb95401f88d83983d0b815104481aaa4186727]
+ 1 file changed, 23 insertions(+)
+
+[START commit][author=CodingBash][time=1532641387][message=Output of rough draft of ml model - several changes to make][hash=84087dd0f2e462d6b4732cfcd646d08edd2ddbbe]
+ 1 file changed, 37 insertions(+), 6 deletions(-)
+
+[START commit][author=CodingBash][time=1532628530][message=Progress on ML preprocessing][hash=14e85024265f174ff53049a891e5a4c369852786]
+ 1 file changed, 34 insertions(+)
+
+[START commit][author=CodingBash][time=1532621678][message=Generated training set for all samples - wrote to file][hash=013e2e05ed521c1b876af57e65a8061aa3cb61fd]
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+[START commit][author=CodingBash][time=1532619118][message=Able to attach labels to a training set matrix][hash=c3d6db731867331ed893cd076d1b010c29b26406]
+ 2 files changed, 37 insertions(+), 7 deletions(-)
+
+[START commit][author=CodingBash][time=1532560777][message=Readded CNprep comparison notebooks back into repo][hash=38b6b3895271702f3ee8d2db58e2a48f41a65fda]
+ 6 files changed, 28 insertions(+), 277 deletions(-)
+
+[START commit][author=CodingBash][time=1532555568][message=Added legend and organized Jupyter notebook][hash=0697a57307182f13359243be2a5e8c1603921c51]
+ 6 files changed, 13412 insertions(+), 114 deletions(-)
+
+[START commit][author=CodingBash][time=1532550457][message=Good draft of scripts to be distributed - moving to new repo][hash=5570affa644139249962e73d6c67d1a2d579a768]
+ 2 files changed, 33 insertions(+), 11 deletions(-)
+
+[START commit][author=CodingBash][time=1532548987][message=Near completed draft of CNprep comparison visualization][hash=c7d023e984d1835736e1e9ec205fb9cb5b0255b4]
+ 1 file changed, 96 insertions(+), 18 deletions(-)
+
+[START commit][author=CodingBash][time=1532545229][message=Good draft of CN compare plot][hash=374563ca6181e9febea15f356f6807b7318a7ac0]
+ 7 files changed, 546 insertions(+), 176 deletions(-)
+
+[START commit][author=CodingBash][time=1532475771][message=Added documentation to the CNLR CORE Feature notebook][hash=43d4cb475f88f65f18a754ef40d1cbe9d0531e64]
+ 4 files changed, 164 insertions(+), 33 deletions(-)
+
+[START commit][author=CodingBash][time=1532473092][message=Produced notebook visualization of CNLR CORE feature assignment][hash=7daafa079202c6c8a137ac9333898532f41fb665]
+ 6 files changed, 13956 insertions(+), 131 deletions(-)
+
+[START commit][author=CodingBash][time=1532464730][message=Draft and organization of cnlr CORe feature assignment][hash=124f220b8015bdae637fef0b0d86f12bb97191dd]
+ 2 files changed, 122 insertions(+), 92 deletions(-)
+
+[START commit][author=CodingBash][time=1532447018][message=Produced hierarchical clustering and dendroheatmap][hash=43936435315e63beb3209f12153dbf4073966914]
+ 1 file changed, 29 insertions(+)
+
+[START commit][author=CodingBash][time=1532392221][message=Included hM organoids][hash=afa8b05b517c0d784e74d15fc4bdf0e4f13724c9]
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+[START commit][author=CodingBash][time=1532391750][message=Produced training_set and visualized][hash=32a52740cda608661db8bc54df30db7060731124]
+ 1 file changed, 23 insertions(+)
+
+[START commit][author=CodingBash][time=1532389582][message=Produced rudimentary output of training set for tumor samples][hash=e77b0ff7c5d854efbbc97879f797636a038c0f1a]
+ 2 files changed, 57 insertions(+), 24 deletions(-)
+
+[START commit][author=CodingBash][time=1532376564][message=Merge branch 'master' into ml-preprocessing][hash=67f8624a8066a671c1ff8fe98c474d7c3ed2d9a0]
+[START commit][author=CodingBash][time=1532375270][message=Revisualizations and minor interface changes][hash=b9d4c9fb8140589d33943ba4ada610f92afcef73]
+ 15 files changed, 14176 insertions(+), 11117 deletions(-)
+
+[START commit][author=CodingBash][time=1532366341][message=Visualization of CNprep clusters - investigating CNprep results more][hash=c07f1cbd1e9c76c3da502cf4c29f413fa3063f6c]
+ 11 files changed, 26001 insertions(+), 22 deletions(-)
+
+[START commit][author=CodingBash][time=1532363157][message=Organization visualization script - made notebooks][hash=01530672e5e8aebcee50187d8e0de8b91ad2b140]
+ 11 files changed, 53499 insertions(+), 68 deletions(-)
+
+[START commit][author=CodingBash][time=1532355567][message=Visualization of CN profile segment clusters - draft][hash=76de9c108dd8efa02a2795d61be0af79711a1b18]
+ 14 files changed, 1872 insertions(+), 64 deletions(-)
+
+[START commit][author=CodingBash][time=1532122975][message=Histogram display functions, stored seginputs][hash=61e3c16e68a4b0a043cc7183b960f40ff89433c9]
+ 4 files changed, 109 insertions(+), 1 deletion(-)
+
+[START commit][author=CodingBash][time=1532118283][message=Started working on geting cnlr.median from given interval][hash=9ec0f5ab93ce6a98e735458b430bcc9ee23a1c81]
+ 1 file changed, 28 insertions(+)
+
+[START commit][author=CodingBash][time=1532118236][message=Updated variation notebook][hash=0fae5e4c4ce1a85c3483ea47782074abc82df7a4]
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+[START commit][author=CodingBash][time=1532108579][message=Added documentation to notebook][hash=4d78ce37987b9b5f12125e7ac0ce3dc81e381d28]
+ 7 files changed, 42 insertions(+), 4 deletions(-)
+
+[START commit][author=CodingBash][time=1532095010][message=Added more documentation to notebooks. Fixed visualization in TCGA Variation Visualization - accidentally visualized SD instead of RMSE for second section.][hash=811efe109c14ed9719d75d7aac2b5d38f0c1894a]
+ 8 files changed, 18285 insertions(+), 4073 deletions(-)
+
+[START commit][author=CodingBash][time=1532055890][message=Created Jupyter notebook to visualize TCGA FACETS profile][hash=f149ff216d603f0c890621b11961f5a7cabf7256]
+ 7 files changed, 22602 insertions(+)
+
+[START commit][author=CodingBash][time=1532037555][message=Produced TCGA visualization output in notebook][hash=05ce4e6e54006297e5a8caee649bef27ea833b34]
+ 4 files changed, 8534 insertions(+), 3317 deletions(-)
+
+[START commit][author=CodingBash][time=1532035506][message=Organized the calculation and visualization of TCGA variation - created notebooks][hash=e2043162d2b5a6eefb9829de53b1404772b6c8cb]
+ 13 files changed, 17070 insertions(+), 203 deletions(-)
+
+[START commit][author=CodingBash][time=1532031171][message=Visualized CNprep results for model E and minjoin = 0.50 to hopefully view more clusters][hash=f043af78beddc052fdc9a670d5c97148928d6aa4]
+ 4 files changed, 2272 insertions(+), 4142 deletions(-)
+
+[START commit][author=CodingBash][time=1532029672][message=Calculated RMSE for segments. Organized variation code into functions][hash=1fd79537a275fe1713b80e60e3baa781108c6284]
+ 1 file changed, 163 insertions(+), 127 deletions(-)
+
+[START commit][author=CodingBash][time=1532028176][message=Calculated mean SD and mean RMSE and printed out - Changed from MSE to RMSE to be able to compare with SD][hash=b8e2dd554565fd7a4f337623e92be0d86dce673f]
+ 1 file changed, 55 insertions(+), 3 deletions(-)
+
+[START commit][author=CodingBash][time=1532027709][message=Organized variation code - have SNP variation for SD and MSE stats][hash=f4925e69bc8c9a19226f07085f537719cb741234]
+ 2 files changed, 101 insertions(+), 74 deletions(-)
+
+[START commit][author=CodingBash][time=1532021670][message=Visualized TCGA results (CORES and matching CN profile) in Jupyter notebook.][hash=9be596f5e2a862786ed1ccdaf0f1fcee3834800e]
+ 6 files changed, 14098 insertions(+), 9 deletions(-)
+
+[START commit][author=CodingBash][time=1532009701][message=Output cn/core profiles of all tumor samples][hash=cd66ea580bde2a1cad3698ba4cdf37b421e46540]
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+[START commit][author=CodingBash][time=1531951636][message=Produce CORE and CNprofile visualization in batch][hash=8a8fee3b3a960e3f3d3dd812932f4a9b3d570b73]
+ 5 files changed, 39 insertions(+), 33 deletions(-)
+
+[START commit][author=CodingBash][time=1531948958][message=Selected COREs and have draft of core visualization logic][hash=92277cf061caee08234f0b32038bb6255bc5b82f]
+ 5 files changed, 98 insertions(+), 8 deletions(-)
+
+[START commit][author=CodingBash][time=1531940564][message=Completed draft of CORE HPC script before taking it to Wigler cluster][hash=ddd3da9018f75b1bff3d1981fd2804b94d877185]
+ 4 files changed, 87 insertions(+), 16 deletions(-)
+
+[START commit][author=CodingBash][time=1531935817][message=Tested after refactoring - everything works except occasional fatal crashes on visualizing the SD of SNP profile][hash=74af0dda673c32abb51ea3844e13dc4966f4818a]
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+[START commit][author=CodingBash][time=1531928381][message=Created script to produce COREs. Organize recent FACETS analysis code (untested after organization)][hash=fab314f9de89df0a895bcc303903e8eeb3f0e850]
+ 4 files changed, 121 insertions(+), 70 deletions(-)
+
+[START commit][author=CodingBash][time=1531924998][message=Now creating code to produce COREs of nonmatching FACET pairs][hash=2d205bbefa0a85a9ac436985f20b52cbb3c8f1f5]
+ 2 files changed, 128 insertions(+), 13 deletions(-)
+
+[START commit][author=CodingBash][time=1531869308][message=Analyzing TCGA results][hash=e29f553a6fb00c79720dfe0def556895028251f6]
+ 15 files changed, 4654 insertions(+), 940 deletions(-)
+
+[START commit][author=CodingBash][time=1531751627][message=Added GMM visualization to notebook][hash=ce0ef5681e2c22f3cf43352c0ba3b7684aa02c39]
+ 5 files changed, 3009 insertions(+), 508 deletions(-)
+
+[START commit][author=CodingBash][time=1531573430][message=Scripts "finally" refactored. Tested in HPC. Tested in visualization notebooks. May still be minor issues that will be resolved over time][hash=3c2bac6de78c6e48b70f184dfcfc62ad2d70803d]
+ 13 files changed, 367 insertions(+), 187 deletions(-)
+
+[START commit][author=CodingBash][time=1531518254][message=Minor touchups][hash=60c9851fba8abc17d26f2cc7d6189177a767f4e0]
+ 14 files changed, 47 insertions(+), 20 deletions(-)
+
+[START commit][author=CodingBash][time=1531515086][message=Organized dependencies for segmentClustering][hash=b92c7e559fc7688bf955c31192bff5e2a39722d9]
+ 5 files changed, 129 insertions(+), 129 deletions(-)
+
+[START commit][author=CodingBash][time=1531514141][message=Rearranged dependent functions into the helperFunctions.R][hash=7974bb3faf82fec8d83f10520aff3e5207e88501]
+ 4 files changed, 129 insertions(+), 70 deletions(-)
+
+[START commit][author=CodingBash][time=1531512738][message=Progress on organization segment clustering (CNprep) scripts][hash=ba9fd1a2f5ef8e93f1e8d998ea7ce688d400b32a]
+ 9 files changed, 254 insertions(+), 440 deletions(-)
+
+[START commit][author=CodingBash][time=1531495161][message=Merging organization code back into master][hash=7b50cccf9cb6f9c775a5d444ed96e2f7cc81d454]
+[START commit][author=CodingBash][time=1531495025][message=Organized final scripts`][hash=ec274cb089f02a0996078854c8768fd28edd91bb]
+ 3 files changed, 23 insertions(+), 40 deletions(-)
+
+[START commit][author=CodingBash][time=1531493291][message=Organized CORE scripts - seems to work on HPC and on interactive NEED - to create segment frequency plot][hash=7c0a1935f74c601c84c6b64bf9fdc909449a13d8]
+ 5 files changed, 91 insertions(+), 39 deletions(-)
+
+[START commit][author=CodingBash][time=1531450108][message=Progress on organizing interactive cnvCORE script -Fixed issues in coreGenerationLibrary which may fix the problems in HPC core scripts -NEED to verify interactive cnvCORE results -NEED to create Jupyter notebook for CORE visualization][hash=2bb0a606deb413e30a79e2903a8c3417b2eb6704]
+ 3 files changed, 48 insertions(+), 220 deletions(-)
+
+[START commit][author=CodingBash][time=1531439194][message=Progress on organizing HPC CORE generation files][hash=d5b357e1815d93462a0e6a9383d9c877f1e60c87]
+ 4 files changed, 137 insertions(+), 4 deletions(-)
+
+[START commit][author=CodingBash][time=1531431463][message=CN Profile notebook visualizes clusters. Organized visualizeCluster scripts. Added some scripts to junk folder. Progress in organizating CORE scripts.][hash=1beefa8b72cc92bf5b02a3e01f82261a074f0930]
+ 13 files changed, 797 insertions(+), 221 deletions(-)
+
+[START commit][author=CodingBash][time=1531422038][message=Visualize GMM notebook, now added way to visualize more than 1 sample][hash=0a298e8d9b13a85bd23a9a5af6058014ac6c330c]
+ 4 files changed, 542 insertions(+), 48 deletions(-)
+
+[START commit][author=CodingBash][time=1531336530][message=Organized and produced notebook for CN profile visualization][hash=f1a3884e312a36e2bdf050e32030395f21ce121a]
+ 14 files changed, 1633 insertions(+), 101 deletions(-)
+
+[START commit][author=CodingBash][time=1531322729][message=Organize code for GMM visualization scripts][hash=e226dc9dd1036f7590f3c3fda3d8aa26bae487e2]
+ 14 files changed, 239 insertions(+), 772 deletions(-)
+
+[START commit][author=CodingBash][time=1531258142][message=Created draft of simple notebook for GMM visualization][hash=6206609401675ef124d4c61b2cbee33e0c6e9106]
+ 8 files changed, 25049 insertions(+), 61 deletions(-)
+
+[START commit][author=Basheer Becerra][time=1531246761][message=Delete hT30_segtable.tsv][hash=897726137cf24cdcf3035401616563bae3384961]
+ 1 file changed, 61 deletions(-)
+
+[START commit][author=CodingBash][time=1531245953][message=Dispaying stacked histogram with color-coding working appropriately][hash=caecfe06828c2576ef4fd0df43edf50389224aae]
+ 1 file changed, 57 insertions(+), 35 deletions(-)
+
+[START commit][author=CodingBash][time=1531234787][message=Reduced interval and reverted locaction of cluster results][hash=707e95de87a6155725c55d5d07736436d43ddbef]
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+[START commit][author=CodingBash][time=1531230739][message=GMM component distributions colored by cluster assignment][hash=34fce5a8b8abd99dc850f9b5e2a2a38ac28a8ef2]
+ 3 files changed, 80 insertions(+), 76 deletions(-)
+
+[START commit][author=CodingBash][time=1531166015][message=Segment clustering more effecient. Using mediandev for GMM][hash=e8a301c9a12569f930b9de080c02a9fab47ce5b8]
+ 5 files changed, 284 insertions(+), 51 deletions(-)
+
+[START commit][author=CodingBash][time=1531143666][message=Working GMM visualization][hash=3d736627a6d1efad92bb0011791761e7e406ac6f]
+ 1 file changed, 17 insertions(+), 9 deletions(-)
+
+[START commit][author=CodingBash][time=1531093074][message=Using ggplot2][hash=1e99e093316e8c15c44695fdc11e678a32039729]
+ 1 file changed, 16 insertions(+), 4 deletions(-)
+
+[START commit][author=CodingBash][time=1531069641][message=Created script to visualize GMM (untested)][hash=30bbe7150b9e9768f0139dc6c349bd752a36397f]
+ 2 files changed, 34 insertions(+), 37 deletions(-)
+
+[START commit][author=CodingBash][time=1531069227][message=Able to generate clusters for whole class of samples. -Unable to create a dataframe with all samples since ratinput requires same row dimensions, which is an issue since the binning scheme (and therefore length) of each sample is different][hash=eb3d6923a049a8c2aff20289b140b0df8e26587a]
+ 3 files changed, 102 insertions(+), 46 deletions(-)
+
+[START commit][author=CodingBash][time=1531058903][message=Draft of visualization (GMM and CNP) - Fixed BSgenome installation issue][hash=fd088e75eac62cf455145fa18e02a60730513290]
+ 4 files changed, 204 insertions(+), 4 deletions(-)
+
+[START commit][author=CodingBash][time=1530907558][message=Renaming and creating files][hash=1b9a43918da3cdf82d59259b6fa48e1426633899]
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+[START commit][author=CodingBash][time=1530907353][message=Added visualization of segment Gaussian mixture model][hash=8b4cd4dd0827c4b123bb23bd0caca06ba07ef19a]
+ 1 file changed, 25 insertions(+), 1 deletion(-)
+
+[START commit][author=CodingBash][time=1530903853][message=Able to view segtable for one sample][hash=df46ad34fd7f3be7fdaa363785871b5aae204024]
+ 1 file changed, 30 insertions(+), 80 deletions(-)
+
+[START commit][author=CodingBash][time=1530833991][message=Ran CNpreprocessing - process of interpretting results][hash=b7f451a244ccfd4f7190332e11fcb48827ae3ce9]
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+[START commit][author=CodingBash][time=1530825764][message=Draft of norminput/normsegs from all hN samples. NEXT: run CNpreprocessing with the formatted parameters][hash=8b4115fc05dfd34fba86d28e49f792b114a2a2b7]
+ 1 file changed, 66 insertions(+)
+
+[START commit][author=CodingBash][time=1530823894][message=Draft of ratinput parameter. NEED - to work on normsegs parameter][hash=d7a73b84ec52419dc1fc3f502519c8f84fe81a83]
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+[START commit][author=CodingBash][time=1530821813][message=Completed draft of segment parameter for CNprep. NEED: code refactoring and modularity][hash=e1fac888907c3013393f63f26e7359d51496192e]
+ 1 file changed, 17 insertions(+), 3 deletions(-)
+
+[START commit][author=CodingBash][time=1530818939][message=Progress in CNprep slicing prepration - currently clustering segments with CNprep. Almost done preparing segment input. -Unverified completion of ID, start, end, num.probes, seg.median, chrom, chrom.pos.start, chrom.pos.end, abs.pos.start, abs.pos.end -NEED to calculate coordinates for cytoband.start and cytoband.end][hash=c3ea23862637eea88d833dc3a8f448b63a88ec2c]
+ 1 file changed, 129 insertions(+), 1 deletion(-)
+
+[START commit][author=CodingBash][time=1530812918][message=Progress on CNprep preprocessing][hash=aa320d95091b0bd4e941598e2640a87d2f613f81]
+ 2 files changed, 891 insertions(+)
+
+[START commit][author=CodingBash][time=1530647159][message=Included X and Y chromosomes in the CORE input][hash=718f4bf192229abaa8ab5b917d3bf48e4a69f9b0]
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+[START commit][author=CodingBash][time=1530628882][message=Produced final cores with removed hN artifacts - IGV visualization looks good][hash=8bc5314f6df9777f2a7d19d8b89f2952ebbfe714]
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+[START commit][author=CodingBash][time=1530627788][message=Produced more significant cores - IGV visualization looks good NEED- to remove artifacts from hT cores][hash=9d991d0f004d048150b0e1801306aa8907b08319]
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+[START commit][author=CodingBash][time=1530391549][message=Progress on mapping Bins to BP -Created draft of function -NEED: to verify function for correctness (compare with cores in bp units) -NEED: to integrate and test in oldCore script -NEED: need to integrate in new CORE scripts -NEED: to run on Black and Blue -NEED: to replace BP visualizations with new ones produced from BNB -NEED: to document][hash=4d888967fb4b7e0c372bd29f06c02bcf7b87e6f4]
+ 2 files changed, 36 insertions(+), 8 deletions(-)
+
+[START commit][author=CodingBash][time=1530240383][message=Produce the CORE regions for hT (and did more organizing)][hash=580d209e0e0055d603b9e992875b37375141ed7a]
+ 3 files changed, 19 insertions(+), 1 deletion(-)
+
+[START commit][author=CodingBash][time=1530211232][message=Able to produce visualization of coverage and COREs][hash=c4021fe6d47db625852a4c218e9c015bc2e8aeee]
+ 3 files changed, 9 insertions(+), 3 deletions(-)
+
+[START commit][author=CodingBash][time=1530197705][message=Brought back interactive cnvCores script][hash=604ba42fccd070c1fd9b4e94d0f63be3a61b182d]
+ 1 file changed, 274 insertions(+)
+
+[START commit][author=CodingBash][time=1530196864][message=Obtained CORES in bp and base units][hash=1d199a87a83f3ea48be4022a77165c777f824f0b]
+ 3 files changed, 130 insertions(+), 119 deletions(-)
+
+[START commit][author=CodingBash][time=1530148073][message=commit][hash=48d31c7245aac6e008e6784a445f5fb296c4acef]
+ 1 file changed, 274 insertions(+)
+
+[START commit][author=CodingBash][time=1530144866][message=Stopping point -][hash=a23d0eb3d8d319e010982e06b2ffdb36bd79a5be]
+ 9 files changed, 122 insertions(+), 498 deletions(-)
+
+[START commit][author=CodingBash][time=1530142000][message=Able to map bp to bins for multiple samples at once based on class][hash=6c3361a9f18a2410e3aed7357f2dc961ab949957]
+ 1 file changed, 50 insertions(+), 21 deletions(-)
+
+[START commit][author=CodingBash][time=1530141279][message=Created script to map bp to bins for one hN sample][hash=a777ef3bf32664fa604bb820e5cae66eea2e2efd]
+ 2 files changed, 43 insertions(+), 15 deletions(-)
+
+[START commit][author=CodingBash][time=1530042965][message=Old frequncy plot code. Will be redoing][hash=1ae775c08ced137270bc95f2dd8d8f79e35f178a]
+ 2 files changed, 24 insertions(+), 3 deletions(-)
+
+[START commit][author=CodingBash][time=1529941155][message=Generated frequency plot for bins for amplifications][hash=28a9658a69021be80574be6e652c6bd839c5e6f9]
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+[START commit][author=CodingBash][time=1529939809][message=Included frequency plot in CORE visualization][hash=49c0919df967a7998c5c992c2e4862f74af83891]
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+[START commit][author=CodingBash][time=1529937573][message=Draft of frequency plot for amplifications][hash=6b23ca8797ff75dc8c95772b4a63cc6f6907cc3b]
+ 1 file changed, 111 insertions(+)
+
+[START commit][author=CodingBash][time=1529933495][message=Fixed CORES visualization][hash=c69320f697f03d0d263a3b20f42bf4daf7be42eb]
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+[START commit][author=CodingBash][time=1529626059][message=Produced cores for amplifications][hash=7e7e915a6a315c3cc64c3141b724bac9b8e77d2f]
+ 2 files changed, 46 insertions(+), 6 deletions(-)
+
+[START commit][author=CodingBash][time=1529603830][message=Able to run current inputs through CORE][hash=6b6f0b4bc5aab874e77e29d4eca690f84c06488a]
+ 1 file changed, 16 insertions(+), 7 deletions(-)
+
+[START commit][author=CodingBash][time=1529597810][message=Produced chromosome boundaries (unverified)][hash=18e26e9d886f87726837c33b926a0d9bd012ed15]
+ 1 file changed, 31 insertions(+)
+
+[START commit][author=CodingBash][time=1529595495][message=Completed inputCORE bp rescaling (unverified)`][hash=ec51691cced42bd3b0c2c5ff88240dc0280e4a97]
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+[START commit][author=CodingBash][time=1529595040][message=Figured CORE output issue. Now in progress of updating input to be continious bp][hash=ad2806f16a4519ac34c0647c0ef778de34c27dde]
+ 1 file changed, 61 insertions(+), 28 deletions(-)
+
+[START commit][author=CodingBash][time=1529528927][message=Progress on visualizing segments from selected patients. Still needs improvement][hash=c4a490c29ba4f890cef6af030d962e4afb26957a]
+ 1 file changed, 52 insertions(+)
+
+[START commit][author=CodingBash][time=1529528002][message=Progress on CORE. Cannot find mapping for bins][hash=2cca26b8350b2fda774246cce26c1e4d3aa64b17]
+ 3 files changed, 64 insertions(+), 7 deletions(-)
+
+[START commit][author=CodingBash][time=1529431318][message=Added CORE library to script. Got an output - need to verify][hash=a76f9b349c563fe9d0cc5107550c4529575f0f9f]
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[START commit][author=CodingBash][time=1529431129][message=Draft of input parameters to CORE][hash=d0d0fb46bc8bab387cc502f4f49e22c7a1170e16]
+ 1 file changed, 25 insertions(+), 11 deletions(-)
+
+[START commit][author=CodingBash][time=1529423244][message=Updated visualization: cytobands and legend][hash=9424b0cd9b231a093837ba9912511d54cfbce370]
+ 2 files changed, 79 insertions(+), 3 deletions(-)
+
+[START commit][author=CodingBash][time=1529373911][message=Improved visualization and progress on CORE runthrough][hash=67f89330578908ab3eeeda6163f5aabb39201a75]
+ 4 files changed, 114 insertions(+), 8 deletions(-)
+
+[START commit][author=CodingBash][time=1529247181][message=Visualization code generates sufficient CNV images][hash=fbf46aa5e6b2289d3e53b668895d4166c3d2db6f]
+ 3 files changed, 100 insertions(+), 100 deletions(-)
+
+[START commit][author=CodingBash][time=1529245782][message=Created code to generate list of samples from data directory][hash=fe5186f2c0545e009841fff7b836449dc726b73f]
+ 4 files changed, 194 insertions(+), 37 deletions(-)
+
+[START commit][author=CodingBash][time=1529163410][message=Visualization of bins and segments in different tracks. Dynamic selection of sample][hash=885744b80aa5c75398f389362d4147357ca50340]
+ 2 files changed, 83 insertions(+), 11 deletions(-)
+
+[START commit][author=CodingBash][time=1529091414][message=Initial visualization of segments][hash=c9559ab4d92da1fceebf0d4bb848786b56c127be]
+ 1 file changed, 42 insertions(+)
+
+[START commit][author=Basheer Becerra][time=1529090566][message=Initial commit][hash=5f480412359856d55a40e118dc9ad79be9d81eb5]
+ 1 file changed, 36 insertions(+)
